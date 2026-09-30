@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Models;
+
+use Database\Factories\InvoiceFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+#[Fillable([
+    'number', 'year', 'sequence', 'business_id', 'client_name', 'client_ice', 'client_address',
+    'lines', 'subtotal', 'tax_rate', 'tax_amount', 'total', 'currency', 'issued_at',
+])]
+class Invoice extends Model implements HasMedia
+{
+    /** @use HasFactory<InvoiceFactory> */
+    use HasFactory, InteractsWithMedia;
+
+    protected function casts(): array
+    {
+        return [
+            'year' => 'integer',
+            'sequence' => 'integer',
+            'lines' => 'array',
+            'subtotal' => 'decimal:2',
+            'tax_rate' => 'decimal:2',
+            'tax_amount' => 'decimal:2',
+            'total' => 'decimal:2',
+            'issued_at' => 'datetime',
+        ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('pdf')->singleFile()->useDisk('local');
+    }
+
+    /**
+     * @return BelongsTo<Business, $this>
+     */
+    public function business(): BelongsTo
+    {
+        return $this->belongsTo(Business::class);
+    }
+
+    /**
+     * @return HasOne<Payment, $this>
+     */
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class);
+    }
+}
