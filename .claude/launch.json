@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "app-sqlite",
+      "runtimeExecutable": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "runtimeArgs": ["-c", "DB_CONNECTION=sqlite DB_DATABASE=\"$PWD/database/database.sqlite\" SCOUT_DRIVER=collection CACHE_STORE=file SESSION_DRIVER=file QUEUE_CONNECTION=sync MAIL_MAILER=log php artisan serve --port=8000"],
+      "port": 8000
+    }
+  ]
+}

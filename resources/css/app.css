@@ -1,9 +1,38 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/*
+ * Use logical utilities only (ms-/me-/ps-/pe-/start-/end-/text-start) so
+ * the Arabic (RTL) layout mirrors automatically.
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+
+    /* Brand: deep teal (zellige) with a saffron accent. */
+    --color-brand-50: #effaf8;
+    --color-brand-100: #d7f2ee;
+    --color-brand-200: #b1e4dc;
+    --color-brand-300: #7fcfc4;
+    --color-brand-400: #4bb3a7;
+    --color-brand-500: #2a978c;
+    --color-brand-600: #1c7a71;
+    --color-brand-700: #0f5e57;
+    --color-brand-800: #0d4b46;
+    --color-brand-900: #0c3e3a;
+
+    --color-accent-400: #f5b93b;
+    --color-accent-500: #e9a01c;
+    --color-accent-600: #c77f0f;
+}
+
+/* Arabic script first in RTL; Latin names and numbers still use Inter. */
+[dir='rtl'] {
+    --font-sans: var(--font-arabic), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+[x-cloak] {
+    display: none !important;
 }

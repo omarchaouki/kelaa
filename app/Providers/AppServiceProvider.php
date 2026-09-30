@@ -2,13 +2,20 @@
 
 namespace App\Providers;
 
+use App\Contracts\OtpSender;
+use App\Http\Middleware\SetLocale;
 use App\Models;
+use App\Services\Otp\LogOtpSender;
+use App\Services\Otp\SmsOtpSender;
+use App\Services\Otp\WhatsAppOtpSender;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Events\ConnectionEstablished;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
+use Livewire\Livewire;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,7 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(OtpSender::class, fn () => match (config('otp.driver')) {
+            'log' => new LogOtpSender,
+            'sms' => new SmsOtpSender(config('otp.drivers.sms')),
+            'whatsapp' => new WhatsAppOtpSender(config('otp.drivers.whatsapp')),
+            default => throw new InvalidArgumentException('Unknown OTP driver ['.config('otp.driver').'].'),
+        });
     }
 
     /**
@@ -54,6 +66,12 @@ class AppServiceProvider extends ServiceProvider
             'banned_word' => Models\BannedWord::class,
             'media' => Media::class,
         ]);
+
+        // App strings live apart from the Laravel Lang package files (lang/{locale}.json).
+        $this->app['translator']->addJsonPath(lang_path('app'));
+
+        // Livewire requests hit /livewire/update: re-apply the page's locale.
+        Livewire::addPersistentMiddleware([SetLocale::class]);
 
         $this->registerSqliteMathFunctions();
     }
