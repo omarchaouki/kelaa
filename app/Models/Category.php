@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\Contracts\Translatable;
+use App\Observers\FlushDirectoryCache;
 use App\Support\ReservedSlugs;
 use Database\Factories\CategoryFactory;
 use DomainException;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +32,7 @@ use Spatie\Translatable\HasTranslations;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
+#[ObservedBy(FlushDirectoryCache::class)]
 #[Fillable(['parent_id', 'name', 'slug', 'icon', 'sort_order', 'is_emergency', 'is_active', 'schema_type'])]
 class Category extends Model implements Translatable
 {

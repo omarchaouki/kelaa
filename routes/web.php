@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ContactEventController;
 use App\Http\Controllers\LocaleRedirectController;
 use App\Http\Controllers\PageController;
 use App\Http\Middleware\SetLocale;
@@ -38,6 +39,10 @@ Route::prefix('{locale}')
         });
 
         Route::get('p/{page:slug}', [PageController::class, 'show'])->name('page.show');
+
+        Route::post('events', ContactEventController::class)
+            ->middleware('throttle:contact-events')
+            ->name('contact-events.store');
 
         // Keep last: catches "/{locale}/{city}".
         Route::get('{city:slug}', [CityController::class, 'show'])->name('city.home');

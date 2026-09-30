@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\Concerns\HasGeoLocation;
 use App\Models\Contracts\Translatable;
+use App\Observers\FlushDirectoryCache;
 use Database\Factories\NeighborhoodFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +27,7 @@ use Spatie\Translatable\HasTranslations;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
+#[ObservedBy(FlushDirectoryCache::class)]
 #[Fillable(['city_id', 'name', 'slug', 'latitude', 'longitude', 'boundary', 'is_active'])]
 class Neighborhood extends Model implements Translatable
 {

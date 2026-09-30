@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\OtpPurpose;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -24,6 +26,18 @@ use Illuminate\Support\Carbon;
 #[Hidden(['code_hash'])]
 class OtpCode extends Model
 {
+    use MassPrunable;
+
+    /**
+     * Codes are useless once expired; keep them one day for abuse investigation.
+     *
+     * @return Builder<self>
+     */
+    public function prunable(): Builder
+    {
+        return static::query()->where('expires_at', '<', now()->subDay());
+    }
+
     protected function casts(): array
     {
         return [

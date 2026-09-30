@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\SearchSynonymObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -17,6 +19,7 @@ use Illuminate\Support\Carbon;
  * A synonym group: "plombier" <=> ["سباك", "plombi"].
  */
 #[Fillable(['term', 'synonyms', 'locale'])]
+#[ObservedBy(SearchSynonymObserver::class)]
 class SearchSynonym extends Model
 {
     protected function casts(): array

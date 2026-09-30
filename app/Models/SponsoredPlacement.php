@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PlacementStatus;
+use Carbon\CarbonInterface;
 use Database\Factories\SponsoredPlacementFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,6 +47,13 @@ class SponsoredPlacement extends Model
             'reminded_7d_at' => 'datetime',
             'reminded_1d_at' => 'datetime',
         ];
+    }
+
+    public function isRunning(?CarbonInterface $at = null): bool
+    {
+        $at ??= now();
+
+        return $this->status === PlacementStatus::Active && $this->starts_at->lessThanOrEqualTo($at) && $this->ends_at->greaterThan($at);
     }
 
     /**

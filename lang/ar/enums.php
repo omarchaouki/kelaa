@@ -22,4 +22,5 @@ return [
     'contact_event_type' => ['profile_view' => 'مشاهدة الصفحة', 'call_click' => 'اتصال', 'whatsapp_click' => 'واتساب', 'directions_click' => 'الاتجاهات', 'website_click' => 'الموقع الإلكتروني'],
     'contact_event_source' => ['organic' => 'طبيعي', 'sponsored' => 'مُموَّل', 'search' => 'بحث', 'map' => 'خريطة'],
     'otp_purpose' => ['login' => 'تسجيل الدخول', 'business_claim' => 'المطالبة بالمحل', 'phone_verification' => 'التحقق من الهاتف'],
+    'search_sort' => ['relevance' => 'الأكثر صلة', 'rating' => 'الأعلى تقييما', 'distance' => 'الأقرب', 'reviews' => 'الأكثر تقييمات', 'newest' => 'الأحدث'],
 ];

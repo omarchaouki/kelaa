@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Casts\DateOnly;
+use App\Observers\FlushDirectoryCache;
 use Carbon\CarbonInterface;
 use Database\Factories\PharmacyDutyFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +27,7 @@ use Illuminate\Support\Carbon;
  *
  * A pharmacie de garde shift (usually an evening/night or a full weekend day).
  */
+#[ObservedBy(FlushDirectoryCache::class)]
 #[Table(name: 'pharmacies_de_garde')]
 #[Fillable(['business_id', 'date', 'starts_at', 'ends_at'])]
 class PharmacyDuty extends Model

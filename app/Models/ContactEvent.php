@@ -6,7 +6,9 @@ use App\Enums\ContactEventSource;
 use App\Enums\ContactEventType;
 use Database\Factories\ContactEventFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -24,7 +26,18 @@ use Illuminate\Support\Carbon;
 class ContactEvent extends Model
 {
     /** @use HasFactory<ContactEventFactory> */
-    use HasFactory;
+    use HasFactory, MassPrunable;
+
+    /**
+     * Raw events are kept 13 months (a year of comparisons); daily
+     * aggregates in business_stats_daily are kept.
+     *
+     * @return Builder<self>
+     */
+    public function prunable(): Builder
+    {
+        return static::query()->where('created_at', '<', now()->subMonths(13));
+    }
 
     public const UPDATED_AT = null;
 

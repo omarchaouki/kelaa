@@ -6,12 +6,14 @@ use App\Enums\BusinessStatus;
 use App\Enums\ReviewStatus;
 use App\Models\Concerns\HasGeoLocation;
 use App\Models\Contracts\Translatable;
+use App\Observers\FlushDirectoryCache;
 use App\Support\Phone\MoroccanPhone;
 use App\Support\Security\SafeUrl;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Database\Factories\BusinessFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Laravel\Scout\Searchable;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -68,6 +71,7 @@ use Spatie\Translatable\HasTranslations;
  * Organic ranking fields (rating_avg, rating_count, bayesian_score,
  * profile_completeness) are computed by jobs and never mass assignable.
  */
+#[ObservedBy(FlushDirectoryCache::class)]
 #[Fillable([
     'city_id', 'neighborhood_id', 'name', 'slug', 'description', 'address',
     'latitude', 'longitude', 'phone', 'whatsapp', 'email', 'website', 'social_links',
@@ -76,10 +80,60 @@ use Spatie\Translatable\HasTranslations;
 class Business extends Model implements HasMedia, Translatable
 {
     /** @use HasFactory<BusinessFactory> */
-    use HasFactory, HasGeoLocation, HasTranslations, InteractsWithMedia, SoftDeletes;
+    use HasFactory, HasGeoLocation, HasTranslations, InteractsWithMedia, Searchable, SoftDeletes;
 
     /** @var list<string> */
     public array $translatable = ['description'];
+
+    /**
+     * Only published listings are indexed; nothing private (owner, legal
+     * info, contact details) ever reaches the search engine.
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === BusinessStatus::Published && ! $this->trashed();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        $this->loadMissing(['categories', 'neighborhood']);
+
+        $translations = fn (Translatable&Model $model, string $attribute) => implode(' ', array_filter(array_map(
+            fn ($value) => is_string($value) ? $value : null,
+            $model->getTranslations($attribute),
+        )));
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'category_names' => $this->categories->map(fn (Category $category) => $translations($category, 'name'))->implode(' '),
+            'neighborhood_name' => $this->neighborhood ? $translations($this->neighborhood, 'name') : '',
+            'description' => mb_substr($translations($this, 'description'), 0, 2000),
+            'address' => (string) $this->address,
+            'city_id' => $this->city_id,
+            'category_ids' => $this->categories->pluck('id')->all(),
+            'neighborhood_id' => $this->neighborhood_id,
+            'is_verified' => $this->is_verified,
+            'price_range' => $this->price_range,
+            'rating_avg' => $this->rating_avg,
+            'rating_count' => $this->rating_count,
+            'bayesian_score' => $this->bayesian_score,
+            'published_at' => $this->published_at?->getTimestamp(),
+            '_geo' => ['lat' => $this->latitude, 'lng' => $this->longitude],
+        ];
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    protected function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->with(['categories', 'neighborhood']);
+    }
 
     /** Social networks accepted in social_links. */
     public const SOCIAL_NETWORKS = ['facebook', 'instagram', 'tiktok', 'youtube', 'linkedin', 'x'];
