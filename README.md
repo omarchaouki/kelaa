@@ -77,6 +77,34 @@ sail composer lint     # Pint (check) + Larastan level 6
 sail composer format   # Pint (fix)
 ```
 
+## Search (Meilisearch)
+
+```bash
+sail artisan search:sync --import   # push index settings + synonyms, then index all published businesses
+```
+
+Synonyms edited in the admin (`Contenu › Synonymes`) are pushed automatically by a queued job.
+
+## Pharmacies de garde import
+
+Admin › Contenu › Pharmacies de garde › *Importer un CSV* (max 512 KB / 2,000 rows, all or nothing):
+
+```csv
+pharmacie,date,debut,fin
+pharmacie-atlas,2026-10-05,20:00,09:00
+```
+
+`pharmacie` is the business slug (it must be a published business in the "Pharmacie de garde" category). A `fin` earlier than `debut` ends the next morning.
+
+## Security
+
+- Nonce-based Content-Security-Policy and hardening headers on every response (`App\Http\Middleware\SecurityHeaders`, `config/security.php`). Scripts are bundled by Vite (Livewire and Alpine included), so no inline script runs without the nonce.
+- Admin-authored HTML is sanitized on save and on render (`App\Support\Security\RichText`); every user-supplied value is escaped with `{{ }}`.
+- Business websites and social links must be absolute `http(s)` URLs (`App\Support\Security\SafeUrl`), phones are normalized to E.164 before they reach an `href`.
+- URL/Livewire parameters are whitelisted (`App\Services\Search\SearchFilters`), Livewire updates and the contact event endpoint are rate-limited, city/category slugs cannot shadow application routes.
+- Privacy: the visitor location stays in the session (rounded to ~110 m) and never in URLs; statistics use a daily-rotating HMAC instead of IPs; old raw events and OTP codes are pruned daily.
+- Production: set `APP_ENV=production`, `APP_DEBUG=false`, `SESSION_SECURE_COOKIE=true`, `TRUSTED_PROXIES` if behind a load balancer; HTTPS is then forced for generated URLs.
+
 ## Project conventions
 
 - Every user-facing string goes through `__()`. French source strings are the keys; translations live in `lang/app/{locale}.json` (kept in sync by a test) and enum labels in `lang/{locale}/enums.php`.

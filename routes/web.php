@@ -6,10 +6,14 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\ContactEventController;
 use App\Http\Controllers\LocaleRedirectController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PharmacyDutyController;
 use App\Http\Middleware\SetLocale;
 use App\Livewire\Account\VerifyPhone;
 use App\Livewire\Auth\EmailLogin;
 use App\Livewire\Auth\PhoneLogin;
+use App\Livewire\Directory\BusinessPage;
+use App\Livewire\Directory\CityHome;
+use App\Livewire\Directory\SearchPage;
 use App\Support\Locales;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +48,14 @@ Route::prefix('{locale}')
             ->middleware('throttle:contact-events')
             ->name('contact-events.store');
 
-        // Keep last: catches "/{locale}/{city}".
-        Route::get('{city:slug}', [CityController::class, 'show'])->name('city.home');
+        // Directory. Fixed segments ("b", "recherche", ...) are reserved slugs
+        // (App\Support\ReservedSlugs) and are registered before the category catch-all.
+        Route::prefix('{city:slug}')->group(function () {
+            Route::livewire('/', CityHome::class)->name('city.home');
+            Route::livewire('recherche', SearchPage::class)->name('city.search');
+            Route::get('pharmacies-de-garde', PharmacyDutyController::class)->name('city.pharmacies');
+            Route::livewire('b/{business:slug}', BusinessPage::class)->scopeBindings()->name('city.business');
+            // Categories are shared by all cities: no scoping under {city}.
+            Route::livewire('{category:slug}/{neighborhoodSlug?}', SearchPage::class)->withoutScopedBindings()->name('city.category');
+        });
     });

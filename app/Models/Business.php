@@ -47,7 +47,7 @@ use Spatie\Translatable\HasTranslations;
  * @property string|null $whatsapp
  * @property string|null $email
  * @property string|null $website
- * @property array<string, string>|null $social_links
+ * @property array<string, mixed>|null $social_links
  * @property int|null $price_range
  * @property bool $is_always_open
  * @property BusinessStatus $status

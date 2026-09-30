@@ -25,8 +25,8 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 
 | Phase | Status |
 |---|---|
-| 1. Foundation | Done, awaiting review (verified on SQLite; MySQL/Sail run pending, see below) |
-| 2. Directory | Not started |
+| 1. Foundation | Done (verified on SQLite; MySQL/Sail run pending, see below) |
+| 2. Directory | Done, awaiting review (security-first pass included) |
 | 3. Reviews & moderation | Not started |
 | 4. Owners | Not started |
 | 5. Monetization | Not started |
@@ -88,6 +88,8 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 ## Phase 2 — Directory
 
 **Goal:** people can find and contact businesses.
+
+**Deferred on purpose** (need later phases): claim flow and "suggest an edit" (phase 4; the CTA links to the contact page for now), report links (phase 3), admin CRUD for businesses and sponsored placements (phases 3/5), the full RankingService (phase 3; relevance currently = Meilisearch rank, then Bayesian score).
 
 1. **Routing & SEO skeleton:** `/{locale}/{city}`, `/{locale}/{city}/{category}`, `/{locale}/{city}/{category}/{neighborhood}`, `/{locale}/{city}/b/{slug}`; slug binding scoped to city; breadcrumbs data.
 2. **Opening-hours engine:** `OpeningHours` service in `Africa/Casablanca`: split hours, overnight ranges, 24/7, special hours override (Ramadan/Eid/holidays); outputs `open now`, `closes at`, `opens at 15:00`, `opens tomorrow`. Heavily unit-tested.

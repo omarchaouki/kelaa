@@ -31,7 +31,7 @@ class OtpCode extends Model
     /**
      * Codes are useless once expired; keep them one day for abuse investigation.
      *
-     * @return Builder<self>
+     * @return Builder<static>
      */
     public function prunable(): Builder
     {

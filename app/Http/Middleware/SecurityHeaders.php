@@ -34,7 +34,10 @@ class SecurityHeaders
             $headers->set('Strict-Transport-Security', 'max-age='.config('security.hsts_max_age').'; includeSubDomains');
         }
 
-        if (config('security.csp.enabled') && ! $headers->has('Content-Security-Policy')) {
+        // The local debug error page relies on inline scripts; production error pages keep the CSP.
+        $debugErrorPage = config('app.debug') && $response->getStatusCode() >= 500;
+
+        if (config('security.csp.enabled') && ! $debugErrorPage && ! $headers->has('Content-Security-Policy')) {
             $headers->set(
                 config('security.csp.report_only') ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                 $this->policy($request, (string) Vite::cspNonce()),

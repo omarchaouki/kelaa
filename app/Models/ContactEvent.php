@@ -32,7 +32,7 @@ class ContactEvent extends Model
      * Raw events are kept 13 months (a year of comparisons); daily
      * aggregates in business_stats_daily are kept.
      *
-     * @return Builder<self>
+     * @return Builder<static>
      */
     public function prunable(): Builder
     {

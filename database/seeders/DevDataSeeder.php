@@ -62,11 +62,12 @@ class DevDataSeeder extends Seeder
                 ->for($city)
                 ->inCategory($category)
                 ->withRegularHours()
-                ->state(fn () => [
+                ->state(fn () => array_filter([
                     'neighborhood_id' => $city->neighborhoods->isEmpty() ? null : $city->neighborhoods->random()->getKey(),
                     'latitude' => $city->center_latitude + fake()->randomFloat(5, -0.04, 0.04),
                     'longitude' => $city->center_longitude + fake()->randomFloat(5, -0.04, 0.04),
-                ])
+                    'name' => $category->slug === 'pharmacie-de-garde' ? 'Pharmacie '.fake()->lastName() : null,
+                ]))
                 ->create();
 
             foreach ($businesses as $business) {
@@ -77,11 +78,42 @@ class DevDataSeeder extends Seeder
                 }
 
                 if ($category->slug === 'pharmacie-de-garde') {
+                    $date = now()->addDays(fake()->numberBetween(0, 6))->startOfDay();
                     PharmacyDuty::factory()->for($business)->create([
-                        'date' => now()->addDays(fake()->numberBetween(0, 6))->startOfDay(),
+                        'date' => $date,
+                        'starts_at' => $date->copy()->setTime(20, 0),
+                        'ends_at' => $date->copy()->addDay()->setTime(9, 0),
                     ]);
                 }
             }
+        }
+
+        $this->approximateRatings();
+    }
+
+    /**
+     * Fills the rating columns for fake data. The real computation (queued job
+     * with the Bayesian ranking service) arrives with reviews in phase 3.
+     */
+    private function approximateRatings(): void
+    {
+        $stats = Review::query()->published()->toBase()
+            ->selectRaw('business_id, avg(rating) as average, count(*) as total')
+            ->groupBy('business_id')
+            ->get();
+
+        $globalAverage = (float) Review::query()->published()->avg('rating') ?: 3.5;
+        $m = (float) config('ranking.bayesian_m');
+
+        foreach ($stats as $row) {
+            $v = (int) $row->total;
+            $r = (float) $row->average;
+
+            Business::query()->whereKey($row->business_id)->update([
+                'rating_avg' => round($r, 2),
+                'rating_count' => $v,
+                'bayesian_score' => round(($v / ($v + $m)) * $r + ($m / ($v + $m)) * $globalAverage, 4),
+            ]);
         }
     }
 }

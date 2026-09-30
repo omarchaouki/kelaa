@@ -8,4 +8,10 @@ namespace App\Models\Contracts;
 interface Translatable
 {
     public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true): mixed;
+
+    /**
+     * @param  array<int, string>|null  $allowedLocales
+     * @return array<string, mixed>
+     */
+    public function getTranslations(?string $key = null, ?array $allowedLocales = null): array;
 }
