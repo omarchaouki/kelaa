@@ -63,7 +63,7 @@ class DevDataSeeder extends Seeder
                 ->inCategory($category)
                 ->withRegularHours()
                 ->state(fn () => [
-                    'neighborhood_id' => $city->neighborhoods->random()?->getKey(),
+                    'neighborhood_id' => $city->neighborhoods->isEmpty() ? null : $city->neighborhoods->random()->getKey(),
                     'latitude' => $city->center_latitude + fake()->randomFloat(5, -0.04, 0.04),
                     'longitude' => $city->center_longitude + fake()->randomFloat(5, -0.04, 0.04),
                 ])

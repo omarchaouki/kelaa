@@ -15,8 +15,31 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 
 - Available: PHP 8.4 (host), Composer, Node, Git, Docker Desktop 29.
 - **WSL has no Linux distro installed.** Sail's `sail` script is bash and runs best from WSL2 (the project should also live on the WSL filesystem for acceptable Docker I/O speed). Recommended: `wsl --install -d Ubuntu` before Phase 1. Fallback: run `docker compose` directly from Windows with the Sail-generated `docker-compose.yml` (slower bind mounts).
-- The folder is not a git repository yet; Phase 1 starts with `git init`.
+- The folder was not a git repository; Phase 1 started with `git init` (branch `main`).
+- Docker Desktop fails to start ("Docker Desktop is unable to start") because no WSL2 distribution is installed.
 - Latest stable versions on Packagist (checked 2026-09-30): Laravel framework v13.34.0, Livewire v4.4.7, Filament v5.9.0, Scout v11.8.0, Pest v5.2.1, Larastan v3.12.2. Re-checked and pinned via `composer.lock` at Phase 1 setup.
+
+---
+
+## Progress
+
+| Phase | Status |
+|---|---|
+| 1. Foundation | Done, awaiting review (verified on SQLite; MySQL/Sail run pending, see below) |
+| 2. Directory | Not started |
+| 3. Reviews & moderation | Not started |
+| 4. Owners | Not started |
+| 5. Monetization | Not started |
+| 6. Polish & launch | Not started |
+
+### Phase 1 decisions (defaults taken while questions were open)
+
+- **Bare Laravel + Livewire** instead of the official starter kit: auth is phone + OTP, so the starter kit's Fortify email flows would have been stripped anyway.
+- **Latitude/longitude columns + derived POINT**: `latitude`/`longitude` decimals are the source of truth (easy JSON/Meilisearch `_geo`, SQLite tests); the `POINT SRID 4326` column is kept in sync on save and used by `ST_Distance_Sphere` on MySQL.
+- **Admin login** uses email + password (Filament); public login uses phone + OTP. Staff accounts are created with `php artisan app:make-admin`.
+- **Translations**: French strings are the keys, `lang/app/{fr,ar,en}.json` holds app strings, `laravel-lang/common` provides framework strings; fallback locale is `en` so missing vendor keys never show raw.
+- **Reviews per day** default and **reply moderation** are decided in Phase 3 (proposal kept: 5/day, replies publish immediately with banned-word filter).
+- **Docker could not start on this machine** (WSL is not installed), so Phase 1 was verified with host PHP 8.4 + SQLite. The MySQL-specific code (spatial column/index, `ST_Distance_Sphere`) must still be run once under Sail: `sail artisan migrate:fresh --seed && sail test`.
 
 ---
 

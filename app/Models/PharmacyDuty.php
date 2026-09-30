@@ -11,8 +11,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
+ * @property int $id
+ * @property int $business_id
+ * @property Carbon $date
+ * @property Carbon $starts_at
+ * @property Carbon $ends_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * A pharmacie de garde shift (usually an evening/night or a full weekend day).
  */
 #[Table(name: 'pharmacies_de_garde')]

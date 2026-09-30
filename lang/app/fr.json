@@ -25,5 +25,18 @@
     "Trop de tentatives. Réessayez dans :minutes min.": "Trop de tentatives. Réessayez dans :minutes min.",
     "Impossible d'envoyer le code pour le moment. Réessayez plus tard.": "Impossible d'envoyer le code pour le moment. Réessayez plus tard.",
     "Code incorrect ou expiré.": "Code incorrect ou expiré.",
-    "Ce compte est suspendu.": "Ce compte est suspendu."
+    "Ce compte est suspendu.": "Ce compte est suspendu.",
+    "Connexion par e-mail": "Connexion par e-mail",
+    "E-mail": "E-mail",
+    "Mot de passe": "Mot de passe",
+    "Rester connecté": "Rester connecté",
+    "Se connecter avec mon numéro de mobile": "Se connecter avec mon numéro de mobile",
+    "Continuer avec Google": "Continuer avec Google",
+    "Se connecter avec un e-mail": "Se connecter avec un e-mail",
+    "Ce numéro est déjà associé à un autre compte.": "Ce numéro est déjà associé à un autre compte.",
+    "Votre numéro est vérifié.": "Votre numéro est vérifié.",
+    "Vérifier mon numéro": "Vérifier mon numéro",
+    "Un numéro de mobile vérifié est nécessaire pour publier un avis.": "Un numéro de mobile vérifié est nécessaire pour publier un avis.",
+    "Numéro actuel :": "Numéro actuel :",
+    "Vérifier": "Vérifier"
 }

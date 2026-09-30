@@ -4,6 +4,7 @@ namespace App\Services\Otp;
 
 use App\Contracts\OtpSender;
 use App\Enums\OtpPurpose;
+use App\Exceptions\OtpDeliveryFailed;
 use App\Exceptions\OtpThrottled;
 use App\Models\OtpCode;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class OtpService
 
     /**
      * @throws OtpThrottled
-     * @throws \App\Exceptions\OtpDeliveryFailed
+     * @throws OtpDeliveryFailed
      */
     public function request(string $phone, OtpPurpose $purpose, string $ip): void
     {

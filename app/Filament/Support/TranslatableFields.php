@@ -2,12 +2,12 @@
 
 namespace App\Filament\Support;
 
+use App\Models\Contracts\Translatable;
 use App\Support\Locales;
 use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Fieldset;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Side-by-side inputs for a spatie/laravel-translatable attribute
@@ -27,8 +27,11 @@ class TranslatableFields
         foreach (Locales::supported() as $locale) {
             $input = $field("{$attribute}.{$locale}")
                 ->label(Locales::nativeName($locale))
-                ->formatStateUsing(fn (?Model $record) => $record?->getTranslation($attribute, $locale, false))
-                ->extraInputAttributes(['dir' => Locales::direction($locale), 'lang' => $locale]);
+                ->formatStateUsing(fn (?Translatable $record) => $record?->getTranslation($attribute, $locale, false));
+
+            if (method_exists($input, 'extraInputAttributes')) {
+                $input->extraInputAttributes(['dir' => Locales::direction($locale), 'lang' => $locale]);
+            }
 
             // The default locale is mandatory; the others fall back to it.
             if ($required && $locale === Locales::default()) {

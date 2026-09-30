@@ -21,5 +21,5 @@ return [
     'payment_status' => ['pending' => 'Pending', 'validated' => 'Validated', 'rejected' => 'Rejected', 'refunded' => 'Refunded'],
     'contact_event_type' => ['profile_view' => 'Profile view', 'call_click' => 'Call', 'whatsapp_click' => 'WhatsApp', 'directions_click' => 'Directions', 'website_click' => 'Website'],
     'contact_event_source' => ['organic' => 'Organic', 'sponsored' => 'Sponsored', 'search' => 'Search', 'map' => 'Map'],
-    'otp_purpose' => ['login' => 'Login', 'business_claim' => 'Business claim'],
+    'otp_purpose' => ['login' => 'Login', 'business_claim' => 'Business claim', 'phone_verification' => 'Phone verification'],
 ];

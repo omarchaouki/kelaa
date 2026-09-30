@@ -9,7 +9,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $review_id
+ * @property int|null $user_id
+ * @property string $body
+ * @property ReplyStatus $status
+ * @property Carbon|null $edited_at
+ * @property int|null $moderated_by
+ * @property Carbon|null $moderated_at
+ * @property string|null $moderation_reason
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['review_id', 'user_id', 'body'])]
 class ReviewReply extends Model
 {

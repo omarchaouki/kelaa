@@ -56,6 +56,8 @@ class Locales
     public static function preferred(Request $request): string
     {
         $candidates = [
+            // A URL such as /ar/account/... already says which language the visitor reads.
+            $request->segment(1),
             $request->cookie('locale'),
             $request->user()?->locale,
             $request->getPreferredLanguage(self::supported()),

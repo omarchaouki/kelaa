@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BusinessStatus;
 use App\Enums\ReviewStatus;
 use App\Models\Concerns\HasGeoLocation;
+use App\Models\Contracts\Translatable;
 use Database\Factories\BusinessFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -22,6 +24,42 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Translatable\HasTranslations;
 
 /**
+ * @property int $id
+ * @property int $city_id
+ * @property int|null $neighborhood_id
+ * @property int|null $owner_id
+ * @property int|null $submitted_by
+ * @property string $name
+ * @property string $slug
+ * @property string|null $description
+ * @property string|null $address
+ * @property float $latitude
+ * @property float $longitude
+ * @property string|null $phone
+ * @property string|null $whatsapp
+ * @property string|null $email
+ * @property string|null $website
+ * @property array<string, string>|null $social_links
+ * @property int|null $price_range
+ * @property bool $is_always_open
+ * @property BusinessStatus $status
+ * @property bool $is_verified
+ * @property bool $is_claimed
+ * @property int|null $plan_id
+ * @property Carbon|null $plan_expires_at
+ * @property string|null $legal_name
+ * @property string|null $ice
+ * @property string|null $legal_address
+ * @property int $profile_completeness
+ * @property float $rating_avg
+ * @property int $rating_count
+ * @property float $bayesian_score
+ * @property Carbon|null $last_activity_at
+ * @property Carbon|null $published_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ *
  * Organic ranking fields (rating_avg, rating_count, bayesian_score,
  * profile_completeness) are computed by jobs and never mass assignable.
  */
@@ -30,7 +68,7 @@ use Spatie\Translatable\HasTranslations;
     'latitude', 'longitude', 'phone', 'whatsapp', 'email', 'website', 'social_links',
     'price_range', 'is_always_open', 'legal_name', 'ice', 'legal_address',
 ])]
-class Business extends Model implements HasMedia
+class Business extends Model implements HasMedia, Translatable
 {
     /** @use HasFactory<BusinessFactory> */
     use HasFactory, HasGeoLocation, HasTranslations, InteractsWithMedia, SoftDeletes;
@@ -73,15 +111,17 @@ class Business extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
+        // Small list thumbnail generated immediately; the large version and its
+        // responsive variants are queued.
         $this->addMediaConversion('thumb')
+            ->nonQueued()
             ->format('webp')
-            ->fit(Fit::Crop, 320, 240)
-            ->nonQueued();
+            ->fit(Fit::Crop, 320, 240);
 
         $this->addMediaConversion('large')
+            ->withResponsiveImages()
             ->format('webp')
-            ->fit(Fit::Max, 1280, 960)
-            ->withResponsiveImages();
+            ->fit(Fit::Max, 1280, 960);
     }
 
     /**

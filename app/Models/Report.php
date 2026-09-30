@@ -10,7 +10,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $reportable_type
+ * @property int $reportable_id
+ * @property int|null $reporter_id
+ * @property ReportReason $reason
+ * @property string|null $details
+ * @property ReportStatus $status
+ * @property int|null $handled_by
+ * @property Carbon|null $handled_at
+ * @property string|null $resolution_note
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['reportable_type', 'reportable_id', 'reporter_id', 'reason', 'details'])]
 class Report extends Model
 {

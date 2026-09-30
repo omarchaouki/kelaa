@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * @property int $id
+ * @property int $business_id
+ * @property int $day_of_week
+ * @property string|null $opens_at
+ * @property string|null $closes_at
+ * @property bool $is_closed
+ *
  * One opening slot. A day may have several slots (split hours).
  * day_of_week follows ISO-8601: 1 = Monday ... 7 = Sunday.
  */

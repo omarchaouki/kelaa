@@ -14,10 +14,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
+ * @property int $id
+ * @property int $business_id
+ * @property int|null $user_id
+ * @property int $rating
+ * @property string|null $body
+ * @property string|null $locale
+ * @property ReviewStatus $status
+ * @property list<string>|null $flags
+ * @property int $helpful_count
+ * @property Carbon|null $published_at
+ * @property Carbon|null $edited_at
+ * @property string|null $ip_hash
+ * @property string|null $device_hash
+ * @property int|null $moderated_by
+ * @property Carbon|null $moderated_at
+ * @property string|null $moderation_reason
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * Status and moderation fields are deliberately not mass assignable:
  * they only change through the moderation actions.
  */

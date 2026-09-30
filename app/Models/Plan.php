@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\Translatable;
 use Database\Factories\PlanFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -9,14 +10,28 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Spatie\Translatable\HasTranslations;
 
 /**
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property string $slug
+ * @property string $price_monthly
+ * @property string $price_yearly
+ * @property array<string, mixed> $features
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property int $sort_order
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * features: max_photos (int), show_stats, highlighted_card, logo_and_cover,
  * remove_competitor_ads, priority_support (bool).
  */
 #[Fillable(['name', 'slug', 'description', 'price_monthly', 'price_yearly', 'features', 'is_default', 'is_active', 'sort_order'])]
-class Plan extends Model
+class Plan extends Model implements Translatable
 {
     /** @use HasFactory<PlanFactory> */
     use HasFactory, HasTranslations;

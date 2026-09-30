@@ -14,8 +14,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property string|null $name
+ * @property string|null $phone
+ * @property Carbon|null $phone_verified_at
+ * @property string|null $email
+ * @property Carbon|null $email_verified_at
+ * @property string|null $password
+ * @property string|null $google_id
+ * @property string $locale
+ * @property Carbon|null $banned_at
+ * @property string|null $ban_reason
+ * @property Carbon|null $last_login_at
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['name', 'phone', 'email', 'password', 'locale'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, HasName

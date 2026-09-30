@@ -9,7 +9,22 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $business_id
+ * @property int $plan_id
+ * @property BillingPeriod $billing_period
+ * @property Carbon|null $starts_at
+ * @property Carbon|null $ends_at
+ * @property SubscriptionStatus $status
+ * @property int|null $payment_id
+ * @property Carbon|null $reminded_7d_at
+ * @property Carbon|null $reminded_1d_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['business_id', 'plan_id', 'billing_period', 'starts_at', 'ends_at', 'payment_id'])]
 class Subscription extends Model
 {

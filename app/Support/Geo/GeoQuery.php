@@ -2,9 +2,9 @@
 
 namespace App\Support\Geo;
 
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 
 /**
  * The only place that knows how distance is computed in SQL.
@@ -61,7 +61,7 @@ class GeoQuery
     public static function selectDistance(Builder $query, Coordinates $from, string $pointColumn = 'location'): Builder
     {
         $table = $query->getModel()->getTable();
-        [$sql, $bindings] = self::distanceSql($query->getConnection(), $table, $from, $pointColumn);
+        [$sql, $bindings] = self::distanceSql($query->getModel()->getConnection(), $table, $from, $pointColumn);
 
         if ($query->getQuery()->columns === null) {
             $query->select("{$table}.*");
@@ -80,7 +80,7 @@ class GeoQuery
     {
         $table = $query->getModel()->getTable();
         $box = $from->boundingBox($meters);
-        [$sql, $bindings] = self::distanceSql($query->getConnection(), $table, $from, $pointColumn);
+        [$sql, $bindings] = self::distanceSql($query->getModel()->getConnection(), $table, $from, $pointColumn);
 
         return $query
             ->whereBetween("{$table}.latitude", [$box['min_lat'], $box['max_lat']])
@@ -97,7 +97,7 @@ class GeoQuery
     public static function orderByDistance(Builder $query, Coordinates $from, string $direction = 'asc', string $pointColumn = 'location'): Builder
     {
         $table = $query->getModel()->getTable();
-        [$sql, $bindings] = self::distanceSql($query->getConnection(), $table, $from, $pointColumn);
+        [$sql, $bindings] = self::distanceSql($query->getModel()->getConnection(), $table, $from, $pointColumn);
 
         return $query->orderByRaw("{$sql} {$direction}", $bindings);
     }

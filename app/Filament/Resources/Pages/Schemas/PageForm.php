@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Filament\Support\TranslatableFields;
+use App\Models\Contracts\Translatable;
 use App\Support\Locales;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
@@ -12,7 +13,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class PageForm
@@ -26,7 +26,7 @@ class PageForm
                 RichEditor::make("body.{$locale}")
                     ->hiddenLabel()
                     ->required($locale === Locales::default())
-                    ->formatStateUsing(fn (?Model $record) => $record?->getTranslation('body', $locale, false))
+                    ->formatStateUsing(fn (?Translatable $record) => $record?->getTranslation('body', $locale, false))
                     ->extraInputAttributes(['dir' => Locales::direction($locale)]),
             ]);
         }

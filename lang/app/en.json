@@ -25,5 +25,18 @@
     "Trop de tentatives. Réessayez dans :minutes min.": "Too many attempts. Try again in :minutes min.",
     "Impossible d'envoyer le code pour le moment. Réessayez plus tard.": "We could not send the code right now. Please try again later.",
     "Code incorrect ou expiré.": "Incorrect or expired code.",
-    "Ce compte est suspendu.": "This account is suspended."
+    "Ce compte est suspendu.": "This account is suspended.",
+    "Connexion par e-mail": "Log in with email",
+    "E-mail": "Email",
+    "Mot de passe": "Password",
+    "Rester connecté": "Stay logged in",
+    "Se connecter avec mon numéro de mobile": "Log in with my mobile number",
+    "Continuer avec Google": "Continue with Google",
+    "Se connecter avec un e-mail": "Log in with an email",
+    "Ce numéro est déjà associé à un autre compte.": "This number is already linked to another account.",
+    "Votre numéro est vérifié.": "Your number is verified.",
+    "Vérifier mon numéro": "Verify my number",
+    "Un numéro de mobile vérifié est nécessaire pour publier un avis.": "A verified mobile number is required to post a review.",
+    "Numéro actuel :": "Current number:",
+    "Vérifier": "Verify"
 }

@@ -4,8 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
+ * @property int $id
+ * @property string $term
+ * @property list<string> $synonyms
+ * @property string|null $locale
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * A synonym group: "plombier" <=> ["سباك", "plombi"].
  */
 #[Fillable(['term', 'synonyms', 'locale'])]

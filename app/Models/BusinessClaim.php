@@ -9,9 +9,24 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @property int $id
+ * @property int $business_id
+ * @property int $user_id
+ * @property ClaimMethod $method
+ * @property string|null $notes
+ * @property ClaimStatus $status
+ * @property Carbon|null $phone_verified_at
+ * @property int|null $reviewed_by
+ * @property Carbon|null $reviewed_at
+ * @property string|null $rejection_reason
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['business_id', 'user_id', 'method', 'notes'])]
 class BusinessClaim extends Model implements HasMedia
 {

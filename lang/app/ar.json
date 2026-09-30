@@ -25,5 +25,18 @@
     "Trop de tentatives. Réessayez dans :minutes min.": "محاولات كثيرة. أعد المحاولة بعد :minutes دقيقة.",
     "Impossible d'envoyer le code pour le moment. Réessayez plus tard.": "تعذر إرسال الرمز حاليا. حاول مرة أخرى لاحقا.",
     "Code incorrect ou expiré.": "الرمز غير صحيح أو منتهي الصلاحية.",
-    "Ce compte est suspendu.": "هذا الحساب موقوف."
+    "Ce compte est suspendu.": "هذا الحساب موقوف.",
+    "Connexion par e-mail": "الدخول بالبريد الإلكتروني",
+    "E-mail": "البريد الإلكتروني",
+    "Mot de passe": "كلمة المرور",
+    "Rester connecté": "تذكرني",
+    "Se connecter avec mon numéro de mobile": "الدخول برقم هاتفي المحمول",
+    "Continuer avec Google": "المتابعة باستخدام Google",
+    "Se connecter avec un e-mail": "الدخول ببريد إلكتروني",
+    "Ce numéro est déjà associé à un autre compte.": "هذا الرقم مرتبط بحساب آخر.",
+    "Votre numéro est vérifié.": "تم التحقق من رقمك.",
+    "Vérifier mon numéro": "التحقق من رقمي",
+    "Un numéro de mobile vérifié est nécessaire pour publier un avis.": "يلزم رقم هاتف محمول مؤكد لنشر تقييم.",
+    "Numéro actuel :": "الرقم الحالي:",
+    "Vérifier": "تحقق"
 }

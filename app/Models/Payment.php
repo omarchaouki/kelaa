@@ -11,10 +11,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
+ * @property int $id
+ * @property int $business_id
+ * @property int|null $user_id
+ * @property string $amount
+ * @property string $currency
+ * @property PaymentMethod $method
+ * @property string|null $reference
+ * @property PaymentStatus $status
+ * @property array<string, mixed>|null $gateway_payload
+ * @property int|null $validated_by
+ * @property Carbon|null $validated_at
+ * @property string|null $rejection_reason
+ * @property int|null $invoice_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * Status only changes through the payment validation action (admin only).
  */
 #[Fillable(['business_id', 'user_id', 'amount', 'currency', 'method', 'reference'])]

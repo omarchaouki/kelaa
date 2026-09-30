@@ -8,9 +8,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @property int $id
+ * @property string $number
+ * @property int $year
+ * @property int $sequence
+ * @property int|null $business_id
+ * @property string $client_name
+ * @property string|null $client_ice
+ * @property string|null $client_address
+ * @property list<array<string, mixed>> $lines
+ * @property string $subtotal
+ * @property string $tax_rate
+ * @property string $tax_amount
+ * @property string $total
+ * @property string $currency
+ * @property Carbon $issued_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable([
     'number', 'year', 'sequence', 'business_id', 'client_name', 'client_ice', 'client_address',
     'lines', 'subtotal', 'tax_rate', 'tax_amount', 'total', 'currency', 'issued_at',

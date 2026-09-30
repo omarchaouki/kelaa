@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Events\ConnectionEstablished;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use InvalidArgumentException;
 use Livewire\Livewire;
@@ -69,6 +70,10 @@ class AppServiceProvider extends ServiceProvider
 
         // App strings live apart from the Laravel Lang package files (lang/{locale}.json).
         $this->app['translator']->addJsonPath(lang_path('app'));
+
+        // route() works outside a localized request too (jobs, mails, console).
+        // SetLocale overrides this default for every localized request.
+        URL::defaults(['locale' => config('app.locale')]);
 
         // Livewire requests hit /livewire/update: re-apply the page's locale.
         Livewire::addPersistentMiddleware([SetLocale::class]);

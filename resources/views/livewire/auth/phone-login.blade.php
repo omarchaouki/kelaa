@@ -45,6 +45,23 @@
         </form>
     @endif
 
+    @if ($normalizedPhone === null && (config('auth_options.email_password') || config('auth_options.google')))
+        <div class="mt-6 space-y-2 border-t border-stone-200 pt-6">
+            @if (config('auth_options.google'))
+                <a href="{{ route('login.google') }}"
+                   class="block w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-center font-medium hover:bg-stone-50">
+                    {{ __('Continuer avec Google') }}
+                </a>
+            @endif
+            @if (config('auth_options.email_password'))
+                <a href="{{ route('login.email') }}" wire:navigate
+                   class="block w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-center font-medium hover:bg-stone-50">
+                    {{ __('Se connecter avec un e-mail') }}
+                </a>
+            @endif
+        </div>
+    @endif
+
     <p class="mt-8 text-xs text-stone-500">
         {{ __('En continuant, vous acceptez nos') }}
         <a href="{{ route('page.show', ['page' => 'cgu']) }}" class="underline">{{ __('pages.cgu') }}</a>

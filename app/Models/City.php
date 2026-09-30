@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\Translatable;
 use Database\Factories\CityFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -9,10 +10,23 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Spatie\Translatable\HasTranslations;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property float $center_latitude
+ * @property float $center_longitude
+ * @property int $default_zoom
+ * @property string $timezone
+ * @property bool $is_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 #[Fillable(['name', 'slug', 'center_latitude', 'center_longitude', 'default_zoom', 'timezone', 'is_active'])]
-class City extends Model
+class City extends Model implements Translatable
 {
     /** @use HasFactory<CityFactory> */
     use HasFactory, HasTranslations;
