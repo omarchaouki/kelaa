@@ -24,7 +24,30 @@ class DevDataSeeder extends Seeder
             throw new RuntimeException('DevDataSeeder must never run in production.');
         }
 
-        DB::transaction(fn () => $this->seedDirectory());
+        DB::transaction(function (): void {
+            $this->seedStaff();
+            $this->seedDirectory();
+        });
+    }
+
+    /**
+     * Local-only staff accounts for the /admin panel (see README).
+     */
+    private function seedStaff(): void
+    {
+        User::factory()->admin()->create([
+            'name' => 'Admin Dev',
+            'phone' => '+212600000001',
+            'email' => 'admin@example.test',
+            'password' => 'password',
+        ]);
+
+        User::factory()->moderator()->create([
+            'name' => 'Modérateur Dev',
+            'phone' => '+212600000002',
+            'email' => 'moderator@example.test',
+            'password' => 'password',
+        ]);
     }
 
     private function seedDirectory(): void
