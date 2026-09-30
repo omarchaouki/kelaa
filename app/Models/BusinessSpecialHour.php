@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\DateOnly;
+use App\Models\Concerns\NormalizesOpeningTimes;
 use App\Models\Contracts\Translatable;
 use Database\Factories\BusinessSpecialHourFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -30,7 +32,7 @@ use Spatie\Translatable\HasTranslations;
 class BusinessSpecialHour extends Model implements Translatable
 {
     /** @use HasFactory<BusinessSpecialHourFactory> */
-    use HasFactory, HasTranslations;
+    use HasFactory, HasTranslations, NormalizesOpeningTimes;
 
     /** @var list<string> */
     public array $translatable = ['label'];
@@ -38,8 +40,8 @@ class BusinessSpecialHour extends Model implements Translatable
     protected function casts(): array
     {
         return [
-            'starts_on' => 'date',
-            'ends_on' => 'date',
+            'starts_on' => DateOnly::class,
+            'ends_on' => DateOnly::class,
             'is_closed' => 'boolean',
         ];
     }

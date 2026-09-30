@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Contracts\Translatable;
+use App\Support\Security\RichText;
 use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,11 +30,29 @@ class Page extends Model implements Translatable
     /** @var list<string> */
     public array $translatable = ['title', 'body', 'meta_description'];
 
+    protected static function booted(): void
+    {
+        // Stored HTML is always sanitized, whatever wrote it (panel, seeder, tinker).
+        static::saving(function (Page $page): void {
+            foreach ($page->getTranslations('body') as $locale => $html) {
+                $page->setTranslation('body', $locale, RichText::sanitize($html));
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [
             'is_published' => 'boolean',
         ];
+    }
+
+    /**
+     * Body HTML for the current locale, sanitized again at render time.
+     */
+    public function safeBody(): string
+    {
+        return RichText::sanitize($this->body);
     }
 
     public function getRouteKeyName(): string

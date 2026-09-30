@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\SecurityHeaders;
 use App\Support\Locales;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->append(SecurityHeaders::class);
+
         $middleware->redirectGuestsTo(fn (Request $request) => route('login', ['locale' => Locales::preferred($request)]));
         $middleware->redirectUsersTo(fn (Request $request) => route('locale.home', ['locale' => Locales::preferred($request)]));
     })

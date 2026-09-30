@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\NormalizesOpeningTimes;
 use Database\Factories\BusinessHourFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use InvalidArgumentException;
 
 /**
  * @property int $id
@@ -25,7 +27,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class BusinessHour extends Model
 {
     /** @use HasFactory<BusinessHourFactory> */
-    use HasFactory;
+    use HasFactory, NormalizesOpeningTimes;
+
+    protected static function booted(): void
+    {
+        static::saving(function (BusinessHour $hour): void {
+            if ($hour->day_of_week < 1 || $hour->day_of_week > 7) {
+                throw new InvalidArgumentException('day_of_week must be between 1 (Monday) and 7 (Sunday).');
+            }
+        });
+    }
 
     protected function casts(): array
     {

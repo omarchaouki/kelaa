@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Models\Contracts\Translatable;
+use App\Support\Locales;
+use App\Support\ReservedSlugs;
 use Database\Factories\CityFactory;
+use DomainException;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +36,15 @@ class City extends Model implements Translatable
 
     /** @var list<string> */
     public array $translatable = ['name'];
+
+    protected static function booted(): void
+    {
+        static::saving(function (City $city): void {
+            if (ReservedSlugs::isReserved($city->slug) || Locales::isSupported($city->slug)) {
+                throw new DomainException("The slug [{$city->slug}] is reserved.");
+            }
+        });
+    }
 
     protected function casts(): array
     {

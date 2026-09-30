@@ -38,5 +38,12 @@
     "Vérifier mon numéro": "Verify my number",
     "Un numéro de mobile vérifié est nécessaire pour publier un avis.": "A verified mobile number is required to post a review.",
     "Numéro actuel :": "Current number:",
-    "Vérifier": "Verify"
+    "Vérifier": "Verify",
+    "Ouvert 24h/24": "Open 24/7",
+    "Ouvert": "Open",
+    "Ouvert · ferme à :time": "Open · closes at :time",
+    "Fermé": "Closed",
+    "Fermé · ouvre à :time": "Closed · opens at :time",
+    "Fermé · ouvre demain à :time": "Closed · opens tomorrow at :time",
+    "Fermé · ouvre :day à :time": "Closed · opens :day at :time"
 }

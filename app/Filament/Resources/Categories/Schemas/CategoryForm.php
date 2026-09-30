@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Categories\Schemas;
 
 use App\Filament\Support\TranslatableFields;
 use App\Models\Category;
+use App\Support\ReservedSlugs;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -29,6 +30,7 @@ class CategoryForm
                             ->maxLength(100)
                             ->alphaDash()
                             ->unique(ignoreRecord: true)
+                            ->notIn(ReservedSlugs::ALL)
                             ->dehydrateStateUsing(fn (string $state) => Str::slug($state)),
                         // Two levels only: a parent must be a root category, and a
                         // category that already has children cannot get a parent.

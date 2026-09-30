@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Cities\Schemas;
 
 use App\Filament\Support\TranslatableFields;
+use App\Support\Locales;
+use App\Support\ReservedSlugs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -26,6 +28,7 @@ class CityForm
                             ->alphaDash()
                             ->maxLength(100)
                             ->unique(ignoreRecord: true)
+                            ->notIn([...ReservedSlugs::ALL, ...Locales::supported()])
                             ->dehydrateStateUsing(fn (string $state) => Str::slug($state)),
                         TextInput::make('timezone')
                             ->label(__('Fuseau horaire'))

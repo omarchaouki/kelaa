@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\DateOnly;
 use Carbon\CarbonInterface;
 use Database\Factories\PharmacyDutyFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -34,7 +35,7 @@ class PharmacyDuty extends Model
     protected function casts(): array
     {
         return [
-            'date' => 'date',
+            'date' => DateOnly::class,
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
         ];

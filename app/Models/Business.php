@@ -6,6 +6,10 @@ use App\Enums\BusinessStatus;
 use App\Enums\ReviewStatus;
 use App\Models\Concerns\HasGeoLocation;
 use App\Models\Contracts\Translatable;
+use App\Support\Phone\MoroccanPhone;
+use App\Support\Security\SafeUrl;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Database\Factories\BusinessFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -17,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -75,6 +80,45 @@ class Business extends Model implements HasMedia, Translatable
 
     /** @var list<string> */
     public array $translatable = ['description'];
+
+    /** Social networks accepted in social_links. */
+    public const SOCIAL_NETWORKS = ['facebook', 'instagram', 'tiktok', 'youtube', 'linkedin', 'x'];
+
+    protected static function booted(): void
+    {
+        // Contact data ends up in href attributes: normalize it whatever wrote it.
+        static::saving(function (Business $business): void {
+            if ($business->isDirty('phone')) {
+                $business->phone = MoroccanPhone::normalize($business->phone, mobileOnly: false);
+            }
+
+            if ($business->isDirty('whatsapp')) {
+                $business->whatsapp = MoroccanPhone::normalize($business->whatsapp);
+            }
+
+            if ($business->isDirty('website')) {
+                $business->website = SafeUrl::normalize($business->website);
+            }
+
+            if ($business->isDirty('email') && $business->email !== null) {
+                $business->email = filter_var($business->email, FILTER_VALIDATE_EMAIL) ? mb_strtolower($business->email) : null;
+            }
+
+            if ($business->isDirty('social_links')) {
+                $links = [];
+
+                foreach ($business->social_links ?? [] as $network => $url) {
+                    $safe = SafeUrl::normalize(is_string($url) ? $url : null);
+
+                    if (in_array($network, self::SOCIAL_NETWORKS, true) && $safe !== null) {
+                        $links[$network] = $safe;
+                    }
+                }
+
+                $business->social_links = $links === [] ? null : $links;
+            }
+        });
+    }
 
     protected function casts(): array
     {
@@ -280,6 +324,58 @@ class Business extends Model implements HasMedia, Translatable
     protected function published(Builder $query): void
     {
         $query->where('status', BusinessStatus::Published);
+    }
+
+    /**
+     * Businesses open at the given moment. Mirrors App\Services\Hours\OpeningHours:
+     * special periods replace regular hours for the dates they cover, a closing
+     * time earlier than (or equal to) the opening time runs past midnight.
+     * Times are stored as "HH:MM:SS" so string comparison is correct.
+     *
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function openAt(Builder $query, CarbonInterface $moment, ?string $timezone = null): void
+    {
+        $now = CarbonImmutable::instance($moment)->setTimezone($timezone ?? config('directory.timezone'));
+        $today = $now->toDateString();
+        $yesterday = $now->subDay()->toDateString();
+        $time = $now->format('H:i:s');
+
+        $special = fn (string $date) => fn ($q) => $q->select(DB::raw(1))
+            ->from('business_special_hours')
+            ->whereColumn('business_special_hours.business_id', 'businesses.id')
+            ->where('starts_on', '<=', $date)
+            ->where('ends_on', '>=', $date);
+
+        // A slot of $date that is running at $time on that same date.
+        $runningToday = fn ($q) => $q->where('is_closed', false)
+            ->where('opens_at', '<=', $time)
+            ->where(fn ($q) => $q->where('closes_at', '>', $time)->orWhereColumn('closes_at', '<=', 'opens_at'));
+
+        // An overnight slot of the previous date still running after midnight.
+        $spillingOver = fn ($q) => $q->where('is_closed', false)
+            ->whereColumn('closes_at', '<=', 'opens_at')
+            ->where('closes_at', '>', $time);
+
+        $query->where(fn (Builder $q) => $q
+            ->where('businesses.is_always_open', true)
+            // Special period today.
+            ->orWhereExists(fn ($q) => $special($today)($q)->where($runningToday))
+            ->orWhere(fn ($q) => $q
+                ->whereNotExists($special($today))
+                ->whereExists(fn ($q) => $q->select(DB::raw(1))->from('business_hours')
+                    ->whereColumn('business_hours.business_id', 'businesses.id')
+                    ->where('day_of_week', $now->isoWeekday())
+                    ->where($runningToday)))
+            // Yesterday's overnight slot (special or regular).
+            ->orWhereExists(fn ($q) => $special($yesterday)($q)->where($spillingOver))
+            ->orWhere(fn ($q) => $q
+                ->whereNotExists($special($yesterday))
+                ->whereExists(fn ($q) => $q->select(DB::raw(1))->from('business_hours')
+                    ->whereColumn('business_hours.business_id', 'businesses.id')
+                    ->where('day_of_week', $now->subDay()->isoWeekday())
+                    ->where($spillingOver))));
     }
 
     /**

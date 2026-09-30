@@ -8,11 +8,16 @@ use App\Models;
 use App\Services\Otp\LogOtpSender;
 use App\Services\Otp\SmsOtpSender;
 use App\Services\Otp\WhatsAppOtpSender;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Events\ConnectionEstablished;
 use Illuminate\Database\SQLiteConnection;
+use Illuminate\Http\Middleware\TrustProxies;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use InvalidArgumentException;
@@ -78,7 +83,30 @@ class AppServiceProvider extends ServiceProvider
         // Livewire requests hit /livewire/update: re-apply the page's locale.
         Livewire::addPersistentMiddleware([SetLocale::class]);
 
+        $this->configureSecurity();
         $this->registerSqliteMathFunctions();
+    }
+
+    private function configureSecurity(): void
+    {
+        // Behind a TLS-terminating proxy, every generated URL must stay HTTPS.
+        if ($this->app->isProduction()) {
+            URL::forceHttps();
+        }
+
+        if ($proxies = config('security.trusted_proxies')) {
+            TrustProxies::at($proxies);
+        }
+
+        RateLimiter::for('livewire', fn (Request $request) => Limit::perMinute((int) config('security.rate_limits.livewire'))
+            ->by($request->user()?->getAuthIdentifier() ?? $request->ip()));
+
+        RateLimiter::for('contact-events', fn (Request $request) => Limit::perMinute((int) config('security.rate_limits.contact_events'))
+            ->by($request->ip()));
+
+        // Every Livewire round trip (search-as-you-type, filters) is throttled.
+        Livewire::setUpdateRoute(fn ($handle, string $path) => Route::post($path, $handle)
+            ->middleware(['web', 'throttle:livewire']));
     }
 
     /**

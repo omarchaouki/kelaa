@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Contracts\Translatable;
+use App\Support\ReservedSlugs;
 use Database\Factories\CategoryFactory;
 use DomainException;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -41,6 +42,10 @@ class Category extends Model implements Translatable
     protected static function booted(): void
     {
         static::saving(function (Category $category): void {
+            if (ReservedSlugs::isReserved($category->slug)) {
+                throw new DomainException("The slug [{$category->slug}] is reserved.");
+            }
+
             $category->guardDepth();
         });
     }

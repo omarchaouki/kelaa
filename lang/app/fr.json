@@ -38,5 +38,12 @@
     "Vérifier mon numéro": "Vérifier mon numéro",
     "Un numéro de mobile vérifié est nécessaire pour publier un avis.": "Un numéro de mobile vérifié est nécessaire pour publier un avis.",
     "Numéro actuel :": "Numéro actuel :",
-    "Vérifier": "Vérifier"
+    "Vérifier": "Vérifier",
+    "Ouvert 24h/24": "Ouvert 24h/24",
+    "Ouvert": "Ouvert",
+    "Ouvert · ferme à :time": "Ouvert · ferme à :time",
+    "Fermé": "Fermé",
+    "Fermé · ouvre à :time": "Fermé · ouvre à :time",
+    "Fermé · ouvre demain à :time": "Fermé · ouvre demain à :time",
+    "Fermé · ouvre :day à :time": "Fermé · ouvre :day à :time"
 }
