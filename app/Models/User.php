@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,7 +37,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 #[Fillable(['name', 'phone', 'email', 'password', 'locale'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, HasLocalePreference, HasName
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, Notifiable;
@@ -112,6 +113,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function getFilamentName(): string
     {
         return $this->name ?? $this->phone ?? $this->email ?? "#{$this->id}";
+    }
+
+    public function preferredLocale(): string
+    {
+        return $this->locale;
     }
 
     public function displayName(): string

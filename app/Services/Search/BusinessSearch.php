@@ -6,6 +6,8 @@ use App\Enums\SearchSort;
 use App\Models\Business;
 use App\Models\Category;
 use App\Models\City;
+use App\Services\Ranking\RankingService;
+use App\Services\Ranking\RankingSignals;
 use App\Support\Geo\Coordinates;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +26,15 @@ class BusinessSearch
      * Upper bound of text matches considered for one query.
      */
     public const MAX_TEXT_HITS = 1000;
+
+    /**
+     * Upper bound of rows scored in PHP for the relevance order.
+     */
+    public const MAX_RELEVANCE_CANDIDATES = 1000;
+
+    public function __construct(
+        private readonly RankingService $ranking,
+    ) {}
 
     /**
      * Relations every result card needs (avoids N+1).
@@ -47,13 +58,15 @@ class BusinessSearch
             $sort = SearchSort::Relevance;
         }
 
+        $rankedIds = null;
+
         if ($filters->hasText()) {
             $rankedIds = $this->textMatches($city, $filters->query);
             $query->whereIn('businesses.id', $rankedIds === [] ? [0] : $rankedIds);
+        }
 
-            if ($sort === SearchSort::Relevance) {
-                return $this->paginateByRank($query, $rankedIds, $perPage, $page, $location);
-            }
+        if ($sort === SearchSort::Relevance) {
+            return $this->paginateByRelevance($query, $rankedIds, $perPage, $page, $location);
         }
 
         $this->applySort($query, $sort, $location);
@@ -136,7 +149,6 @@ class BusinessSearch
             SearchSort::Distance => $query->orderBy('distance_m'),
             SearchSort::Reviews => $query->orderByDesc('businesses.rating_count')->orderByDesc('businesses.bayesian_score'),
             SearchSort::Newest => $query->orderByDesc('businesses.published_at'),
-            // Relevance without text and "best rated" both use the Bayesian score (phase 3: RankingService).
             SearchSort::Relevance, SearchSort::Rating => $query->orderByDesc('businesses.bayesian_score')->orderByDesc('businesses.rating_count'),
         };
 
@@ -144,16 +156,41 @@ class BusinessSearch
     }
 
     /**
-     * Keeps Meilisearch's relevance order while SQL applies the filters.
+     * Relevance order from RankingService: Bayesian score, text match rank,
+     * distance, profile completeness, recent activity and verification.
+     * Scores are computed over at most MAX_RELEVANCE_CANDIDATES rows.
      *
      * @param  Builder<Business>  $query
-     * @param  list<int>  $rankedIds
+     * @param  list<int>|null  $rankedIds  Text matches, best first (null without a text query).
      * @return LengthAwarePaginator<int, Business>
      */
-    private function paginateByRank(Builder $query, array $rankedIds, int $perPage, int $page, ?Coordinates $location): LengthAwarePaginator
+    private function paginateByRelevance(Builder $query, ?array $rankedIds, int $perPage, int $page, ?Coordinates $location): LengthAwarePaginator
     {
-        $allowed = array_flip($query->clone()->pluck('businesses.id')->map(fn ($id) => (int) $id)->all());
-        $ordered = array_values(array_filter($rankedIds, fn (int $id) => isset($allowed[$id])));
+        $textPositions = $rankedIds === null ? null : array_flip($rankedIds);
+
+        $candidates = $query->clone()
+            ->reorder()
+            ->orderByDesc('businesses.bayesian_score')
+            ->limit(self::MAX_RELEVANCE_CANDIDATES)
+            ->get(['businesses.id', 'businesses.bayesian_score', 'businesses.profile_completeness', 'businesses.is_verified', 'businesses.last_activity_at', 'businesses.latitude', 'businesses.longitude']);
+
+        $scores = [];
+
+        foreach ($candidates as $candidate) {
+            $scores[$candidate->id] = $this->ranking->relevance(new RankingSignals(
+                bayesianScore: $candidate->bayesian_score,
+                profileCompleteness: $candidate->profile_completeness,
+                isVerified: $candidate->is_verified,
+                lastActivityAt: $candidate->last_activity_at,
+                distanceMeters: $location !== null && ($coordinates = $candidate->coordinates()) !== null ? $location->distanceTo($coordinates) : null,
+                textRank: $textPositions === null ? null : (float) ($textPositions[$candidate->id] ?? count($textPositions)),
+                textHits: $textPositions === null ? null : count($textPositions),
+            ));
+        }
+
+        // Stable ordering: score, then id, so pages never overlap.
+        uksort($scores, fn (int $a, int $b) => [$scores[$b], $a] <=> [$scores[$a], $b]);
+        $ordered = array_keys($scores);
 
         $pageIds = array_slice($ordered, ($page - 1) * $perPage, $perPage);
 

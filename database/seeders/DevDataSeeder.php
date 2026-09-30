@@ -9,6 +9,7 @@ use App\Models\PharmacyDuty;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -88,32 +89,6 @@ class DevDataSeeder extends Seeder
             }
         }
 
-        $this->approximateRatings();
-    }
-
-    /**
-     * Fills the rating columns for fake data. The real computation (queued job
-     * with the Bayesian ranking service) arrives with reviews in phase 3.
-     */
-    private function approximateRatings(): void
-    {
-        $stats = Review::query()->published()->toBase()
-            ->selectRaw('business_id, avg(rating) as average, count(*) as total')
-            ->groupBy('business_id')
-            ->get();
-
-        $globalAverage = (float) Review::query()->published()->avg('rating') ?: 3.5;
-        $m = (float) config('ranking.bayesian_m');
-
-        foreach ($stats as $row) {
-            $v = (int) $row->total;
-            $r = (float) $row->average;
-
-            Business::query()->whereKey($row->business_id)->update([
-                'rating_avg' => round($r, 2),
-                'rating_count' => $v,
-                'bayesian_score' => round(($v / ($v + $m)) * $r + ($m / ($v + $m)) * $globalAverage, 4),
-            ]);
-        }
+        Artisan::call('ranking:recalculate');
     }
 }

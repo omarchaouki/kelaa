@@ -11,4 +11,7 @@ Schedule::job(AggregateContactEvents::forYesterday())->dailyAt('00:20')->onOneSe
 // Data minimization: expired OTP codes and old raw contact events are deleted.
 Schedule::command('model:prune', ['--model' => [OtpCode::class, ContactEvent::class]])->dailyAt('03:10')->onOneServer();
 
+// Safety net: scores are recomputed on every review change, and fully each night.
+Schedule::command('ranking:recalculate')->dailyAt('02:30')->onOneServer();
+
 Schedule::command('horizon:snapshot')->everyFiveMinutes();

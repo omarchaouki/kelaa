@@ -100,6 +100,12 @@
             <section id="avis" aria-labelledby="reviews-title" class="space-y-4">
                 <h2 id="reviews-title" class="text-lg font-semibold">{{ __('Avis') }}</h2>
 
+                <livewire:reviews.review-form :business="$business" :key="'review-form-'.$business->id" />
+
+                @if ($reportFlash)
+                    <p class="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800" role="status">{{ $reportFlash }}</p>
+                @endif
+
                 @if ($totalReviews > 0)
                     <div class="flex gap-6 rounded-xl border border-stone-200 bg-white p-4">
                         <div class="text-center">
@@ -148,11 +154,54 @@
                                     <p class="mt-1 text-xs text-stone-500">{{ __('Modifié') }}</p>
                                 @endif
 
+                                @php $photos = $review->getMedia('photos'); @endphp
+                                @if ($photos->isNotEmpty())
+                                    <div class="mt-2 flex flex-wrap gap-2">
+                                        @foreach ($photos as $photo)
+                                            <div class="relative" wire:key="review-photo-{{ $photo->id }}">
+                                                <a href="{{ $photo->getUrl('large') }}" target="_blank" rel="noopener">
+                                                    <img src="{{ $photo->getUrl('thumb') }}" alt="{{ __('Photo de :business', ['business' => $business->name]) }}" width="80" height="80" loading="lazy" class="size-20 rounded-lg object-cover">
+                                                </a>
+                                                <button type="button" wire:click="openReport('media', {{ $photo->id }})" class="absolute bottom-1 end-1 rounded bg-white/90 p-0.5 text-stone-600" aria-label="{{ __('Signaler cette photo') }}">
+                                                    <x-ui.icon name="flag" size="12" />
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                <div class="mt-3 flex items-center gap-4 text-sm text-stone-600">
+                                    <button type="button" wire:click="toggleHelpful({{ $review->id }})"
+                                            aria-pressed="{{ in_array($review->id, $votedIds, true) ? 'true' : 'false' }}"
+                                            @class(['inline-flex items-center gap-1 hover:text-brand-700', 'font-semibold text-brand-700' => in_array($review->id, $votedIds, true)])
+                                            @disabled(auth()->id() === $review->user_id)>
+                                        👍 {{ __('Utile') }}@if ($review->helpful_count > 0) ({{ $review->helpful_count }})@endif
+                                    </button>
+                                    <button type="button" wire:click="openReport('review', {{ $review->id }})" class="inline-flex items-center gap-1 hover:text-rose-700">
+                                        <x-ui.icon name="flag" size="14" /> {{ __('Signaler') }}
+                                    </button>
+                                </div>
+
                                 @if ($review->reply)
                                     <div class="ms-4 mt-3 border-s-2 border-brand-200 ps-3">
                                         <p class="text-sm font-medium text-brand-800">{{ __('Réponse du propriétaire') }}</p>
                                         <p class="mt-1 text-sm text-stone-700" dir="auto">{!! nl2br(e($review->reply->body)) !!}</p>
+                                        <button type="button" wire:click="openReport('review_reply', {{ $review->reply->id }})" class="mt-1 text-xs text-stone-500 hover:text-rose-700">{{ __('Signaler') }}</button>
                                     </div>
+                                @endif
+
+                                @if ($isOwner)
+                                    <form wire:submit="saveReply({{ $review->id }})" class="ms-4 mt-3 space-y-2 border-s-2 border-stone-200 ps-3">
+                                        <label for="reply-{{ $review->id }}" class="text-sm font-medium">
+                                            {{ $review->reply ? __('Modifier votre réponse') : __('Répondre publiquement') }}
+                                        </label>
+                                        <textarea id="reply-{{ $review->id }}" wire:model="replyBodies.{{ $review->id }}" rows="2" dir="auto"
+                                                  maxlength="{{ \App\Actions\Reviews\ReplyToReview::MAX_LENGTH }}"
+                                                  class="block w-full rounded-lg border border-stone-300 px-3 py-2 text-sm"
+                                                  placeholder="{{ $review->reply?->body }}"></textarea>
+                                        @error('replyBodies.'.$review->id) <p class="text-sm text-red-700">{{ $message }}</p> @enderror
+                                        <button type="submit" class="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white">{{ __('Envoyer') }}</button>
+                                    </form>
                                 @endif
                             </li>
                         @endforeach
@@ -263,6 +312,40 @@
             @endunless
         </aside>
     </div>
+
+    <p class="text-sm">
+        <button type="button" wire:click="openReport('business', {{ $business->id }})" class="inline-flex items-center gap-1 text-stone-500 hover:text-rose-700">
+            <x-ui.icon name="flag" size="14" /> {{ __('Signaler cette fiche') }}
+        </button>
+    </p>
+
+    @if ($reportType !== null)
+        <div class="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center" role="dialog" aria-modal="true" aria-labelledby="report-title"
+             x-data x-on:keydown.escape.window="$wire.closeReport()">
+            <form wire:submit="submitReport" class="w-full max-w-md space-y-3 rounded-xl bg-white p-4 shadow-xl">
+                <h2 id="report-title" class="text-lg font-semibold">{{ __('Signaler un contenu') }}</h2>
+                <div>
+                    <label for="report-reason" class="text-sm font-medium">{{ __('Motif') }}</label>
+                    <select id="report-reason" wire:model="reportReason" class="mt-1 block w-full rounded-lg border border-stone-300 px-3 py-2" required>
+                        <option value="">{{ __('Choisir…') }}</option>
+                        @foreach ($reportReasons as $reason)
+                            <option value="{{ $reason->value }}">{{ $reason->getLabel() }}</option>
+                        @endforeach
+                    </select>
+                    @error('reportReason') <p class="mt-1 text-sm text-red-700">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="report-details" class="text-sm font-medium">{{ __('Détails (facultatif)') }}</label>
+                    <textarea id="report-details" wire:model="reportDetails" rows="3" maxlength="{{ \App\Actions\Reports\SubmitReport::MAX_DETAILS }}" dir="auto"
+                              class="mt-1 block w-full rounded-lg border border-stone-300 px-3 py-2"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" wire:click="closeReport" class="rounded-lg border border-stone-300 px-3 py-2 text-sm">{{ __('Annuler') }}</button>
+                    <button type="submit" class="rounded-lg bg-rose-700 px-3 py-2 text-sm font-semibold text-white">{{ __('Envoyer le signalement') }}</button>
+                </div>
+            </form>
+        </div>
+    @endif
 
     {{-- Similar businesses: organic only, never sponsored. --}}
     @if ($similar->isNotEmpty())

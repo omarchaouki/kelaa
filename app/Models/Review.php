@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ReviewStatus;
+use App\Exceptions\UnauthorizedStatusChange;
+use App\Support\Moderation\ModerationGate;
 use Database\Factories\ReviewFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -15,8 +17,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -48,6 +52,22 @@ class Review extends Model implements HasMedia
     /** @use HasFactory<ReviewFactory> */
     use HasFactory, InteractsWithMedia;
 
+    protected static function booted(): void
+    {
+        // Hard rule: only moderation (App\Support\Moderation\ModerationGate)
+        // may change the status of an existing review.
+        static::updating(function (Review $review): void {
+            if ($review->isDirty(['status', 'moderated_by', 'moderated_at', 'moderation_reason']) && ! ModerationGate::allowsStatusChange()) {
+                throw UnauthorizedStatusChange::for('review');
+            }
+        });
+
+        // Photos, votes, reports and revisions go with the review.
+        static::deleting(function (Review $review): void {
+            $review->reports()->delete();
+        });
+    }
+
     protected function casts(): array
     {
         return [
@@ -64,6 +84,18 @@ class Review extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('photos')->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->nonQueued()
+            ->format('webp')
+            ->fit(Fit::Crop, 240, 240);
+
+        $this->addMediaConversion('large')
+            ->format('webp')
+            ->fit(Fit::Max, 1280, 1280);
     }
 
     /**

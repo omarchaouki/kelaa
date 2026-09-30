@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ReplyStatus;
+use App\Exceptions\UnauthorizedStatusChange;
+use App\Support\Moderation\ModerationGate;
 use Database\Factories\ReviewReplyFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +31,19 @@ class ReviewReply extends Model
 {
     /** @use HasFactory<ReviewReplyFactory> */
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::updating(function (ReviewReply $reply): void {
+            if ($reply->isDirty(['status', 'moderated_by', 'moderated_at', 'moderation_reason']) && ! ModerationGate::allowsStatusChange()) {
+                throw UnauthorizedStatusChange::for('reply');
+            }
+        });
+
+        static::deleting(function (ReviewReply $reply): void {
+            $reply->reports()->delete();
+        });
+    }
 
     protected function casts(): array
     {
