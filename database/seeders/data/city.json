@@ -1,0 +1,15 @@
+{
+    "_comment": "PLACEHOLDER - replace with the launch city and its real quartiers. Coordinates are WGS84 (latitude, longitude). Slugs appear in URLs: keep them short, lowercase, ASCII.",
+    "city": {
+        "slug": "ma-ville",
+        "name": { "fr": "Ma Ville", "ar": "مدينتي", "en": "My City" },
+        "center": { "latitude": 33.5731, "longitude": -7.5898 },
+        "default_zoom": 13
+    },
+    "neighborhoods": [
+        { "slug": "centre-ville", "name": { "fr": "Centre-ville", "ar": "وسط المدينة", "en": "City centre" }, "center": { "latitude": 33.5950, "longitude": -7.6190 } },
+        { "slug": "medina", "name": { "fr": "Médina", "ar": "المدينة القديمة", "en": "Medina" }, "center": { "latitude": 33.6030, "longitude": -7.6180 } },
+        { "slug": "quartier-industriel", "name": { "fr": "Quartier industriel", "ar": "الحي الصناعي", "en": "Industrial district" }, "center": { "latitude": 33.5800, "longitude": -7.5600 } },
+        { "slug": "hay-salam", "name": { "fr": "Hay Salam", "ar": "حي السلام", "en": "Hay Salam" }, "center": { "latitude": 33.5550, "longitude": -7.6000 } }
+    ]
+}
