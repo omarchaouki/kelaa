@@ -16,7 +16,8 @@ Alpine.magic('share', () => share);
 
 Livewire.start();
 
-// Offline page and static asset cache only (see public/sw.js).
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+// Offline page and static asset cache only (see public/sw.js). HTTPS (production)
+// only: on a local dev server, restarts would show the offline page.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
     window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
 }

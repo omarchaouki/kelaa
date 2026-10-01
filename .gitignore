@@ -32,3 +32,4 @@ Thumbs.db
 /public/sitemap.xml
 /public/sitemaps
 /public/sitemaps-tmp
+/.env.sail.backup
