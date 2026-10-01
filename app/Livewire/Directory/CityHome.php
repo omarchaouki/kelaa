@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Services\Directory\CityDirectory;
 use App\Services\Search\BusinessSearch;
 use App\Services\Search\SearchFilters;
+use App\Support\Seo\JsonLd;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
@@ -86,6 +87,7 @@ class CityHome extends Component
             ->layoutData([
                 'metaDescription' => __('Trouvez artisans, mécaniciens, pharmacies de garde et commerces à :city, avec les avis des habitants.', ['city' => $this->city->name]),
                 'canonical' => route('city.home', ['city' => $this->city]),
+                'structuredData' => [JsonLd::website($this->city, route('city.home', ['city' => $this->city]), route('city.search', ['city' => $this->city]))],
             ]);
     }
 }

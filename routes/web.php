@@ -5,12 +5,17 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CmiCallbackController;
 use App\Http\Controllers\ContactEventController;
+use App\Http\Controllers\DataExportController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocaleRedirectController;
+use App\Http\Controllers\ManifestController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PharmacyDutyController;
 use App\Http\Controllers\PrivateMediaController;
+use App\Http\Controllers\RobotsController;
 use App\Http\Middleware\SetLocale;
+use App\Livewire\Account\PrivacyPage;
 use App\Livewire\Account\VerifyPhone;
 use App\Livewire\Auth\EmailLogin;
 use App\Livewire\Auth\PhoneLogin;
@@ -29,6 +34,11 @@ use Illuminate\Support\Facades\Route;
 
 // "/" => "/{preferred-locale}/{default-city}"
 Route::get('/', LocaleRedirectController::class)->name('root');
+
+// Crawlers, PWA and uptime probes.
+Route::get('robots.txt', RobotsController::class)->name('robots');
+Route::get('manifest.webmanifest', ManifestController::class)->name('manifest');
+Route::get('health', HealthController::class)->middleware('throttle:30,1')->name('health');
 
 // Private files (claim documents) for moderators only.
 Route::get('admin-files/media/{media}', PrivateMediaController::class)
@@ -67,6 +77,10 @@ Route::prefix('{locale}')
         Route::middleware('auth')->group(function () {
             Route::post('logout', LogoutController::class)->name('logout');
             Route::livewire('account/phone', VerifyPhone::class)->name('account.phone');
+            Route::livewire('account/donnees', PrivacyPage::class)->name('account.privacy');
+            Route::get('account/donnees/export/{token}', DataExportController::class)
+                ->middleware(['signed', 'throttle:10,1'])
+                ->name('account.export.download');
 
             // Owner area. Business ids are re-authorized by BusinessPolicy::manage on every request.
             Route::livewire('dashboard', Dashboard::class)->name('dashboard');

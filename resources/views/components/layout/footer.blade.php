@@ -9,6 +9,12 @@
                         </a>
                     </li>
                 @endforeach
+                @auth
+                    <li><a href="{{ route('account.privacy') }}" wire:navigate class="hover:text-brand-700 hover:underline">{{ __('Mes données') }}</a></li>
+                @endauth
+                <li>
+                    <button type="button" x-data x-on:click="$dispatch('open-cookie-consent')" class="hover:text-brand-700 hover:underline">{{ __('Gérer les cookies') }}</button>
+                </li>
             </ul>
         </nav>
 

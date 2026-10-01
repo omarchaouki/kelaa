@@ -21,7 +21,7 @@ return [
     'payment_status' => ['pending' => 'Pending', 'validated' => 'Validated', 'rejected' => 'Rejected', 'refunded' => 'Refunded'],
     'contact_event_type' => ['profile_view' => 'Profile view', 'call_click' => 'Call', 'whatsapp_click' => 'WhatsApp', 'directions_click' => 'Directions', 'website_click' => 'Website'],
     'contact_event_source' => ['organic' => 'Organic', 'sponsored' => 'Sponsored', 'search' => 'Search', 'map' => 'Map'],
-    'otp_purpose' => ['login' => 'Login', 'business_claim' => 'Business claim', 'phone_verification' => 'Phone verification'],
+    'otp_purpose' => ['login' => 'Login', 'business_claim' => 'Business claim', 'phone_verification' => 'Phone verification', 'account_deletion' => 'Account deletion'],
     'search_sort' => ['relevance' => 'Relevance', 'rating' => 'Best rated', 'distance' => 'Nearest', 'reviews' => 'Most reviewed', 'newest' => 'Newest'],
     'payment_purpose' => ['subscription' => 'Subscription', 'placement' => 'Sponsored placement'],
     'placement_unit' => ['week' => 'Week', 'month' => 'Month'],

@@ -29,8 +29,8 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 | 2. Directory | Done (security-first pass included) |
 | 3. Reviews & moderation | Done |
 | 4. Owners | Done |
-| 5. Monetization | Done, awaiting review |
-| 6. Polish & launch | Not started |
+| 5. Monetization | Done |
+| 6. Polish & launch | Done, awaiting review |
 
 ### Phase 1 decisions (defaults taken while questions were open)
 
@@ -153,6 +153,12 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 8. **Tests:** payment validation activates correct product, rejected payment activates nothing, moderator cannot validate payments, invoice numbering (concurrency + year rollover), placement overlap, expiry/downgrade, reminders timing, organic ranking unchanged by paid plan (regression).
 
 ## Phase 6 — Polish & launch
+
+**Done.** Notes:
+- Legal pages ship with French drafts (`database/seeders/data/legal.php`) to be reviewed by a lawyer; Arabic/English readers see the French text until translated in the admin.
+- No non-essential cookie exists yet: the consent banner records the choice and exposes `window.cookieConsent.allows('analytics')` for any future measurement script.
+- Account deletion keeps reviews as "Utilisateur supprimé" by default (option to remove them), keeps payments/invoices (accounting), and is confirmed by an SMS code (or a sign-in < 15 min for accounts without a phone). Staff accounts cannot self-delete.
+- Lighthouse could not be run from this machine; it is on the launch checklist in `docs/DEPLOY.md`.
 
 1. **SEO:** per-page title/description, Open Graph, canonical, hreflang; JSON-LD `LocalBusiness` (specific subtype map per category) with geo, openingHours, `AggregateRating`, and `BreadcrumbList`; daily split sitemaps.
 2. **PWA:** manifest + icons, service worker (static asset cache + offline fallback only).

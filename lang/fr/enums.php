@@ -21,7 +21,7 @@ return [
     'payment_status' => ['pending' => 'En attente', 'validated' => 'Validé', 'rejected' => 'Refusé', 'refunded' => 'Remboursé'],
     'contact_event_type' => ['profile_view' => 'Vue de la fiche', 'call_click' => 'Appel', 'whatsapp_click' => 'WhatsApp', 'directions_click' => 'Itinéraire', 'website_click' => 'Site web'],
     'contact_event_source' => ['organic' => 'Naturel', 'sponsored' => 'Sponsorisé', 'search' => 'Recherche', 'map' => 'Carte'],
-    'otp_purpose' => ['login' => 'Connexion', 'business_claim' => 'Revendication', 'phone_verification' => 'Vérification du téléphone'],
+    'otp_purpose' => ['login' => 'Connexion', 'business_claim' => 'Revendication', 'phone_verification' => 'Vérification du téléphone', 'account_deletion' => 'Suppression du compte'],
     'search_sort' => ['relevance' => 'Pertinence', 'rating' => 'Mieux notés', 'distance' => 'Plus proches', 'reviews' => 'Plus d\'avis', 'newest' => 'Nouveautés'],
     'payment_purpose' => ['subscription' => 'Abonnement', 'placement' => 'Emplacement sponsorisé'],
     'placement_unit' => ['week' => 'Semaine', 'month' => 'Mois'],

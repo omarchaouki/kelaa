@@ -62,7 +62,7 @@
                     @foreach ($photos as $index => $photo)
                         @if ($photo->isPreviewable())
                             <div class="relative" wire:key="upload-{{ $index }}">
-                                <img src="{{ $photo->temporaryUrl() }}" alt="" class="size-16 rounded-lg object-cover">
+                                <img src="{{ $photo->temporaryUrl() }}" alt="" width="64" height="64" class="size-16 rounded-lg object-cover">
                                 <button type="button" wire:click="removeUpload({{ $index }})" class="absolute -end-1 -top-1 rounded-full bg-white p-0.5 shadow" aria-label="{{ __('Retirer') }}">
                                     <x-ui.icon name="x" size="14" />
                                 </button>
@@ -74,7 +74,7 @@
                                 @class(['relative rounded-lg', 'opacity-40' => in_array($media->id, $removePhotoIds, true)])
                                 aria-pressed="{{ in_array($media->id, $removePhotoIds, true) ? 'true' : 'false' }}"
                                 aria-label="{{ __('Retirer') }}">
-                            <img src="{{ $media->getUrl('thumb') }}" alt="" class="size-16 rounded-lg object-cover">
+                            <img src="{{ $media->getUrl('thumb') }}" alt="" width="64" height="64" class="size-16 rounded-lg object-cover">
                         </button>
                     @endforeach
                 </div>

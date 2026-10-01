@@ -26,12 +26,30 @@
     <meta property="og:site_name" content="{{ config('app.name') }}">
     <meta property="og:title" content="{{ $pageTitle }}">
     <meta property="og:locale" content="{{ Locales::regional() }}">
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
+    @if (! empty($metaDescription))
+        <meta property="og:description" content="{{ $metaDescription }}">
+    @endif
+    @if (! empty($ogImage))
+        <meta property="og:image" content="{{ $ogImage }}">
+        <meta name="twitter:card" content="summary_large_image">
+    @else
+        <meta name="twitter:card" content="summary">
+    @endif
+
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 
     <x-seo.hreflang />
 
     @fonts(Locales::isRtl() ? ['inter', 'arabic'] : ['inter'])
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    @foreach ($structuredData ?? [] as $schema)
+        <x-seo.json-ld :data="$schema" />
+    @endforeach
     @stack('head')
 </head>
 <body class="min-h-dvh bg-stone-50 text-stone-900 antialiased">
@@ -46,6 +64,7 @@
     </main>
 
     <x-layout.footer />
+    <x-layout.cookie-consent />
     <x-layout.bottom-nav />
 
     {{-- Livewire and Alpine are bundled in app.js (one nonce'd script, no injected inline code). --}}

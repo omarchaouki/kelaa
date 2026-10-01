@@ -6,8 +6,9 @@ use App\Models\Page;
 use Illuminate\Database\Seeder;
 
 /**
- * Creates empty legal/static pages once. Their content is written in the
- * admin panel (legal texts must be reviewed by a lawyer before launch).
+ * Creates the legal/static pages once, with French drafts (data/legal.php)
+ * that must be reviewed by a lawyer before launch, then edited in the admin
+ * panel. Existing pages are never overwritten.
  */
 class PageSeeder extends Seeder
 {
@@ -29,10 +30,13 @@ class PageSeeder extends Seeder
             'en' => '<p>Content to be written from the admin panel.</p>',
         ];
 
+        $drafts = require __DIR__.'/data/legal.php';
+
         foreach ($pages as $slug => $title) {
             Page::query()->firstOrCreate(['slug' => $slug], [
                 'title' => $title,
-                'body' => $placeholder,
+                // Until translated, Arabic and English readers see the French text.
+                'body' => isset($drafts[$slug]) ? ['fr' => $drafts[$slug], 'ar' => null, 'en' => null] : $placeholder,
                 'is_published' => true,
             ]);
         }

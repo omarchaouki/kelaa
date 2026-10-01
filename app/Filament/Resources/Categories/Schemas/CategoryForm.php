@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Categories\Schemas;
 use App\Filament\Support\TranslatableFields;
 use App\Models\Category;
 use App\Support\ReservedSlugs;
+use App\Support\Seo\JsonLd;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -54,6 +55,8 @@ class CategoryForm
                         TextInput::make('schema_type')
                             ->label(__('Type schema.org'))
                             ->placeholder('LocalBusiness')
+                            ->datalist(JsonLd::TYPES)
+                            ->in(JsonLd::TYPES)
                             ->maxLength(50),
                         Toggle::make('is_emergency')->label(__('Urgence')),
                         Toggle::make('is_active')->label(__('Active'))->default(true),

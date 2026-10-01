@@ -1,4 +1,4 @@
-<x-layouts.page :title="$page->title" :meta-description="$page->meta_description">
+<x-layouts.page :title="$page->title" :meta-description="$page->meta_description" :canonical="route('page.show', ['page' => $page])">
     <article class="prose prose-stone max-w-none py-6">
         <h1>{{ $page->title }}</h1>
         {{-- Admin-authored HTML, sanitized on save and again here (App\Support\Security\RichText). --}}

@@ -52,7 +52,10 @@ class Page extends Model implements Translatable
      */
     public function safeBody(): string
     {
-        return RichText::sanitize($this->body);
+        // Untranslated legal pages show the French text rather than an empty page.
+        $body = $this->body ?: $this->getTranslation('body', (string) config('directory.default_locale'), false);
+
+        return RichText::sanitize((string) $body);
     }
 
     public function getRouteKeyName(): string

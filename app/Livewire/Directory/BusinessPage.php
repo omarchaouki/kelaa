@@ -22,6 +22,7 @@ use App\Services\Hours\OpeningHours;
 use App\Services\Plans\PlanFeatures;
 use App\Services\Tracking\ContactEventRecorder;
 use App\Support\Phone\MoroccanPhone;
+use App\Support\Seo\JsonLd;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -238,7 +239,7 @@ class BusinessPage extends Component
     public function render(CityDirectory $directory): View
     {
         $business = $this->business->load([
-            'categories', 'neighborhood', 'hours', 'specialHours', 'city', 'media',
+            'categories.parent', 'neighborhood', 'hours', 'specialHours', 'city', 'media',
         ]);
 
         $hours = OpeningHours::for($business);
@@ -267,6 +268,14 @@ class BusinessPage extends Component
             ->all();
 
         $primaryCategory = $business->categories->firstWhere('pivot.is_primary', true) ?? $business->categories->first();
+        $url = route('city.business', ['city' => $this->city, 'business' => $business]);
+        $breadcrumbs = [['name' => $this->city->name, 'url' => route('city.home', ['city' => $this->city])]];
+
+        if ($primaryCategory !== null) {
+            $breadcrumbs[] = ['name' => $primaryCategory->name, 'url' => route('city.category', ['city' => $this->city, 'category' => $primaryCategory])];
+        }
+
+        $breadcrumbs[] = ['name' => $business->name, 'url' => $url];
 
         return view('livewire.directory.business-page', [
             'hours' => $hours,
@@ -293,7 +302,10 @@ class BusinessPage extends Component
             ]))
             ->layoutData([
                 'metaDescription' => str($business->description ?: __(':business à :city : horaires, avis, téléphone et WhatsApp.', ['business' => $business->name, 'city' => $this->city->name]))->squish()->limit(155)->toString(),
-                'canonical' => route('city.business', ['city' => $this->city, 'business' => $business]),
+                'canonical' => $url,
+                'ogType' => 'business.business',
+                'structuredData' => [JsonLd::localBusiness($business, $primaryCategory, $url), JsonLd::breadcrumbs($breadcrumbs)],
+                'ogImage' => $business->getFirstMediaUrl('cover', 'large') ?: ($business->getFirstMedia('gallery')?->getUrl('large') ?: null),
             ]);
     }
 

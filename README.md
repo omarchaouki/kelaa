@@ -109,6 +109,14 @@ Sponsored inventory is one business per city × category × (neighborhood or who
 
 Before selling anything, fill the `PAYMENT_*` and `INVOICE_*` keys in `.env`. The invoice legal details and the 20 % VAT rate are placeholders. The CMI card gateway is a documented stub: its routes return 404 until `CMI_ENABLED` is set and `App\Services\Billing\Gateways\CmiGateway` is implemented.
 
+## SEO, PWA and privacy
+
+- Business pages carry JSON-LD (`LocalBusiness` subtype from the category's `schema_type`, hours, geo, rating) and breadcrumbs; output goes through `App\Support\Seo\JsonLd::encode()` so user text can never close the script element.
+- `php artisan sitemap:generate` (daily at 04:00) writes `public/sitemap.xml` and split files in `public/sitemaps/` (one file per 5,000 businesses, hreflang alternates). `robots.txt` is a route: it blocks everything outside production.
+- PWA: `/manifest.webmanifest`, icons in `public/icons`, `public/sw.js` caches only static assets and an offline page (never HTML pages, which may contain personal data).
+- **Mes données** (`/{locale}/account/donnees`): JSON export (queued, signed link valid 7 days for the same logged-in user, pruned daily) and account deletion.
+- `GET /health` for uptime monitoring (see `docs/DEPLOY.md`).
+
 ## Security
 
 - Nonce-based Content-Security-Policy and hardening headers on every response (`App\Http\Middleware\SecurityHeaders`, `config/security.php`). Scripts are bundled by Vite (Livewire and Alpine included), so no inline script runs without the nonce.

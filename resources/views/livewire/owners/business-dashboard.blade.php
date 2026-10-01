@@ -165,7 +165,7 @@
             <div class="flex flex-wrap gap-2">
                 @foreach ($gallery as $index => $photo)
                     <div class="relative" wire:key="photo-{{ $photo->id }}">
-                        <img src="{{ $photo->getUrl('thumb') }}" alt="" width="96" height="72" @class(['h-18 w-24 rounded-lg object-cover', 'opacity-40' => $index >= $maxPhotos])>
+                        <img src="{{ $photo->getUrl('thumb') }}" alt="" width="96" height="72" loading="lazy" @class(['h-18 w-24 rounded-lg object-cover', 'opacity-40' => $index >= $maxPhotos])>
                         <button type="button" wire:click="removePhoto({{ $photo->id }})" wire:confirm="{{ __('Supprimer cette photo ?') }}" class="absolute -end-1 -top-1 rounded-full bg-white p-0.5 shadow" aria-label="{{ __('Supprimer') }}">
                             <x-ui.icon name="x" size="14" />
                         </button>
@@ -186,7 +186,7 @@
             <h2 class="font-semibold">{{ __('Logo') }}</h2>
             @if ($logoAllowed)
                 @if ($business->getFirstMedia('logo'))
-                    <img src="{{ $business->getFirstMediaUrl('logo', 'thumb') }}" alt="" class="size-20 rounded-lg object-cover">
+                    <img src="{{ $business->getFirstMediaUrl('logo', 'thumb') }}" alt="" width="80" height="80" loading="lazy" class="size-20 rounded-lg object-cover">
                 @endif
                 <form wire:submit="uploadLogo" class="space-y-2">
                     <input type="file" wire:model="logo" accept="image/jpeg,image/png,image/webp" class="block text-sm">

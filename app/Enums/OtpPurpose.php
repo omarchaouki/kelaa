@@ -12,4 +12,5 @@ enum OtpPurpose: string implements HasLabel
     case Login = 'login';
     case BusinessClaim = 'business_claim';
     case PhoneVerification = 'phone_verification';
+    case AccountDeletion = 'account_deletion';
 }

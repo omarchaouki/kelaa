@@ -15,6 +15,7 @@ use App\Services\Search\BusinessSearch;
 use App\Services\Search\SearchFilters;
 use App\Services\Sponsoring\SponsoredSlots;
 use App\Services\Tracking\ContactEventRecorder;
+use App\Support\Seo\JsonLd;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
@@ -201,6 +202,7 @@ class SearchPage extends Component
                 'canonical' => $this->canonicalUrl($category, $neighborhood, $page),
                 // Filtered and free-text result pages are not indexed; category pages are.
                 'noindex' => $category === null || $this->hasRefinements(),
+                'structuredData' => $category === null ? [] : [JsonLd::breadcrumbs($this->breadcrumbs($category, $neighborhood))],
             ]);
     }
 
@@ -238,6 +240,26 @@ class SearchPage extends Component
         ]);
     }
 
+    /**
+     * @return list<array{name: string, url: string}>
+     */
+    protected function breadcrumbs(Category $category, ?Neighborhood $neighborhood): array
+    {
+        $items = [['name' => $this->city->name, 'url' => route('city.home', ['city' => $this->city])]];
+
+        if ($category->parent !== null) {
+            $items[] = ['name' => $category->parent->name, 'url' => route('city.category', ['city' => $this->city, 'category' => $category->parent])];
+        }
+
+        $items[] = ['name' => $category->name, 'url' => route('city.category', ['city' => $this->city, 'category' => $category])];
+
+        if ($neighborhood !== null) {
+            $items[] = ['name' => $neighborhood->name, 'url' => $this->canonicalUrl($category, $neighborhood, 1)];
+        }
+
+        return $items;
+    }
+
     protected function canonicalUrl(?Category $category, ?Neighborhood $neighborhood, int $page): string
     {
         if ($category === null) {
@@ -247,7 +269,7 @@ class SearchPage extends Component
         $parameters = ['city' => $this->city, 'category' => $category];
 
         if ($neighborhood !== null) {
-            $parameters['neighborhood'] = $neighborhood->slug;
+            $parameters['neighborhoodSlug'] = $neighborhood->slug;
         }
 
         if ($page > 1) {

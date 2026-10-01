@@ -17,4 +17,10 @@ Schedule::command('ranking:recalculate')->dailyAt('02:30')->onOneServer();
 // Unpaid orders, plan and placement expiry, reminders 7 days and 1 day before.
 Schedule::command('billing:maintain')->hourly()->onOneServer();
 
+// Personal data exports are downloadable for 7 days only.
+Schedule::command('privacy:prune-exports')->dailyAt('03:30')->onOneServer();
+
+// Split sitemaps for search engines.
+Schedule::command('sitemap:generate')->dailyAt('04:00')->onOneServer();
+
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
