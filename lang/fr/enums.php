@@ -23,4 +23,6 @@ return [
     'contact_event_source' => ['organic' => 'Naturel', 'sponsored' => 'Sponsorisé', 'search' => 'Recherche', 'map' => 'Carte'],
     'otp_purpose' => ['login' => 'Connexion', 'business_claim' => 'Revendication', 'phone_verification' => 'Vérification du téléphone'],
     'search_sort' => ['relevance' => 'Pertinence', 'rating' => 'Mieux notés', 'distance' => 'Plus proches', 'reviews' => 'Plus d\'avis', 'newest' => 'Nouveautés'],
+    'payment_purpose' => ['subscription' => 'Abonnement', 'placement' => 'Emplacement sponsorisé'],
+    'placement_unit' => ['week' => 'Semaine', 'month' => 'Mois'],
 ];

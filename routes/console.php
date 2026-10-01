@@ -14,4 +14,7 @@ Schedule::command('model:prune', ['--model' => [OtpCode::class, ContactEvent::cl
 // Safety net: scores are recomputed on every review change, and fully each night.
 Schedule::command('ranking:recalculate')->dailyAt('02:30')->onOneServer();
 
+// Unpaid orders, plan and placement expiry, reminders 7 days and 1 day before.
+Schedule::command('billing:maintain')->hourly()->onOneServer();
+
 Schedule::command('horizon:snapshot')->everyFiveMinutes();

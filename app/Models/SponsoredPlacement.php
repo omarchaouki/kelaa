@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PlacementStatus;
+use App\Enums\PlacementUnit;
 use Carbon\CarbonInterface;
 use Database\Factories\SponsoredPlacementFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -18,6 +19,8 @@ use Illuminate\Support\Carbon;
  * @property int $category_id
  * @property int|null $neighborhood_id
  * @property int $position
+ * @property PlacementUnit $billing_unit
+ * @property int $units
  * @property Carbon $starts_at
  * @property Carbon $ends_at
  * @property PlacementStatus $status
@@ -39,6 +42,8 @@ class SponsoredPlacement extends Model
     {
         return [
             'position' => 'integer',
+            'billing_unit' => PlacementUnit::class,
+            'units' => 'integer',
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'status' => PlacementStatus::class,

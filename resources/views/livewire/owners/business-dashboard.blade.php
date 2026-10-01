@@ -32,9 +32,12 @@
                 @if ($business->plan_expires_at?->isFuture()) · {{ __('jusqu’au :date', ['date' => $business->plan_expires_at->format('d/m/Y')]) }} @endif
             </p>
         </div>
-        @if ($business->isPublished())
-            <a href="{{ route('city.business', ['city' => $business->city, 'business' => $business]) }}" target="_blank" class="rounded-lg border border-stone-300 px-3 py-2 text-sm">{{ __('Voir ma fiche') }}</a>
-        @endif
+        <div class="flex gap-2">
+            <a href="{{ route('dashboard.billing', ['business' => $business->id]) }}" wire:navigate class="rounded-lg bg-accent-500 px-3 py-2 text-sm font-semibold text-stone-900">{{ __('Formules et paiements') }}</a>
+            @if ($business->isPublished())
+                <a href="{{ route('city.business', ['city' => $business->city, 'business' => $business]) }}" target="_blank" class="rounded-lg border border-stone-300 px-3 py-2 text-sm">{{ __('Voir ma fiche') }}</a>
+            @endif
+        </div>
     </div>
 
     <nav class="-mx-4 flex gap-1 overflow-x-auto px-4 text-sm" aria-label="{{ __('Sections') }}">

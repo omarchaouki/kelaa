@@ -13,6 +13,7 @@ use App\Models\Plan;
 use App\Models\Review;
 use App\Models\ReviewReply;
 use App\Notifications\ContentRejected;
+use App\Support\Billing\BillingGate;
 use App\Support\Moderation\ModerationGate;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Notification;
@@ -89,7 +90,7 @@ it('never lets a payment change what reviews are visible', function () {
 
     // The business pays and its payment is validated.
     $payment = Payment::factory()->for($this->business)->create();
-    $payment->forceFill(['status' => PaymentStatus::Validated, 'validated_at' => now()])->save();
+    BillingGate::asSystem(fn () => $payment->forceFill(['status' => PaymentStatus::Validated, 'validated_at' => now()])->save());
     $this->business->forceFill(['plan_id' => Plan::factory()->create()->id, 'plan_expires_at' => now()->addYear()])->save();
 
     expect($hidden->fresh()->status)->toBe(ReviewStatus::HiddenByModeration)

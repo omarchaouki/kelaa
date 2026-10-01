@@ -96,6 +96,19 @@ pharmacie-atlas,2026-10-05,20:00,09:00
 
 `pharmacie` is the business slug (it must be a published business in the "Pharmacie de garde" category). A `fin` earlier than `debut` ends the next morning.
 
+## Billing
+
+Plans and sponsored placements are paid manually (bank transfer, CashPlus/Wafacash). The flow:
+
+1. The owner orders from **Dashboard → Formules et paiements**. Prices always come from the database (`plans`, `placement_rates`), never from the form.
+2. A pending payment is created with a reference (`P-XXXXXXXX`) to write on the transfer. A sponsored slot is held for `PAYMENT_PENDING_HOLD_HOURS` (72 h by default). Uploading a receipt extends the hold to 7 days.
+3. An admin (permission `manage payments`; moderators cannot) validates it in **Filament → Monétisation → Paiements**. Validation activates the subscription or placement and issues the invoice (`F-YYYY-NNNNN`, sequential per year, immutable once issued, PDF rendered on first download).
+4. `billing:maintain` runs hourly. It cancels unpaid orders that have no receipt, ends finished plans and placements (the business falls back to the free plan; extra photos are hidden, not deleted) and sends reminders 7 days and 1 day before the end.
+
+Sponsored inventory is one business per city × category × (neighborhood or whole city) × position 1–3 at any time. The admin calendar is at **Monétisation → Calendrier des emplacements**, and rates are under **Tarifs sponsorisés**: a city/category rate overrides the default one, and a neighborhood slot costs `neighborhood_percent` % of the city-wide price.
+
+Before selling anything, fill the `PAYMENT_*` and `INVOICE_*` keys in `.env`. The invoice legal details and the 20 % VAT rate are placeholders. The CMI card gateway is a documented stub: its routes return 404 until `CMI_ENABLED` is set and `App\Services\Billing\Gateways\CmiGateway` is implemented.
+
 ## Security
 
 - Nonce-based Content-Security-Policy and hardening headers on every response (`App\Http\Middleware\SecurityHeaders`, `config/security.php`). Scripts are bundled by Vite (Livewire and Alpine included), so no inline script runs without the nonce.
@@ -103,6 +116,7 @@ pharmacie-atlas,2026-10-05,20:00,09:00
 - Business websites and social links must be absolute `http(s)` URLs (`App\Support\Security\SafeUrl`), phones are normalized to E.164 before they reach an `href`.
 - URL/Livewire parameters are whitelisted (`App\Services\Search\SearchFilters`), Livewire updates and the contact event endpoint are rate-limited, city/category slugs cannot shadow application routes.
 - Privacy: the visitor location stays in the session (rounded to ~110 m) and never in URLs; statistics use a daily-rotating HMAC instead of IPs; old raw events and OTP codes are pruned daily.
+- Billing: amounts, statuses and invoice links can only change through `App\Support\Billing\BillingGate` (admin with payment rights, or the scheduler). Receipts and invoices live on the private disk and are served only to their owner or to payment admins.
 - Production: set `APP_ENV=production`, `APP_DEBUG=false`, `SESSION_SECURE_COOKIE=true`, `TRUSTED_PROXIES` if behind a load balancer; HTTPS is then forced for generated URLs.
 
 ## Project conventions

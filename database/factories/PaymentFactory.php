@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\PaymentMethod;
+use App\Enums\PaymentPurpose;
 use App\Enums\PaymentStatus;
 use App\Models\Business;
 use App\Models\Payment;
@@ -27,6 +28,8 @@ class PaymentFactory extends Factory
             'method' => PaymentMethod::BankTransfer,
             'reference' => 'PAY-'.strtoupper(fake()->unique()->bothify('????####')),
             'status' => PaymentStatus::Pending,
+            'purpose' => PaymentPurpose::Subscription,
+            'expires_at' => now()->addHours(72),
         ];
     }
 }

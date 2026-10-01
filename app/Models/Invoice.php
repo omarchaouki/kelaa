@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use LogicException;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -39,6 +40,16 @@ class Invoice extends Model implements HasMedia
 {
     /** @use HasFactory<InvoiceFactory> */
     use HasFactory, InteractsWithMedia;
+
+    /**
+     * An issued invoice is a legal document: it is never edited nor deleted.
+     * Corrections go through a refund (and a credit note outside the app).
+     */
+    protected static function booted(): void
+    {
+        static::updating(fn () => throw new LogicException('Issued invoices are immutable.'));
+        static::deleting(fn () => throw new LogicException('Issued invoices cannot be deleted.'));
+    }
 
     protected function casts(): array
     {

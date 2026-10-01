@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property int $business_id
  * @property int $plan_id
  * @property BillingPeriod $billing_period
+ * @property string|null $amount
  * @property Carbon|null $starts_at
  * @property Carbon|null $ends_at
  * @property SubscriptionStatus $status
@@ -35,6 +36,7 @@ class Subscription extends Model
     {
         return [
             'billing_period' => BillingPeriod::class,
+            'amount' => 'decimal:2',
             'status' => SubscriptionStatus::class,
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',

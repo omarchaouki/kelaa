@@ -28,8 +28,8 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 | 1. Foundation | Done (verified on SQLite; MySQL/Sail run pending, see below) |
 | 2. Directory | Done (security-first pass included) |
 | 3. Reviews & moderation | Done |
-| 4. Owners | Done, awaiting review |
-| 5. Monetization | Not started |
+| 4. Owners | Done |
+| 5. Monetization | Done, awaiting review |
 | 6. Polish & launch | Not started |
 
 ### Phase 1 decisions (defaults taken while questions were open)
@@ -134,6 +134,14 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 ## Phase 5 — Monetization
 
 **Goal:** plans and sponsored placements can be sold and paid manually.
+
+**Done.** Decisions taken while questions are open:
+- Invoice legal details and VAT (20 %, prices include VAT) are placeholders in `config/billing.php` / `.env`.
+- Unpaid orders hold a sponsored slot for 72 h (7 days once a receipt is uploaded). Validation re-checks the slot.
+- Placements are sold per week (max 12) or month (max 6) and start up to 6 months ahead. A neighborhood slot defaults to 60 % of the city-wide price.
+- Renewing the same plan extends it from its current end. Switching plans starts now and cancels the old one (any proration is handled manually).
+- Issued invoices are immutable and always written in French. Corrections go through a refund.
+- CMI is a stub: its routes return 404 until it is implemented and enabled.
 
 1. **Plans & features:** feature flags read from `plans.features`; `PlanFeatures` helper used across app (photo limits, stats, highlighted card, hide competitor sponsored on own page, priority moderation).
 2. **`PaymentGateway` contract:** `manual` driver (bank transfer / CashPlus / Wafacash instructions from config, receipt upload) and `cmi` stub (config keys, callback/ok/fail routes, TODO skeleton).

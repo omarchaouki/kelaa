@@ -3,7 +3,9 @@
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CmiCallbackController;
 use App\Http\Controllers\ContactEventController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocaleRedirectController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PharmacyDutyController;
@@ -16,11 +18,13 @@ use App\Livewire\Directory\BusinessPage;
 use App\Livewire\Directory\CityHome;
 use App\Livewire\Directory\SearchPage;
 use App\Livewire\Owners\AddBusiness;
+use App\Livewire\Owners\BillingPage;
 use App\Livewire\Owners\BusinessDashboard;
 use App\Livewire\Owners\ClaimPage;
 use App\Livewire\Owners\Dashboard;
 use App\Livewire\Owners\SuggestEditPage;
 use App\Support\Locales;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Support\Facades\Route;
 
 // "/" => "/{preferred-locale}/{default-city}"
@@ -30,6 +34,18 @@ Route::get('/', LocaleRedirectController::class)->name('root');
 Route::get('admin-files/media/{media}', PrivateMediaController::class)
     ->middleware(['auth', 'throttle:60,1'])
     ->name('admin.private-media');
+
+Route::get('admin-files/invoices/{invoice}', [InvoiceController::class, 'admin'])
+    ->middleware(['auth', 'throttle:60,1'])
+    ->name('admin.invoice');
+
+// CMI card gateway (inactive until the integration is finished: 404).
+Route::post('payments/cmi/callback', [CmiCallbackController::class, 'callback'])
+    ->withoutMiddleware([PreventRequestForgery::class])
+    ->middleware('throttle:60,1')
+    ->name('payments.cmi.callback');
+Route::match(['get', 'post'], 'payments/cmi/ok', [CmiCallbackController::class, 'return'])->name('payments.cmi.ok');
+Route::match(['get', 'post'], 'payments/cmi/fail', [CmiCallbackController::class, 'return'])->name('payments.cmi.fail');
 
 // Registered once in the Google console, hence no locale prefix.
 Route::get('auth/google/callback', [GoogleAuthController::class, 'callback'])
@@ -55,6 +71,10 @@ Route::prefix('{locale}')
             // Owner area. Business ids are re-authorized by BusinessPolicy::manage on every request.
             Route::livewire('dashboard', Dashboard::class)->name('dashboard');
             Route::livewire('dashboard/{business:id}', BusinessDashboard::class)->name('dashboard.business');
+            Route::livewire('dashboard/{business:id}/facturation', BillingPage::class)->name('dashboard.billing');
+            Route::get('dashboard/{business:id}/factures/{invoice}', [InvoiceController::class, 'owner'])
+                ->middleware('throttle:30,1')
+                ->name('dashboard.invoice');
         });
 
         Route::get('p/{page:slug}', [PageController::class, 'show'])->name('page.show');

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             CategorySeeder::class,
             PlanSeeder::class,
+            PlacementRateSeeder::class,
             PageSeeder::class,
             SearchSynonymSeeder::class,
         ]);

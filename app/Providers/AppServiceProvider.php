@@ -64,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
             'plan' => Models\Plan::class,
             'subscription' => Models\Subscription::class,
             'sponsored_placement' => Models\SponsoredPlacement::class,
+            'placement_rate' => Models\PlacementRate::class,
             'payment' => Models\Payment::class,
             'invoice' => Models\Invoice::class,
             'pharmacy_duty' => Models\PharmacyDuty::class,

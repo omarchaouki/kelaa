@@ -23,4 +23,6 @@ return [
     'contact_event_source' => ['organic' => 'Organic', 'sponsored' => 'Sponsored', 'search' => 'Search', 'map' => 'Map'],
     'otp_purpose' => ['login' => 'Login', 'business_claim' => 'Business claim', 'phone_verification' => 'Phone verification'],
     'search_sort' => ['relevance' => 'Relevance', 'rating' => 'Best rated', 'distance' => 'Nearest', 'reviews' => 'Most reviewed', 'newest' => 'Newest'],
+    'payment_purpose' => ['subscription' => 'Subscription', 'placement' => 'Sponsored placement'],
+    'placement_unit' => ['week' => 'Week', 'month' => 'Month'],
 ];
