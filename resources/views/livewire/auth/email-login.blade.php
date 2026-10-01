@@ -1,33 +1,36 @@
-<div class="mx-auto max-w-sm py-6">
-    <h1 class="text-2xl font-bold">{{ __('Connexion par e-mail') }}</h1>
+<div class="mx-auto max-w-[400px] py-6 md:py-10">
+    <div class="fb-card p-4 shadow-[0_2px_4px_rgb(0_0_0/0.1),0_8px_16px_rgb(0_0_0/0.1)]">
+        <h1 class="mb-3 text-center text-[20px] font-bold">{{ __('Connexion par e-mail') }}</h1>
 
-    <form wire:submit="login" class="mt-6 space-y-4">
-        <div>
-            <label for="email" class="block text-sm font-medium">{{ __('E-mail') }}</label>
-            <input id="email" type="email" wire:model="email" autocomplete="email" dir="ltr" required autofocus
-                   class="mt-1 block w-full rounded-lg border border-stone-300 px-3 py-2.5 text-start focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30">
-            @error('email') <p class="mt-1 text-sm text-red-700" role="alert">{{ $message }}</p> @enderror
-        </div>
+        <form wire:submit="login" class="space-y-3">
+            <div>
+                <label for="email" class="sr-only">{{ __('E-mail') }}</label>
+                <input id="email" type="email" wire:model="email" autocomplete="email" dir="ltr" required autofocus
+                       placeholder="{{ __('E-mail') }}" class="fb-field h-[52px] text-start text-[17px]">
+                @error('email') <p class="mt-1 text-[13px] text-red-700" role="alert">{{ $message }}</p> @enderror
+            </div>
 
-        <div>
-            <label for="password" class="block text-sm font-medium">{{ __('Mot de passe') }}</label>
-            <input id="password" type="password" wire:model="password" autocomplete="current-password" required
-                   class="mt-1 block w-full rounded-lg border border-stone-300 px-3 py-2.5 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30">
-            @error('password') <p class="mt-1 text-sm text-red-700" role="alert">{{ $message }}</p> @enderror
-        </div>
+            <div>
+                <label for="password" class="sr-only">{{ __('Mot de passe') }}</label>
+                <input id="password" type="password" wire:model="password" autocomplete="current-password" required
+                       placeholder="{{ __('Mot de passe') }}" class="fb-field h-[52px] text-[17px]">
+                @error('password') <p class="mt-1 text-[13px] text-red-700" role="alert">{{ $message }}</p> @enderror
+            </div>
 
-        <label class="flex items-center gap-2 text-sm">
-            <input type="checkbox" wire:model="remember" class="rounded border-stone-300 text-brand-600">
-            {{ __('Rester connecté') }}
-        </label>
+            <label class="flex items-center gap-2 text-[14px]">
+                <input type="checkbox" wire:model="remember" class="rounded border-stone-300 text-brand-600">
+                {{ __('Rester connecté') }}
+            </label>
 
-        <button type="submit" wire:loading.attr="disabled"
-                class="w-full rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white hover:bg-brand-700 disabled:opacity-60">
-            {{ __('Se connecter') }}
-        </button>
-    </form>
+            <button type="submit" wire:loading.attr="disabled" class="fb-btn fb-btn-primary h-12 w-full text-[20px]">
+                {{ __('Se connecter') }}
+            </button>
+        </form>
 
-    <a href="{{ route('login') }}" wire:navigate class="mt-6 block text-center text-sm text-brand-700 underline">
-        {{ __('Se connecter avec mon numéro de mobile') }}
-    </a>
+        <div class="fb-divider my-4"></div>
+
+        <a href="{{ route('login') }}" wire:navigate class="fb-btn fb-btn-green h-11 w-full">
+            {{ __('Se connecter avec mon numéro de mobile') }}
+        </a>
+    </div>
 </div>

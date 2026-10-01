@@ -4,7 +4,7 @@
 @endphp
 <div class="space-y-6 py-4">
     <div>
-        <a href="{{ route('dashboard.business', ['business' => $business->id]) }}" wire:navigate class="text-sm text-brand-700 underline">← {{ $business->name }}</a>
+        <a href="{{ route('dashboard.business', ['business' => $business->id]) }}" wire:navigate class="text-sm text-brand-600 hover:underline">← {{ $business->name }}</a>
         <h1 class="text-2xl font-bold">{{ __('Formules et paiements') }}</h1>
         <p class="text-sm text-stone-600">
             {{ __('Formule : :plan', ['plan' => $currentPlan?->name ?? __('Gratuit')]) }}
@@ -13,7 +13,7 @@
     </div>
 
     @if ($flash)
-        <p class="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800" role="status">{{ $flash }}</p>
+        <p class="rounded-lg bg-brand-50 p-3 text-brand-800" role="status">{{ $flash }}</p>
     @endif
 
     <p class="rounded-lg bg-stone-100 p-3 text-sm text-stone-700">
@@ -23,7 +23,7 @@
     {{-- Pending payments: instructions and receipt upload --}}
     @foreach ($pending as $payment)
         @php $info = $instructions($payment); @endphp
-        <section class="space-y-2 rounded-xl border border-amber-300 bg-amber-50 p-4" wire:key="pending-{{ $payment->id }}">
+        <section class="space-y-2 rounded-lg border-s-4 border-amber-400 bg-amber-50 p-4" wire:key="pending-{{ $payment->id }}">
             <h2 class="font-semibold">{{ __('Paiement en attente : :purpose', ['purpose' => $payment->purpose->getLabel()]) }}</h2>
             <dl class="grid grid-cols-2 gap-1 text-sm">
                 <dt>{{ __('Montant') }}</dt><dd class="font-semibold">{{ $money($payment->amount) }}</dd>
@@ -39,11 +39,11 @@
                 <dt>{{ __('À payer avant le') }}</dt><dd>{{ $payment->expires_at?->format('d/m/Y H:i') }}</dd>
             </dl>
             @if ($payment->getFirstMedia('receipt'))
-                <p class="text-sm text-emerald-800">{{ __('Reçu reçu, validation en cours.') }}</p>
+                <p class="text-sm text-brand-700">{{ __('Reçu reçu, validation en cours.') }}</p>
             @else
                 <form wire:submit="uploadReceipt({{ $payment->id }})" class="flex flex-wrap items-center gap-2 text-sm">
                     <input type="file" wire:model="receipts.{{ $payment->id }}" accept="application/pdf,image/jpeg,image/png,image/webp">
-                    <button type="submit" class="rounded-lg bg-brand-600 px-3 py-1.5 font-semibold text-white">{{ __('Envoyer le reçu') }}</button>
+                    <button type="submit" class="fb-btn fb-btn-primary">{{ __('Envoyer le reçu') }}</button>
                     @error('receipts.'.$payment->id) <p class="w-full text-red-700">{{ $message }}</p> @enderror
                 </form>
             @endif
@@ -51,7 +51,7 @@
     @endforeach
 
     {{-- Plans --}}
-    <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+    <section class="fb-card space-y-3 p-4">
         <h2 class="font-semibold">{{ __('Changer de formule') }}</h2>
         <div class="grid gap-3 sm:grid-cols-2">
             @foreach ($plans as $plan)
@@ -79,13 +79,13 @@
                 <option value="bank_transfer">{{ __('Virement bancaire') }}</option>
                 <option value="cash_agency">{{ __('Espèces en agence (CashPlus, Wafacash)') }}</option>
             </select>
-            <button type="submit" @disabled($planId === null) class="mt-1 rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white disabled:opacity-50">{{ __('Commander') }}</button>
+            <button type="submit" @disabled($planId === null) class="fb-btn fb-btn-primary mt-1">{{ __('Commander') }}</button>
             @error('planId') <p class="text-sm text-red-700 sm:col-span-3">{{ $message }}</p> @enderror
         </form>
     </section>
 
     {{-- Sponsored placement --}}
-    <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+    <section class="fb-card space-y-3 p-4">
         <h2 class="font-semibold">{{ __('Emplacement sponsorisé') }}</h2>
         <p class="text-sm text-stone-600">{{ __('Apparaissez en tête de votre catégorie, avec la mention « Sponsorisé ». 3 places maximum par catégorie.') }}</p>
         <form wire:submit="orderPlacement" class="grid gap-3 sm:grid-cols-2">
@@ -114,8 +114,8 @@
             </label>
             <label class="text-sm">{{ __('Durée') }}
                 <span class="mt-1 flex gap-2">
-                    <input type="number" min="1" max="12" wire:model.live="units" class="w-20 rounded-lg border border-stone-300 px-3 py-2">
-                    <select wire:model.live="unit" class="flex-1 rounded-lg border border-stone-300 px-3 py-2">
+                    <input type="number" min="1" max="12" wire:model.live="units" class="fb-field w-20">
+                    <select wire:model.live="unit" class="fb-field flex-1">
                         <option value="week">{{ __('semaine(s)') }}</option>
                         <option value="month">{{ __('mois') }}</option>
                     </select>
@@ -128,7 +128,7 @@
             @error('position') <p class="text-sm text-red-700 sm:col-span-2" role="alert">{{ $message }}</p> @enderror
             @error('units') <p class="text-sm text-red-700 sm:col-span-2">{{ $message }}</p> @enderror
             @error('startDate') <p class="text-sm text-red-700 sm:col-span-2">{{ $message }}</p> @enderror
-            <button type="submit" @disabled($quote === null) class="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white disabled:opacity-50 sm:col-span-2">{{ __('Réserver et payer') }}</button>
+            <button type="submit" @disabled($quote === null) class="fb-btn fb-btn-primary sm:col-span-2">{{ __('Réserver et payer') }}</button>
         </form>
 
         @if ($grid !== [])
@@ -152,7 +152,7 @@
     </section>
 
     {{-- Invoicing details --}}
-    <form wire:submit="saveLegal" class="grid gap-3 rounded-xl border border-stone-200 bg-white p-4 sm:grid-cols-3">
+    <form wire:submit="saveLegal" class="fb-card grid gap-3 p-4 sm:grid-cols-3">
         <h2 class="font-semibold sm:col-span-3">{{ __('Informations de facturation') }}</h2>
         <label class="text-sm">{{ __('Raison sociale') }} <input type="text" wire:model="legalName" maxlength="190" class="{{ $input }}"></label>
         <label class="text-sm">ICE <input type="text" wire:model="ice" inputmode="numeric" maxlength="15" dir="ltr" class="{{ $input }}"></label>
@@ -162,7 +162,7 @@
     </form>
 
     {{-- History --}}
-    <section class="rounded-xl border border-stone-200 bg-white p-4">
+    <section class="fb-card p-4">
         <h2 class="font-semibold">{{ __('Historique') }}</h2>
         <ul class="mt-2 divide-y divide-stone-200 text-sm">
             @forelse ($history as $payment)
@@ -171,7 +171,7 @@
                     <span class="flex items-center gap-3">
                         <span>{{ $payment->status->getLabel() }}</span>
                         @if ($payment->invoice)
-                            <a href="{{ route('dashboard.invoice', ['business' => $business->id, 'invoice' => $payment->invoice->id]) }}" class="text-brand-700 underline">{{ __('Facture :number', ['number' => $payment->invoice->number]) }}</a>
+                            <a href="{{ route('dashboard.invoice', ['business' => $business->id, 'invoice' => $payment->invoice->id]) }}" class="text-brand-600 hover:underline">{{ __('Facture :number', ['number' => $payment->invoice->number]) }}</a>
                         @endif
                     </span>
                 </li>

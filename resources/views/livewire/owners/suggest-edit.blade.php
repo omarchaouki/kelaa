@@ -2,11 +2,11 @@
     $input = 'mt-1 block w-full rounded-lg border border-stone-300 px-3 py-2 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30';
 @endphp
 <div class="mx-auto max-w-xl space-y-4 py-4">
-    <a href="{{ route('city.business', ['city' => $city, 'business' => $business]) }}" wire:navigate class="text-sm text-brand-700 underline">← {{ $business->name }}</a>
+    <a href="{{ route('city.business', ['city' => $city, 'business' => $business]) }}" wire:navigate class="text-sm text-brand-600 hover:underline">← {{ $business->name }}</a>
     <h1 class="text-2xl font-bold">{{ __('Proposer une modification') }}</h1>
 
     @if ($sent)
-        <p class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900" role="status">
+        <p class="rounded-lg bg-brand-50 p-4 text-brand-900" role="status">
             {{ __('Merci ! Notre équipe vérifiera votre proposition avant de modifier la fiche.') }}
         </p>
     @else
@@ -16,7 +16,7 @@
                 : __('Une information est fausse ou a changé ? Proposez la correction, notre équipe la vérifiera.') }}
         </p>
 
-        <form wire:submit="submit" class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+        <form wire:submit="submit" class="fb-card space-y-3 p-4">
             <div>
                 <label for="name" class="text-sm font-medium">{{ __('Nom') }}</label>
                 <input id="name" type="text" wire:model="name" maxlength="120" class="{{ $input }}">
@@ -55,7 +55,7 @@
                 <textarea id="comment" wire:model="comment" rows="2" maxlength="1000" dir="auto" class="{{ $input }}"></textarea>
                 @error('comment') <p class="mt-1 text-sm text-red-700">{{ $message }}</p> @enderror
             </div>
-            <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white hover:bg-brand-700">{{ __('Envoyer') }}</button>
+            <button type="submit" class="fb-btn fb-btn-primary">{{ __('Envoyer') }}</button>
         </form>
     @endif
 </div>

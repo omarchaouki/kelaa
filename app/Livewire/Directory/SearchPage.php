@@ -198,6 +198,7 @@ class SearchPage extends Component
         ])
             ->title($this->title($category, $neighborhood, $filters))
             ->layoutData([
+                'wide' => true,
                 'metaDescription' => $this->metaDescription($category, $neighborhood),
                 'canonical' => $this->canonicalUrl($category, $neighborhood, $page),
                 // Filtered and free-text result pages are not indexed; category pages are.

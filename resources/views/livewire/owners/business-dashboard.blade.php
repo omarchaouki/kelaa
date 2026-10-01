@@ -23,38 +23,40 @@
     $typeLabels = collect(\App\Enums\ContactEventType::cases())->mapWithKeys(fn ($t) => [$t->value => $t->getLabel()]);
 @endphp
 <div class="space-y-4 py-4">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-        <div>
-            <a href="{{ route('dashboard') }}" wire:navigate class="text-sm text-brand-700 underline">← {{ __('Mon espace professionnel') }}</a>
-            <h1 class="text-2xl font-bold">{{ $business->name }}</h1>
-            <p class="text-sm text-stone-600">
-                {{ __('Formule : :plan', ['plan' => $plan?->name ?? __('Gratuit')]) }}
-                @if ($business->plan_expires_at?->isFuture()) · {{ __('jusqu’au :date', ['date' => $business->plan_expires_at->format('d/m/Y')]) }} @endif
-            </p>
+    <section class="fb-card">
+        <div class="flex flex-wrap items-center gap-4 p-4">
+            <x-ui.avatar :name="$business->name" :src="$business->getFirstMediaUrl('logo', 'thumb') ?: null" size="72" />
+            <div class="min-w-0 flex-1">
+                <a href="{{ route('dashboard') }}" wire:navigate class="text-[13px] font-semibold text-brand-600 hover:underline">← {{ __('Mon espace professionnel') }}</a>
+                <h1 class="text-[24px] font-bold leading-7">{{ $business->name }}</h1>
+                <p class="text-[13px] text-stone-600">
+                    {{ __('Formule : :plan', ['plan' => $plan?->name ?? __('Gratuit')]) }}
+                    @if ($business->plan_expires_at?->isFuture()) · {{ __('jusqu’au :date', ['date' => $business->plan_expires_at->format('d/m/Y')]) }} @endif
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('dashboard.billing', ['business' => $business->id]) }}" wire:navigate class="fb-btn fb-btn-primary">{{ __('Formules et paiements') }}</a>
+                @if ($business->isPublished())
+                    <a href="{{ route('city.business', ['city' => $business->city, 'business' => $business]) }}" target="_blank" class="fb-btn fb-btn-gray">{{ __('Voir ma fiche') }}</a>
+                @endif
+            </div>
         </div>
-        <div class="flex gap-2">
-            <a href="{{ route('dashboard.billing', ['business' => $business->id]) }}" wire:navigate class="rounded-lg bg-accent-500 px-3 py-2 text-sm font-semibold text-stone-900">{{ __('Formules et paiements') }}</a>
-            @if ($business->isPublished())
-                <a href="{{ route('city.business', ['city' => $business->city, 'business' => $business]) }}" target="_blank" class="rounded-lg border border-stone-300 px-3 py-2 text-sm">{{ __('Voir ma fiche') }}</a>
-            @endif
-        </div>
-    </div>
-
-    <nav class="-mx-4 flex gap-1 overflow-x-auto px-4 text-sm" aria-label="{{ __('Sections') }}">
-        @foreach ($tabs as $key => $label)
-            <button type="button" wire:click="setTab('{{ $key }}')" aria-current="{{ $tab === $key ? 'page' : 'false' }}"
-                    @class(['whitespace-nowrap rounded-full px-3 py-1.5', 'bg-brand-600 text-white' => $tab === $key, 'bg-white border border-stone-300' => $tab !== $key])>
-                {{ $label }}
-            </button>
-        @endforeach
-    </nav>
+        <div class="fb-divider mx-4"></div>
+        <nav class="flex overflow-x-auto px-2" aria-label="{{ __('Sections') }}">
+            @foreach ($tabs as $key => $label)
+                <button type="button" wire:click="setTab('{{ $key }}')" @if ($tab === $key) aria-current="page" @endif class="fb-tab whitespace-nowrap">
+                    {{ $label }}
+                </button>
+            @endforeach
+        </nav>
+    </section>
 
     @if ($flash)
-        <p class="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800" role="status">{{ $flash }}</p>
+        <p class="rounded-lg bg-brand-50 p-3 text-brand-800" role="status">{{ $flash }}</p>
     @endif
 
     @if ($tab === 'overview')
-        <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+        <section class="fb-card space-y-3 p-4">
             <h2 class="font-semibold">{{ __('Fiche complétée à :percent %', ['percent' => $business->profile_completeness]) }}</h2>
             <div class="h-2 overflow-hidden rounded-full bg-stone-200">
                 <span class="block h-full bg-brand-500" style="width: {{ (int) $business->profile_completeness }}%"></span>
@@ -62,18 +64,18 @@
             <p class="text-sm text-stone-600">{{ __('Une fiche complète aide les clients à vous choisir.') }}</p>
             <ul class="grid gap-1 text-sm sm:grid-cols-2">
                 @foreach ($checklist as $item => $done)
-                    <li @class(['text-emerald-700' => $done, 'text-stone-600' => ! $done])>{{ $done ? '✓' : '○' }} {{ $checklistLabels[$item] }}</li>
+                    <li @class(['text-online-dark' => $done, 'text-stone-600' => ! $done])>{{ $done ? '✓' : '○' }} {{ $checklistLabels[$item] }}</li>
                 @endforeach
             </ul>
             <p class="text-sm">
                 {{ __('Nom, adresse, position ou numéros à changer ?') }}
-                <a href="{{ route('city.business.suggest', ['city' => $business->city, 'business' => $business]) }}" class="text-brand-700 underline">{{ __('Demander une modification') }}</a>
+                <a href="{{ route('city.business.suggest', ['city' => $business->city, 'business' => $business]) }}" class="text-brand-600 hover:underline">{{ __('Demander une modification') }}</a>
             </p>
         </section>
     @endif
 
     @if ($tab === 'info')
-        <form wire:submit="saveInfo" class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+        <form wire:submit="saveInfo" class="fb-card space-y-3 p-4">
             @foreach (['fr' => 'Français', 'ar' => 'العربية', 'en' => 'English'] as $locale => $label)
                 <div>
                     <label for="description-{{ $locale }}" class="text-sm font-medium">{{ __('Description') }} · {{ $label }}</label>
@@ -109,22 +111,22 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white">{{ __('Enregistrer') }}</button>
+            <button type="submit" class="fb-btn fb-btn-primary">{{ __('Enregistrer') }}</button>
         </form>
     @endif
 
     @if ($tab === 'hours')
-        <form wire:submit="saveHours" class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+        <form wire:submit="saveHours" class="fb-card space-y-3 p-4">
             <label class="flex items-center gap-2 text-sm">
                 <input type="checkbox" wire:model.live="alwaysOpen" class="rounded border-stone-300"> {{ __('Ouvert 24h/24, 7j/7') }}
             </label>
             @unless ($alwaysOpen)
                 <x-owner.hours-editor :week="$week" />
             @endunless
-            <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white">{{ __('Enregistrer les horaires') }}</button>
+            <button type="submit" class="fb-btn fb-btn-primary">{{ __('Enregistrer les horaires') }}</button>
         </form>
 
-        <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+        <section class="fb-card space-y-3 p-4">
             <h2 class="font-semibold">{{ __('Horaires exceptionnels (Ramadan, Aïd, jours fériés)') }}</h2>
             <ul class="space-y-1 text-sm">
                 @forelse ($business->specialHours->where('ends_on', '>=', now()->startOfDay()) as $period)
@@ -157,7 +159,7 @@
 
     @if ($tab === 'photos')
         @php $gallery = $business->getMedia('gallery'); @endphp
-        <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+        <section class="fb-card space-y-3 p-4">
             <h2 class="font-semibold">{{ __('Photos (:count / :max)', ['count' => $gallery->count(), 'max' => $maxPhotos]) }}</h2>
             @if ($gallery->count() > $maxPhotos)
                 <p class="text-sm text-amber-800">{{ __('Votre formule affiche :max photos. Les autres sont conservées mais masquées.', ['max' => $maxPhotos]) }}</p>
@@ -177,12 +179,12 @@
                     <input type="file" wire:model="photos" multiple accept="image/jpeg,image/png,image/webp" class="block text-sm">
                     @error('photos') <p class="text-sm text-red-700">{{ $message }}</p> @enderror
                     @error('photos.*') <p class="text-sm text-red-700">{{ $message }}</p> @enderror
-                    <button type="submit" wire:loading.attr="disabled" class="rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white">{{ __('Ajouter') }}</button>
+                    <button type="submit" wire:loading.attr="disabled" class="fb-btn fb-btn-primary">{{ __('Ajouter') }}</button>
                 </form>
             @endif
         </section>
 
-        <section class="space-y-2 rounded-xl border border-stone-200 bg-white p-4">
+        <section class="fb-card space-y-2 p-4">
             <h2 class="font-semibold">{{ __('Logo') }}</h2>
             @if ($logoAllowed)
                 @if ($business->getFirstMedia('logo'))
@@ -203,7 +205,7 @@
         <section class="space-y-3">
             <p class="text-sm text-stone-600">{{ __('Vous pouvez répondre publiquement à chaque avis, une fois. Les avis ne peuvent pas être supprimés : signalez ceux qui ne respectent pas les règles.') }}</p>
             @forelse ($reviews as $review)
-                <article class="rounded-xl border border-stone-200 bg-white p-4" wire:key="dash-review-{{ $review->id }}">
+                <article class="fb-card p-4" wire:key="dash-review-{{ $review->id }}">
                     <div class="flex items-center justify-between">
                         <p class="font-medium">{{ $review->authorName() }}</p>
                         <x-directory.stars :rating="$review->rating" size="14" />
@@ -219,7 +221,7 @@
                                   placeholder="{{ $review->reply ? __('Modifier votre réponse') : __('Répondre publiquement') }}" class="{{ $input }}"></textarea>
                         @error('replyBodies.'.$review->id) <p class="text-sm text-red-700">{{ $message }}</p> @enderror
                         <div class="flex gap-3">
-                            <button type="submit" class="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white">{{ __('Envoyer') }}</button>
+                            <button type="submit" class="fb-btn fb-btn-primary">{{ __('Envoyer') }}</button>
                             <a href="{{ route('city.business', ['city' => $business->city, 'business' => $business]) }}#avis" class="text-sm text-stone-600 underline">{{ __('Signaler depuis la fiche') }}</a>
                         </div>
                     </form>
@@ -247,21 +249,21 @@
             </div>
             <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
                 @foreach ($stats['totals'] as $type => $total)
-                    <div class="rounded-xl border border-stone-200 bg-white p-3">
+                    <div class="fb-card p-3">
                         <p class="text-2xl font-bold">{{ $total }}</p>
                         <p class="text-xs text-stone-600">{{ $typeLabels[$type] }}</p>
                     </div>
                 @endforeach
             </div>
-            <section class="rounded-xl border border-stone-200 bg-white p-4">
+            <section class="fb-card p-4">
                 <h2 class="font-semibold">{{ __('Vues de la fiche par jour') }}</h2>
                 <x-owner.bar-chart :series="collect($stats['daily'])->map(fn ($day) => $day['profile_view'])->all()" :label="__('Vues de la fiche par jour')" class="mt-2" />
             </section>
-            <section class="rounded-xl border border-stone-200 bg-white p-4">
+            <section class="fb-card p-4">
                 <h2 class="font-semibold">{{ __('Contacts par jour (WhatsApp, appels, itinéraires, site)') }}</h2>
                 <x-owner.bar-chart :series="collect($stats['daily'])->map(fn ($day) => $day['whatsapp_click'] + $day['call_click'] + $day['directions_click'] + $day['website_click'])->all()" :label="__('Contacts par jour')" class="mt-2" />
             </section>
-            <section class="rounded-xl border border-stone-200 bg-white p-4 text-sm">
+            <section class="fb-card p-4 text-sm">
                 <h2 class="font-semibold">{{ __('Provenance') }}</h2>
                 <ul class="mt-2 grid grid-cols-2 gap-1">
                     @foreach ($stats['by_source'] as $source => $count)

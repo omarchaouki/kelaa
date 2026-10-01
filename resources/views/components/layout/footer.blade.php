@@ -1,33 +1,28 @@
-<footer class="border-t border-stone-200 bg-white">
-    <div class="mx-auto max-w-5xl px-4 py-8 text-sm text-stone-600">
-        <nav aria-label="{{ __('Informations légales') }}">
-            <ul class="flex flex-wrap gap-x-4 gap-y-2">
-                @foreach (['a-propos', 'cgu', 'confidentialite', 'regles-des-avis', 'cookies', 'mentions-legales', 'contact'] as $slug)
-                    <li>
-                        <a href="{{ route('page.show', ['page' => $slug]) }}" wire:navigate class="hover:text-brand-700 hover:underline">
-                            {{ __("pages.{$slug}") }}
-                        </a>
-                    </li>
-                @endforeach
-                @auth
-                    <li><a href="{{ route('account.privacy') }}" wire:navigate class="hover:text-brand-700 hover:underline">{{ __('Mes données') }}</a></li>
-                @endauth
-                <li>
-                    <button type="button" x-data x-on:click="$dispatch('open-cookie-consent')" class="hover:text-brand-700 hover:underline">{{ __('Gérer les cookies') }}</button>
+{{-- Small grey link line, like the legal links under a social network's side rail. --}}
+<footer class="mx-auto max-w-[1240px] px-4 pb-28 pt-4 text-[13px] leading-6 text-stone-600 md:pb-8">
+    <nav aria-label="{{ __('Informations légales') }}">
+        <ul class="flex flex-wrap gap-x-1">
+            @foreach (['a-propos', 'cgu', 'confidentialite', 'regles-des-avis', 'cookies', 'mentions-legales', 'contact'] as $slug)
+                <li class="after:ms-1 after:content-['·']">
+                    <a href="{{ route('page.show', ['page' => $slug]) }}" wire:navigate class="hover:underline">{{ __("pages.{$slug}") }}</a>
                 </li>
-            </ul>
-        </nav>
-
-        @php $footerCity = request()->route('city'); @endphp
-        @if ($footerCity instanceof \App\Models\City)
-            <p class="mt-4"><a href="{{ route('city.add', ['city' => $footerCity]) }}" class="font-medium text-brand-700 underline">{{ __('Ajouter un établissement') }}</a></p>
-        @endif
-
-        <p class="mt-4">
-            &copy; {{ now()->year }} {{ config('app.name') }}
-            @if (config('directory.cndp_number'))
-                · {{ __('Déclaration CNDP n° :number', ['number' => config('directory.cndp_number')]) }}
+            @endforeach
+            @auth
+                <li class="after:ms-1 after:content-['·']"><a href="{{ route('account.privacy') }}" wire:navigate class="hover:underline">{{ __('Mes données') }}</a></li>
+            @endauth
+            <li class="after:ms-1 after:content-['·']">
+                <button type="button" x-data x-on:click="$dispatch('open-cookie-consent')" class="hover:underline">{{ __('Gérer les cookies') }}</button>
+            </li>
+            @php $footerCity = request()->route('city'); @endphp
+            @if ($footerCity instanceof \App\Models\City)
+                <li class="after:ms-1 after:content-['·']"><a href="{{ route('city.add', ['city' => $footerCity]) }}" class="font-semibold text-brand-600 hover:underline">{{ __('Ajouter un établissement') }}</a></li>
             @endif
-        </p>
-    </div>
+            <li>
+                {{ config('app.name') }} &copy; {{ now()->year }}
+                @if (config('directory.cndp_number'))
+                    · {{ __('Déclaration CNDP n° :number', ['number' => config('directory.cndp_number')]) }}
+                @endif
+            </li>
+        </ul>
+    </nav>
 </footer>

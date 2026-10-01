@@ -4,7 +4,7 @@
     $full = (int) floor($rating);
     $half = ($rating - $full) >= 0.5;
 @endphp
-<span {{ $attributes->merge(['class' => 'inline-flex items-center text-accent-500']) }} role="img"
+<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-px text-accent-400']) }} role="img"
       aria-label="{{ __(':rating sur 5', ['rating' => number_format($rating, 1, ',', ' ')]) }}">
     @for ($i = 1; $i <= 5; $i++)
         <svg width="{{ $size }}" height="{{ $size }}" viewBox="0 0 24 24" aria-hidden="true"

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="contact-events-endpoint" content="{{ route('contact-events.store') }}">
-    <meta name="theme-color" content="#0f5e57">
+    <meta name="theme-color" content="#ffffff">
 
     <title>{{ $pageTitle }}</title>
     @if (! empty($metaDescription))
@@ -44,7 +44,7 @@
 
     <x-seo.hreflang />
 
-    @fonts(Locales::isRtl() ? ['inter', 'arabic'] : ['inter'])
+    {{-- System fonts only (Segoe UI, San Francisco, Roboto…): nothing to download. --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @foreach ($structuredData ?? [] as $schema)
@@ -52,14 +52,15 @@
     @endforeach
     @stack('head')
 </head>
-<body class="min-h-dvh bg-stone-50 text-stone-900 antialiased">
-    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:start-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2">
+<body class="min-h-dvh bg-stone-100 text-[15px] leading-snug text-stone-900 antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:start-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:shadow-[var(--shadow-pop)]">
         {{ __('Aller au contenu') }}
     </a>
 
     <x-layout.header />
 
-    <main id="main" class="mx-auto w-full max-w-5xl px-4 pb-24 pt-4 sm:pb-10">
+    {{-- Feed-style pages (home, search, business) use the wide three-column canvas. --}}
+    <main id="main" @class(['mx-auto w-full pb-24 pt-4 sm:pb-10', 'max-w-[1240px] px-0 sm:px-4' => ! empty($wide), 'max-w-5xl px-3 sm:px-4' => empty($wide)])>
         {{ $slot }}
     </main>
 

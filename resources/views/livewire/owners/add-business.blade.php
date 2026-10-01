@@ -5,16 +5,16 @@
     <h1 class="text-2xl font-bold">{{ __('Ajouter un établissement') }}</h1>
 
     @if ($submittedName)
-        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4" role="status">
-            <p class="font-semibold text-emerald-900">{{ __('Merci ! « :name » a été envoyé.', ['name' => $submittedName]) }}</p>
-            <p class="mt-1 text-sm text-emerald-900/80">{{ __('Notre équipe vérifie chaque fiche avant publication. Vous serez prévenu.') }}</p>
-            <a href="{{ route('city.home', ['city' => $city]) }}" wire:navigate class="mt-3 inline-block text-sm font-semibold text-brand-700 underline">{{ __('Retour à l’accueil') }}</a>
+        <div class="rounded-lg bg-brand-50 p-4 text-brand-900" role="status">
+            <p class="font-semibold text-brand-900">{{ __('Merci ! « :name » a été envoyé.', ['name' => $submittedName]) }}</p>
+            <p class="mt-1 text-sm text-brand-900/80">{{ __('Notre équipe vérifie chaque fiche avant publication. Vous serez prévenu.') }}</p>
+            <a href="{{ route('city.home', ['city' => $city]) }}" wire:navigate class="mt-3 inline-block text-sm font-semibold text-brand-600 hover:underline">{{ __('Retour à l’accueil') }}</a>
         </div>
     @else
         <p class="text-stone-600">{{ __('Ajoutez gratuitement un établissement de :city. Il sera publié après vérification.', ['city' => $city->name]) }}</p>
 
         <form wire:submit="{{ $checked ? 'submit' : 'check' }}" class="space-y-5">
-            <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+            <section class="fb-card space-y-3 p-4">
                 <div>
                     <label for="name" class="text-sm font-medium">{{ __('Nom') }} *</label>
                     <input id="name" type="text" wire:model="name" maxlength="120" required class="{{ $input }}">
@@ -45,7 +45,7 @@
                 </div>
             </section>
 
-            <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+            <section class="fb-card space-y-3 p-4">
                 <h2 class="font-semibold">{{ __('Adresse et position') }}</h2>
                 <div class="grid gap-3 sm:grid-cols-2">
                     <div>
@@ -68,13 +68,13 @@
                     'center' => ['lat' => $city->center_latitude, 'lng' => $city->center_longitude],
                     'lat' => $latitude, 'lng' => $longitude, 'zoom' => 14,
                     'tiles' => ['url' => config('directory.maps.tile_url'), 'attribution' => config('directory.maps.attribution'), 'maxZoom' => config('directory.maps.max_zoom')],
-                ]))" class="overflow-hidden rounded-lg border border-stone-200">
+                ]))" class="fb-card overflow-hidden">
                     <div x-ref="canvas" class="h-64 w-full"></div>
                 </div>
                 @error('latitude') <p class="text-sm text-red-700">{{ $message }}</p> @enderror
             </section>
 
-            <section class="grid gap-3 rounded-xl border border-stone-200 bg-white p-4 sm:grid-cols-2">
+            <section class="fb-card grid gap-3 p-4 sm:grid-cols-2">
                 <div>
                     <label for="whatsapp" class="text-sm font-medium">WhatsApp</label>
                     <input id="whatsapp" type="tel" wire:model="whatsapp" dir="ltr" placeholder="06 12 34 56 78" class="{{ $input }}">
@@ -101,7 +101,7 @@
                 </div>
             </section>
 
-            <section class="space-y-3 rounded-xl border border-stone-200 bg-white p-4">
+            <section class="fb-card space-y-3 p-4">
                 <h2 class="font-semibold">{{ __('Horaires') }}</h2>
                 <label class="flex items-center gap-2 text-sm">
                     <input type="checkbox" wire:model.live="alwaysOpen" class="rounded border-stone-300"> {{ __('Ouvert 24h/24, 7j/7') }}
@@ -112,7 +112,7 @@
             </section>
 
             @if ($checked && $duplicates->isNotEmpty())
-                <section class="space-y-2 rounded-xl border border-amber-300 bg-amber-50 p-4" role="alert">
+                <section class="space-y-2 rounded-lg border-s-4 border-amber-400 bg-amber-50 p-4" role="alert">
                     <p class="font-semibold text-amber-900">{{ __('Cet établissement existe peut-être déjà :') }}</p>
                     <ul class="list-disc ps-5 text-sm">
                         @foreach ($duplicates as $duplicate)
@@ -134,7 +134,7 @@
                 </section>
             @endif
 
-            <button type="submit" wire:loading.attr="disabled" class="w-full rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white hover:bg-brand-700 disabled:opacity-60">
+            <button type="submit" wire:loading.attr="disabled" class="fb-btn fb-btn-primary w-full">
                 {{ $checked ? __('Envoyer pour vérification') : __('Continuer') }}
             </button>
         </form>

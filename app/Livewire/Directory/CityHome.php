@@ -85,6 +85,7 @@ class CityHome extends Component
         ])
             ->title(__('Services à :city', ['city' => $this->city->name]))
             ->layoutData([
+                'wide' => true,
                 'metaDescription' => __('Trouvez artisans, mécaniciens, pharmacies de garde et commerces à :city, avec les avis des habitants.', ['city' => $this->city->name]),
                 'canonical' => route('city.home', ['city' => $this->city]),
                 'structuredData' => [JsonLd::website($this->city, route('city.home', ['city' => $this->city]), route('city.search', ['city' => $this->city]))],

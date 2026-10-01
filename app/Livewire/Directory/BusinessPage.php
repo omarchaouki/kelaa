@@ -301,6 +301,7 @@ class BusinessPage extends Component
                 'city' => $this->city->name,
             ]))
             ->layoutData([
+                'wide' => true,
                 'metaDescription' => str($business->description ?: __(':business à :city : horaires, avis, téléphone et WhatsApp.', ['business' => $business->name, 'city' => $this->city->name]))->squish()->limit(155)->toString(),
                 'canonical' => $url,
                 'ogType' => 'business.business',
