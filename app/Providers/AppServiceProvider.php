@@ -9,12 +9,14 @@ use App\Services\Otp\LogOtpSender;
 use App\Services\Otp\SmsOtpSender;
 use App\Services\Otp\WhatsAppOtpSender;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Events\ConnectionEstablished;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +39,11 @@ class AppServiceProvider extends ServiceProvider
             'whatsapp' => new WhatsAppOtpSender(config('otp.drivers.whatsapp')),
             default => throw new InvalidArgumentException('Unknown OTP driver ['.config('otp.driver').'].'),
         });
+
+        // App strings live apart from the Laravel Lang package files (lang/{locale}.json).
+        // Added as soon as the translator exists: a provider translating anything while
+        // booting would otherwise cache the default locale's strings without this file.
+        $this->callAfterResolving('translator', fn ($translator) => $translator->addJsonPath(lang_path('app')));
     }
 
     /**
@@ -73,9 +80,6 @@ class AppServiceProvider extends ServiceProvider
             'banned_word' => Models\BannedWord::class,
             'media' => Media::class,
         ]);
-
-        // App strings live apart from the Laravel Lang package files (lang/{locale}.json).
-        $this->app['translator']->addJsonPath(lang_path('app'));
 
         // route() works outside a localized request too (jobs, mails, console).
         // SetLocale overrides this default for every localized request.
@@ -116,19 +120,29 @@ class AppServiceProvider extends ServiceProvider
      */
     private function registerSqliteMathFunctions(): void
     {
-        Event::listen(function (ConnectionEstablished $event): void {
-            if (! $event->connection instanceof SQLiteConnection) {
-                return;
-            }
+        // Connections opened (or re-opened) from now on...
+        Event::listen(fn (ConnectionEstablished $event) => self::addSqliteMathFunctions($event->connection));
 
-            $pdo = $event->connection->getPdo();
+        // ...and those already opened while providers booted: their
+        // ConnectionEstablished event fired before this listener existed.
+        foreach (DB::getConnections() as $connection) {
+            self::addSqliteMathFunctions($connection);
+        }
+    }
 
-            foreach (['sin', 'cos', 'asin', 'sqrt'] as $function) {
-                $pdo->sqliteCreateFunction($function, $function, 1);
-            }
+    private static function addSqliteMathFunctions(Connection $connection): void
+    {
+        if (! $connection instanceof SQLiteConnection) {
+            return;
+        }
 
-            $pdo->sqliteCreateFunction('radians', 'deg2rad', 1);
-            $pdo->sqliteCreateFunction('power', 'pow', 2);
-        });
+        $pdo = $connection->getPdo();
+
+        foreach (['sin', 'cos', 'asin', 'sqrt'] as $function) {
+            $pdo->sqliteCreateFunction($function, $function, 1);
+        }
+
+        $pdo->sqliteCreateFunction('radians', 'deg2rad', 1);
+        $pdo->sqliteCreateFunction('power', 'pow', 2);
     }
 }
