@@ -12,6 +12,11 @@
             </ul>
         </nav>
 
+        @php $footerCity = request()->route('city'); @endphp
+        @if ($footerCity instanceof \App\Models\City)
+            <p class="mt-4"><a href="{{ route('city.add', ['city' => $footerCity]) }}" class="font-medium text-brand-700 underline">{{ __('Ajouter un établissement') }}</a></p>
+        @endif
+
         <p class="mt-4">
             &copy; {{ now()->year }} {{ config('app.name') }}
             @if (config('directory.cndp_number'))

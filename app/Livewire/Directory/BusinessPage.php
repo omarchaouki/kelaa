@@ -19,6 +19,7 @@ use App\Models\ReviewVote;
 use App\Models\SponsoredPlacement;
 use App\Services\Directory\CityDirectory;
 use App\Services\Hours\OpeningHours;
+use App\Services\Plans\PlanFeatures;
 use App\Services\Tracking\ContactEventRecorder;
 use App\Support\Phone\MoroccanPhone;
 use Illuminate\Contracts\View\View;
@@ -282,7 +283,8 @@ class BusinessPage extends Component
             'primaryCategory' => $primaryCategory,
             'similar' => $directory->similarNearby($business),
             'whatsappUrl' => $this->whatsappUrl($business),
-            'gallery' => $business->getMedia('gallery'),
+            // Photos beyond the current plan's limit are kept but not shown (graceful downgrade).
+            'gallery' => $business->getMedia('gallery')->take(app(PlanFeatures::class)->maxPhotos($business)),
         ])
             ->title(__(':business, :category à :city', [
                 'business' => $business->name,

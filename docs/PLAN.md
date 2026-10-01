@@ -27,8 +27,8 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 |---|---|
 | 1. Foundation | Done (verified on SQLite; MySQL/Sail run pending, see below) |
 | 2. Directory | Done (security-first pass included) |
-| 3. Reviews & moderation | Done, awaiting review |
-| 4. Owners | Not started |
+| 3. Reviews & moderation | Done |
+| 4. Owners | Done, awaiting review |
 | 5. Monetization | Not started |
 | 6. Polish & launch | Not started |
 

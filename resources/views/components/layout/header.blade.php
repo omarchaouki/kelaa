@@ -28,6 +28,7 @@
             </div>
 
             @auth
+                <a href="{{ route('dashboard') }}" wire:navigate class="hidden rounded-lg px-2 py-1.5 text-sm text-stone-700 hover:bg-stone-100 sm:block">{{ __('Espace pro') }}</a>
                 <form method="POST" action="{{ route('logout') }}" class="hidden sm:block">
                     @csrf
                     <button type="submit" class="flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm text-stone-700 hover:bg-stone-100">

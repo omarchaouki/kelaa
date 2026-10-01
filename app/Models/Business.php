@@ -7,6 +7,7 @@ use App\Enums\ReviewStatus;
 use App\Models\Concerns\HasGeoLocation;
 use App\Models\Contracts\Translatable;
 use App\Observers\FlushDirectoryCache;
+use App\Services\Owners\ProfileCompleteness;
 use App\Support\Phone\MoroccanPhone;
 use App\Support\Security\SafeUrl;
 use Carbon\CarbonImmutable;
@@ -51,6 +52,7 @@ use Spatie\Translatable\HasTranslations;
  * @property int|null $price_range
  * @property bool $is_always_open
  * @property BusinessStatus $status
+ * @property list<int>|null $possible_duplicate_ids
  * @property bool $is_verified
  * @property bool $is_claimed
  * @property int|null $plan_id
@@ -140,6 +142,11 @@ class Business extends Model implements HasMedia, Translatable
 
     protected static function booted(): void
     {
+        // Completeness is a ranking signal: keep it in line with the data.
+        static::saved(function (Business $business): void {
+            app(ProfileCompleteness::class)->refresh($business);
+        });
+
         // Contact data ends up in href attributes: normalize it whatever wrote it.
         static::saving(function (Business $business): void {
             if ($business->isDirty('phone')) {
@@ -183,6 +190,7 @@ class Business extends Model implements HasMedia, Translatable
             'price_range' => 'integer',
             'is_always_open' => 'boolean',
             'status' => BusinessStatus::class,
+            'possible_duplicate_ids' => 'array',
             'is_verified' => 'boolean',
             'is_claimed' => 'boolean',
             'plan_expires_at' => 'datetime',

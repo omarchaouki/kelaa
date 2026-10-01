@@ -12,7 +12,7 @@ final class ReservedSlugs
         // /{locale}/...
         'login', 'logout', 'account', 'p', 'events', 'auth',
         // /{locale}/{city}/...
-        'b', 'recherche', 'search', 'carte', 'pharmacies-de-garde',
+        'b', 'recherche', 'search', 'carte', 'pharmacies-de-garde', 'ajouter',
         // Top-level application paths.
         'admin', 'livewire', 'horizon', 'api', 'up', 'build', 'storage', 'vendor', 'dashboard',
         'sitemap', 'robots', 'manifest', 'offline',

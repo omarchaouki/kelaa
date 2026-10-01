@@ -95,6 +95,9 @@ it('ignores paid plans and sponsored placements in organic ranking', function ()
     $premium->forceFill(['plan_id' => Plan::factory()->create(['features' => ['highlighted_card' => true, 'remove_competitor_ads' => true, 'priority_support' => true, 'max_photos' => 40, 'show_stats' => true]])->id, 'plan_expires_at' => now()->addYear()])->save();
     SponsoredPlacement::factory()->create(['business_id' => $premium->id, 'city_id' => $city->id, 'category_id' => $category->id]);
 
+    // Identical listings apart from money (completeness is derived from data on save).
+    Business::query()->whereKey([$free->id, $premium->id])->toBase()->update(['profile_completeness' => 60, 'bayesian_score' => 4.0, 'is_verified' => false, 'last_activity_at' => now()->subDays(3)]);
+
     $signals = fn (Business $b) => new RankingSignals($b->bayesian_score, $b->profile_completeness, $b->is_verified, $b->last_activity_at);
 
     expect($this->ranking->relevance($signals($premium->fresh())))->toBe($this->ranking->relevance($signals($free->fresh())));
@@ -104,7 +107,7 @@ it('ignores paid plans and sponsored placements in organic ranking', function ()
     expect(collect($organic->items())->pluck('name')->all())->toBe(['Free', 'Premium']);
 
     // A paid plan never outranks better reviews.
-    $free->forceFill(['bayesian_score' => 4.5])->save();
+    Business::query()->whereKey($free->id)->toBase()->update(['bayesian_score' => 4.5]);
     $organic = app(BusinessSearch::class)->search($city, new SearchFilters(sort: SearchSort::Relevance));
     expect(collect($organic->items())->pluck('name')->first())->toBe('Free');
 });

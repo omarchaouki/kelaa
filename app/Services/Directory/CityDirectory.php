@@ -16,7 +16,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Read models for the city home page and listings (cached where shared by all visitors).
+ * Read models for the city home page and listings. Shared results are cached
+ * as ids/arrays only: the cache never holds objects (cache.serializable_classes = false).
  */
 class CityDirectory
 {
@@ -28,12 +29,13 @@ class CityDirectory
      */
     public function categoryTree(City $city): array
     {
-        return DirectoryCache::remember("city:{$city->id}:category-tree", now()->addHour(), function () use ($city) {
-            $groups = Category::query()->active()->roots()->ordered()
-                ->with(['children' => fn ($q) => $q->where('is_active', true)])
-                ->get();
+        // Small, indexed query: not cached (the cache only holds scalars and arrays).
+        $groups = Category::query()->active()->roots()->ordered()
+            ->with(['children' => fn ($q) => $q->where('is_active', true)])
+            ->get();
 
-            $counts = DB::table('business_category')
+        $counts = DirectoryCache::remember("city:{$city->id}:category-counts", now()->addHour(), function () use ($city): array {
+            return DB::table('business_category')
                 ->join('businesses', 'businesses.id', '=', 'business_category.business_id')
                 ->where('businesses.city_id', $city->id)
                 ->where('businesses.status', 'published')
@@ -43,9 +45,9 @@ class CityDirectory
                 ->pluck('total', 'category_id')
                 ->map(fn ($count) => (int) $count)
                 ->all();
-
-            return ['groups' => $groups, 'counts' => $counts];
         });
+
+        return ['groups' => $groups, 'counts' => $counts];
     }
 
     /**
@@ -58,13 +60,19 @@ class CityDirectory
         $at ??= now()->toImmutable();
         $bucket = $at->format('Y-m-d-H');
 
-        return DirectoryCache::remember("city:{$city->id}:pharmacies:{$bucket}:{$hoursAhead}", now()->addMinutes(10), fn () => PharmacyDuty::query()
+        $ids = DirectoryCache::remember("city:{$city->id}:pharmacies:{$bucket}:{$hoursAhead}", now()->addMinutes(10), fn () => PharmacyDuty::query()
             ->where('ends_at', '>', $at)
             ->where('starts_at', '<', $at->addHours($hoursAhead))
             ->whereHas('business', fn (Builder $q) => $q->published()->inCity($city))
+            ->orderBy('starts_at')
+            ->pluck('id')
+            ->all());
+
+        return PharmacyDuty::query()
+            ->whereKey($ids)
             ->with(['business' => fn ($q) => $q->with(['neighborhood', 'city'])])
             ->orderBy('starts_at')
-            ->get());
+            ->get();
     }
 
     /**
@@ -72,7 +80,7 @@ class CityDirectory
      */
     public function recentlyReviewed(City $city, int $limit = 6): Collection
     {
-        return DirectoryCache::remember("city:{$city->id}:recently-reviewed:{$limit}", now()->addMinutes(10), function () use ($city, $limit) {
+        $ids = DirectoryCache::remember("city:{$city->id}:recently-reviewed:{$limit}", now()->addMinutes(10), function () use ($city, $limit): array {
             $latest = DB::table('reviews')
                 ->select('business_id', DB::raw('max(published_at) as last_review_at'))
                 ->where('status', ReviewStatus::Published->value)
@@ -83,9 +91,15 @@ class CityDirectory
                 ->joinSub($latest, 'latest_reviews', 'latest_reviews.business_id', '=', 'businesses.id')
                 ->orderByDesc('latest_reviews.last_review_at')
                 ->limit($limit)
-                ->with(BusinessSearch::CARD_RELATIONS)
-                ->get();
+                ->pluck('businesses.id')
+                ->all();
         });
+
+        return Business::query()->published()->whereKey($ids)
+            ->with(BusinessSearch::CARD_RELATIONS)
+            ->get()
+            ->sortBy(fn (Business $business) => array_search($business->id, $ids, false))
+            ->values();
     }
 
     /**

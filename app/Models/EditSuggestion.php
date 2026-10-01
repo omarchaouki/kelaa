@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $business_id
  * @property int|null $user_id
+ * @property bool $from_owner
  * @property array<string, mixed> $changes
  * @property string|null $comment
  * @property EditSuggestionStatus $status
@@ -33,6 +34,7 @@ class EditSuggestion extends Model
     {
         return [
             'changes' => 'array',
+            'from_owner' => 'boolean',
             'status' => EditSuggestionStatus::class,
             'reviewed_at' => 'datetime',
         ];

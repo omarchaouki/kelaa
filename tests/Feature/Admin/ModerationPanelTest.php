@@ -15,7 +15,7 @@ beforeEach(function () {
 
 it('shows the moderation queues to moderators', function (string $url) {
     $this->actingAs(staff(Role::Moderator))->get($url)->assertOk();
-})->with(['/admin', '/admin/reviews', '/admin/review-replies', '/admin/reports', '/admin/businesses']);
+})->with(['/admin', '/admin/reviews', '/admin/review-replies', '/admin/reports', '/admin/businesses', '/admin/business-claims', '/admin/edit-suggestions']);
 
 it('lists pending reviews first in the queue', function () {
     $this->actingAs(staff(Role::Moderator))->get('/admin/reviews')->assertSee('Avis en attente de modération');
@@ -23,7 +23,7 @@ it('lists pending reviews first in the queue', function () {
 
 it('keeps business owners out of every moderation queue', function (string $url) {
     $this->actingAs(staff(Role::BusinessOwner))->get($url)->assertForbidden();
-})->with(['/admin/reviews', '/admin/reports', '/admin/businesses']);
+})->with(['/admin/reviews', '/admin/reports', '/admin/businesses', '/admin/business-claims', '/admin/edit-suggestions']);
 
 it('keeps the banned words list for admins', function () {
     $this->actingAs(staff(Role::Admin))->get('/admin/banned-words')->assertOk();

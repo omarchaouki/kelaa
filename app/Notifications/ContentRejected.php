@@ -53,6 +53,7 @@ class ContentRejected extends Notification implements ShouldQueue
             'review' => __('avis'),
             'reply' => __('réponse'),
             'business' => __('fiche'),
+            'edit_suggestion' => __('suggestion de modification'),
             default => __('photo'),
         };
     }

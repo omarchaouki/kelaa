@@ -33,6 +33,8 @@ class BusinessesTable
                     BusinessStatus::Suspended => 'danger',
                 }),
                 IconColumn::make('is_verified')->label(__('Vérifié'))->boolean(),
+                TextColumn::make('possible_duplicate_ids')->label(__('Doublons possibles'))->badge()->color('danger')->placeholder('—')
+                    ->formatStateUsing(fn ($state) => '#'.$state),
                 TextColumn::make('rating_avg')->label(__('Note'))->numeric(1)->suffix(' ★'),
                 TextColumn::make('rating_count')->label(__('Avis'))->numeric(),
                 TextColumn::make('created_at')->label(__('Ajouté le'))->date('d/m/Y')->sortable(),

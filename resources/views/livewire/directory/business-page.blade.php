@@ -307,7 +307,7 @@
                 <section class="rounded-xl border border-dashed border-brand-300 bg-brand-50 p-4 text-sm">
                     <p class="font-medium text-brand-900">{{ __('C’est votre établissement ?') }}</p>
                     <p class="mt-1 text-brand-900/80">{{ __('Revendiquez cette fiche pour répondre aux avis et mettre à jour vos informations.') }}</p>
-                    <a href="{{ route('page.show', ['page' => 'contact']) }}" class="mt-2 inline-block font-semibold text-brand-700 underline">{{ __('Revendiquer la fiche') }}</a>
+                    <a href="{{ route('city.business.claim', ['city' => $city, 'business' => $business]) }}" class="mt-2 inline-block font-semibold text-brand-700 underline">{{ __('Revendiquer la fiche') }}</a>
                 </section>
             @endunless
         </aside>
@@ -317,6 +317,8 @@
         <button type="button" wire:click="openReport('business', {{ $business->id }})" class="inline-flex items-center gap-1 text-stone-500 hover:text-rose-700">
             <x-ui.icon name="flag" size="14" /> {{ __('Signaler cette fiche') }}
         </button>
+        ·
+        <a href="{{ route('city.business.suggest', ['city' => $city, 'business' => $business]) }}" class="text-stone-500 hover:text-brand-700">{{ __('Proposer une modification') }}</a>
     </p>
 
     @if ($reportType !== null)

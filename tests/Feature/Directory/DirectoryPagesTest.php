@@ -18,7 +18,7 @@ beforeEach(function () {
     $this->city = City::factory()->create(['slug' => 'ma-ville', 'name' => ['fr' => 'Ma Ville', 'ar' => 'مدينتي', 'en' => 'My City']]);
     $this->group = Category::factory()->create(['slug' => 'maison', 'name' => ['fr' => 'Maison', 'ar' => 'المنزل', 'en' => 'Home']]);
     $this->plumbers = Category::factory()->childOf($this->group)->create(['slug' => 'plombier', 'name' => ['fr' => 'Plombier', 'ar' => 'سباك', 'en' => 'Plumber']]);
-    $this->business = Business::factory()->for($this->city)->inCategory($this->plumbers)->withRegularHours()->create(['name' => 'Atelier Amine', 'slug' => 'atelier-amine']);
+    $this->business = Business::factory()->for($this->city)->inCategory($this->plumbers)->withRegularHours()->create(['name' => 'Atelier Amine', 'slug' => 'atelier-amine', 'is_verified' => false]);
 });
 
 it('renders the city home in every locale', function (string $locale, string $expected) {
