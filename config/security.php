@@ -24,6 +24,15 @@ return [
         'img_hosts' => array_filter(explode(',', (string) env('CSP_IMG_HOSTS', ''))),
 
         'report_uri' => env('CSP_REPORT_URI'),
+
+        // Filament's own inline scripts (no nonce support), allowed by exact hash on
+        // admin pages only. tests/Feature/Security/AdminInlineScriptsTest.php lists
+        // the new hashes when a Filament update changes them.
+        'admin_script_hashes' => [
+            "'sha256-U1bkbkwEe1mD+tUU83n0bTj/yfxW/ZR1XA7I/KciRwU='", // dark mode loader (layout head)
+            "'sha256-0mqBbIWwNzdgIFPFU9BM5l9RnzSn/EbrlFBGLZHGf5Y='", // loadDarkMode() call (layout body)
+            "'sha256-CUO614iJ1yQTie8j253djmvmNcad8Y2m0MoYGZs+JQo='", // sidebar collapsed groups
+        ],
     ],
 
     // Reverse proxy / load balancer IPs whose X-Forwarded-* headers are trusted

@@ -50,6 +50,11 @@ class SecurityHeaders
     private function policy(Request $request, string $nonce): string
     {
         $scriptSrc = ["'self'", "'nonce-{$nonce}'", "'unsafe-eval'"];
+
+        // Admin panel: Filament's own inline scripts, allowed by exact hash (never 'unsafe-inline').
+        if ($request->is('admin', 'admin/*')) {
+            array_push($scriptSrc, ...config('security.csp.admin_script_hashes'));
+        }
         $styleSrc = ["'self'", "'unsafe-inline'"];
         $connectSrc = ["'self'"];
         $imgSrc = ["'self'", 'data:', 'blob:', ...$this->tileHosts(), ...config('security.csp.img_hosts')];

@@ -12,7 +12,7 @@ it('boots the admin panel with a nonce\'d script that matches the CSP', function
     $response = $this->actingAs(staff(Role::Admin))->get('/admin')->assertOk();
 
     preg_match("/'nonce-([^']+)'/", (string) $response->headers->get('Content-Security-Policy'), $header);
-    preg_match('/<script nonce="([^"]+)">\s*\(\(\) => \{\s*let groups/', $response->getContent(), $script);
+    preg_match('/<script nonce="([^"]+)"[^>]*>\s*\(\(\) => \{\s*let groups/', $response->getContent(), $script);
 
     expect($header[1] ?? null)->not->toBeNull()
         ->and($script[1] ?? null)->toBe($header[1])

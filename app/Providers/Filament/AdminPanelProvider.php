@@ -69,6 +69,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->font('Segoe UI', provider: LocalFontProvider::class)
             ->viteTheme('resources/css/filament/admin/theme.css')
+            // Single-page navigation: links swap the page content without a full reload,
+            // and are prefetched on hover. Downloads and Horizon (a separate app) load normally.
+            ->spa(hasPrefetching: true)
+            ->spaUrlExceptions(fn (): array => [url('/horizon*'), url('/admin-files/*')])
             ->defaultAvatarProvider(InitialsAvatarProvider::class)
             // Filament's inline scripts have no CSP nonce: see the view for what it replaces.
             ->renderHook(PanelsRenderHook::HEAD_END, fn () => view('filament.csp-bootstrap'))

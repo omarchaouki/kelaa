@@ -3,9 +3,10 @@
     This nonce'd copy does the two jobs that matter before Alpine starts:
     a valid collapsed-groups list for the sidebar (otherwise the menu crashes
     on null) and the dark-mode class. Semicolons are required: Blade's @js
-    swallows the following line break.
+    swallows the following line break. data-navigate-once: SPA navigation must not
+    re-insert it (a re-inserted copy carries a new nonce the page's CSP rejects).
 --}}
-<script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">
+<script nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}" data-navigate-once>
     (() => {
         let groups = null;
         try { groups = JSON.parse(localStorage.getItem('collapsedGroups')); } catch (e) {}
