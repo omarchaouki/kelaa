@@ -2,7 +2,7 @@
 
 return [
     'role' => ['member' => 'Membre', 'business_owner' => 'Professionnel', 'moderator' => 'Modérateur', 'admin' => 'Administrateur'],
-    'business_status' => ['pending' => 'En attente', 'published' => 'Publié', 'suspended' => 'Suspendu'],
+    'business_status' => ['pending' => 'En attente', 'published' => 'Publié', 'suspended' => 'Suspendu', 'rejected' => 'Refusé'],
     'review_status' => ['pending' => 'En attente', 'published' => 'Publié', 'rejected' => 'Refusé', 'hidden_by_moderation' => 'Masqué par la modération'],
     'reply_status' => ['pending' => 'En attente', 'published' => 'Publié', 'rejected' => 'Refusé', 'hidden_by_moderation' => 'Masqué par la modération'],
     'report_reason' => [

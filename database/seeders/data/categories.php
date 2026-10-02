@@ -9,8 +9,9 @@
  * Slugs appear in URLs and must never change once live (links, SEO).
  * "pharmacie-de-garde" is used by the on-duty pharmacy import.
  *
- * Transport > "Stations de taxis" only lists taxi stations and licensed
- * companies, never individual drivers offering private rides (moderation rule).
+ * Transport > taxis: only licensed petits/grands taxis (with their agrément)
+ * and taxi stations, never unlicensed drivers offering private rides
+ * (moderation rule).
  */
 
 return [
@@ -126,7 +127,9 @@ return [
         'children' => [
             ['slug' => 'location-de-voitures', 'fr' => 'Location de voitures', 'ar' => 'كراء السيارات', 'en' => 'Car rental', 'icon' => 'key', 'schema' => 'AutoRental'],
             ['slug' => 'location-utilitaires', 'fr' => 'Location d’utilitaires et camions', 'ar' => 'كراء الشاحنات والعربات النفعية', 'en' => 'Van and truck rental', 'icon' => 'truck', 'schema' => 'AutoRental'],
-            ['slug' => 'stations-de-taxis', 'fr' => 'Stations de taxis', 'ar' => 'محطات الطاكسيات', 'en' => 'Taxi stations', 'icon' => 'car-taxi-front', 'schema' => 'TaxiStand'],
+            ['slug' => 'petits-taxis', 'fr' => 'Petits taxis', 'ar' => 'الطاكسيات الصغيرة', 'en' => 'Petit taxis (in town)', 'icon' => 'car-taxi-front', 'schema' => 'TaxiService'],
+            ['slug' => 'grands-taxis', 'fr' => 'Grands taxis', 'ar' => 'الطاكسيات الكبيرة', 'en' => 'Grand taxis (intercity)', 'icon' => 'car-front', 'schema' => 'TaxiService'],
+            ['slug' => 'stations-de-taxis', 'fr' => 'Stations de taxis', 'ar' => 'محطات الطاكسيات', 'en' => 'Taxi stations', 'icon' => 'map-pin', 'schema' => 'TaxiStand'],
             ['slug' => 'autocars-voyageurs', 'fr' => 'Autocars et agences de voyageurs', 'ar' => 'الحافلات ووكالات المسافرين', 'en' => 'Coaches and bus agencies', 'icon' => 'bus', 'schema' => 'LocalBusiness'],
             ['slug' => 'transport-de-marchandises', 'fr' => 'Transport de marchandises', 'ar' => 'نقل البضائع', 'en' => 'Freight transport', 'icon' => 'container', 'schema' => 'LocalBusiness'],
             ['slug' => 'transport-scolaire', 'fr' => 'Transport scolaire', 'ar' => 'النقل المدرسي', 'en' => 'School transport', 'icon' => 'school', 'schema' => 'LocalBusiness'],

@@ -52,6 +52,7 @@ use Spatie\Translatable\HasTranslations;
  * @property int|null $price_range
  * @property bool $is_always_open
  * @property BusinessStatus $status
+ * @property string|null $rejection_reason
  * @property list<int>|null $possible_duplicate_ids
  * @property bool $is_verified
  * @property bool $is_claimed

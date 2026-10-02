@@ -102,6 +102,7 @@ it('refuses a position far away from the city', function () {
         ->set('name', 'Loin')
         ->set('categoryId', $this->plumbers->id)
         ->set('address', 'Ailleurs')
+        ->set('whatsapp', '0612345678')
         ->set('latitude', 31.63)   // Marrakech
         ->set('longitude', -8.0)
         ->call('check')

@@ -3,28 +3,30 @@
 namespace App\Livewire\Directory;
 
 use App\Livewire\Concerns\WithVisitorLocation;
-use App\Models\Business;
 use App\Models\Category;
 use App\Models\City;
 use App\Services\Directory\CityDirectory;
-use App\Services\Search\BusinessSearch;
-use App\Services\Search\SearchFilters;
 use App\Support\Seo\JsonLd;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
+/**
+ * City home: every category with its number of listings, filtered instantly
+ * in the browser, plus tonight's pharmacies and recent activity. Business
+ * search lives in the nested QuickSearch component.
+ */
 #[Layout('layouts.app')]
 class CityHome extends Component
 {
     use WithVisitorLocation;
 
+    /** Popular categories shown first (the most listings). */
+    public const POPULAR = 8;
+
     #[Locked]
     public City $city;
-
-    public string $q = '';
 
     public function mount(City $city): void
     {
@@ -33,55 +35,31 @@ class CityHome extends Component
         $this->city = $city;
     }
 
-    public function search(): mixed
-    {
-        return $this->redirectRoute('city.search', ['city' => $this->city, 'q' => SearchFilters::cleanQuery($this->q) ?: null], navigate: true);
-    }
-
-    /**
-     * Autocomplete: matching categories first, then businesses.
-     *
-     * @return array{categories: Collection<int, Category>, businesses: Collection<int, Business>}
-     */
-    protected function suggestions(CityDirectory $directory, BusinessSearch $search): array
-    {
-        $query = SearchFilters::cleanQuery($this->q);
-
-        if (mb_strlen($query) < 2) {
-            return ['categories' => collect(), 'businesses' => collect()];
-        }
-
-        $needle = mb_strtolower($query);
-
-        $categories = $directory->categoryTree($this->city)['groups']
-            ->flatMap(fn (Category $group) => [$group, ...$group->children])
-            ->filter(fn (Category $category) => collect($category->getTranslations('name'))
-                ->contains(fn ($name) => is_string($name) && str_contains(mb_strtolower($name), $needle)))
-            ->take(4)
-            ->values();
-
-        $ids = array_slice($search->textMatches($this->city, $query), 0, 5);
-
-        $businesses = Business::query()->published()->whereKey($ids)->with(['categories', 'neighborhood'])->get()
-            ->sortBy(fn (Business $business) => array_search($business->id, $ids, true))
-            ->values();
-
-        return ['categories' => $categories, 'businesses' => $businesses];
-    }
-
-    public function render(CityDirectory $directory, BusinessSearch $search): View
+    public function render(CityDirectory $directory): View
     {
         $tree = $directory->categoryTree($this->city);
+        $counts = $tree['counts'];
         $location = $this->location();
+
+        $popular = $tree['groups']
+            ->flatMap(fn (Category $group) => $group->children)
+            ->filter(fn (Category $category) => ($counts[$category->id] ?? 0) > 0)
+            ->sortByDesc(fn (Category $category) => $counts[$category->id])
+            ->take(self::POPULAR)
+            ->values();
 
         return view('livewire.directory.city-home', [
             'groups' => $tree['groups'],
-            'counts' => $tree['counts'],
+            'counts' => $counts,
+            'popular' => $popular,
+            'index' => $directory->categorySearchIndex($tree['groups']),
+            'stats' => $directory->stats($this->city) + [
+                'categories' => $tree['groups']->sum(fn (Category $group) => $group->children->count()),
+            ],
             'pharmacies' => $directory->pharmaciesOnDuty($this->city),
             'recentlyReviewed' => $directory->recentlyReviewed($this->city),
             'openNearby' => $location ? $directory->openNearby($this->city, $location) : null,
             'hasLocation' => $location !== null,
-            'suggestions' => $this->suggestions($directory, $search),
         ])
             ->title(__('Services à :city', ['city' => $this->city->name]))
             ->layoutData([

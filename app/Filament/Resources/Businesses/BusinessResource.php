@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Businesses;
 
-use App\Enums\BusinessStatus;
 use App\Filament\Resources\Businesses\Pages\CreateBusiness;
 use App\Filament\Resources\Businesses\Pages\EditBusiness;
 use App\Filament\Resources\Businesses\Pages\ListBusinesses;
@@ -42,18 +41,6 @@ class BusinessResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('établissements');
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        $pending = Business::query()->where('status', BusinessStatus::Pending)->count();
-
-        return $pending > 0 ? (string) $pending : null;
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'warning';
     }
 
     public static function form(Schema $schema): Schema

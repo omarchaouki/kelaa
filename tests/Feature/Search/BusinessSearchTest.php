@@ -122,6 +122,9 @@ it('ignores a paid plan when ordering results', function () {
     $premium = Business::factory()->for($this->city)->create(['name' => 'Premium', 'bayesian_score' => 3.5]);
     $premium->forceFill(['plan_id' => $paid->id, 'plan_expires_at' => now()->addMonth()])->save();
 
+    // Every other relevance signal equal (the factory randomises them): only the rating differs.
+    Business::query()->toBase()->update(['profile_completeness' => 80, 'is_verified' => false, 'last_activity_at' => now()]);
+
     expect(names($this->search->search($this->city, new SearchFilters(sort: SearchSort::Relevance))))->toBe(['Better reviews', 'Premium']);
 });
 

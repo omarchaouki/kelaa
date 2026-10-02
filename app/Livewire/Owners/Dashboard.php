@@ -20,7 +20,7 @@ class Dashboard extends Component
         $userId = Auth::id();
 
         return view('livewire.owners.dashboard', [
-            'owned' => Business::query()->where('owner_id', $userId)->with(['city', 'categories'])->orderBy('name')->get(),
+            'owned' => Business::query()->where('owner_id', $userId)->with(['city', 'categories', 'media'])->orderBy('name')->get(),
             'submitted' => Business::query()->where('submitted_by', $userId)->whereNull('owner_id')->with('city')->latest()->limit(20)->get(),
         ])->title(__('Mon espace professionnel'))->layoutData(['noindex' => true]);
     }

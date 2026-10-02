@@ -2,7 +2,7 @@
 
 return [
     'role' => ['member' => 'عضو', 'business_owner' => 'مهني', 'moderator' => 'مشرف', 'admin' => 'مدير'],
-    'business_status' => ['pending' => 'قيد المراجعة', 'published' => 'منشور', 'suspended' => 'موقوف'],
+    'business_status' => ['pending' => 'قيد المراجعة', 'published' => 'منشور', 'suspended' => 'موقوف', 'rejected' => 'مرفوض'],
     'review_status' => ['pending' => 'قيد المراجعة', 'published' => 'منشور', 'rejected' => 'مرفوض', 'hidden_by_moderation' => 'مخفي من طرف الإشراف'],
     'reply_status' => ['pending' => 'قيد المراجعة', 'published' => 'منشور', 'rejected' => 'مرفوض', 'hidden_by_moderation' => 'مخفي من طرف الإشراف'],
     'report_reason' => [

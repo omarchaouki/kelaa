@@ -26,7 +26,8 @@ class PageForm
                 RichEditor::make("body.{$locale}")
                     ->hiddenLabel()
                     ->required($locale === Locales::default())
-                    ->formatStateUsing(fn (?Translatable $record) => $record?->getTranslation('body', $locale, false))
+                    // An untranslated body is an empty string, which the rich editor cannot parse.
+                    ->formatStateUsing(fn (?Translatable $record) => $record?->getTranslation('body', $locale, false) ?: null)
                     ->extraInputAttributes(['dir' => Locales::direction($locale)]),
             ]);
         }

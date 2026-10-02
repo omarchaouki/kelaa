@@ -12,4 +12,7 @@ enum BusinessStatus: string implements HasLabel
     case Pending = 'pending';
     case Published = 'published';
     case Suspended = 'suspended';
+
+    /** A submitted listing the moderators declined (never published). */
+    case Rejected = 'rejected';
 }

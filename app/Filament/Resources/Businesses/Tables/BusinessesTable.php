@@ -31,6 +31,7 @@ class BusinessesTable
                     BusinessStatus::Published => 'success',
                     BusinessStatus::Pending => 'warning',
                     BusinessStatus::Suspended => 'danger',
+                    BusinessStatus::Rejected => 'gray',
                 }),
                 IconColumn::make('is_verified')->label(__('Vérifié'))->boolean(),
                 TextColumn::make('possible_duplicate_ids')->label(__('Doublons possibles'))->badge()->color('danger')->placeholder('—')

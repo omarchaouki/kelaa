@@ -7,6 +7,7 @@ use App\Models\Business;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\PharmacyDuty;
+use App\Models\SearchSynonym;
 use App\Services\Search\BusinessSearch;
 use App\Support\DirectoryCache;
 use App\Support\Geo\Coordinates;
@@ -14,6 +15,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Read models for the city home page and listings. Shared results are cached
@@ -48,6 +50,72 @@ class CityDirectory
         });
 
         return ['groups' => $groups, 'counts' => $counts];
+    }
+
+    /**
+     * Text the home page filters categories on, in the browser: names in
+     * every language, the group name, and the search synonyms whose term
+     * appears in the category name ("mikanik" finds "Mécaniciens").
+     *
+     * @param  Collection<int, Category>  $groups
+     * @return list<array{id: int, group: int, text: string}>
+     */
+    public function categorySearchIndex(Collection $groups): array
+    {
+        $synonyms = DirectoryCache::remember('search-synonyms:all', now()->addHour(), fn (): array => SearchSynonym::query()
+            ->get(['term', 'synonyms'])
+            ->map(fn (SearchSynonym $synonym) => ['term' => Str::lower(Str::ascii($synonym->term)), 'words' => (array) $synonym->synonyms])
+            ->all());
+
+        $index = [];
+
+        foreach ($groups as $group) {
+            $groupNames = implode(' ', array_filter($group->getTranslations('name'), 'is_string'));
+
+            foreach ($group->children as $category) {
+                $names = implode(' ', array_filter($category->getTranslations('name'), 'is_string'));
+                $latin = Str::lower(Str::ascii($category->getTranslation('name', 'fr', false) ?: $names));
+                $extra = [];
+
+                foreach ($synonyms as $synonym) {
+                    $stem = rtrim($synonym['term'], 's');
+
+                    if (mb_strlen($stem) >= 3 && str_contains($latin, $stem)) {
+                        array_push($extra, $synonym['term'], ...$synonym['words']);
+                    }
+                }
+
+                $index[] = [
+                    'id' => $category->id,
+                    'group' => $group->id,
+                    'text' => mb_strtolower(implode(' ', [$names, $groupNames, $category->slug, ...$extra])),
+                ];
+            }
+        }
+
+        return $index;
+    }
+
+    /**
+     * Figures shown on the city home.
+     *
+     * @return array{businesses: int, reviews: int, new_this_month: int}
+     */
+    public function stats(City $city): array
+    {
+        return DirectoryCache::remember("city:{$city->id}:stats", now()->addMinutes(30), fn (): array => [
+            'businesses' => Business::query()->published()->inCity($city)->count(),
+            'reviews' => DB::table('reviews')
+                ->join('businesses', 'businesses.id', '=', 'reviews.business_id')
+                ->where('businesses.city_id', $city->id)
+                ->where('businesses.status', 'published')
+                ->whereNull('businesses.deleted_at')
+                ->where('reviews.status', ReviewStatus::Published->value)
+                ->count(),
+            'new_this_month' => Business::query()->published()->inCity($city)
+                ->where('published_at', '>=', now()->subDays(30))
+                ->count(),
+        ]);
     }
 
     /**

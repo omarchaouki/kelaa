@@ -4,11 +4,15 @@ import locationPicker from './components/location-picker';
 import geolocate from './components/geolocate';
 import { track, share } from './components/contact';
 import cookieConsent from './components/cookie-consent';
+import homeCategories from './components/home-categories';
+import categoryPicker from './components/category-picker';
 
 Alpine.data('directoryMap', directoryMap);
 Alpine.data('locationPicker', locationPicker);
 Alpine.data('geolocate', geolocate);
 Alpine.data('cookieConsent', cookieConsent);
+Alpine.data('homeCategories', homeCategories);
+Alpine.data('categoryPicker', categoryPicker);
 
 // Available to Alpine expressions: x-on:click="$track(...)".
 Alpine.magic('track', () => track);
