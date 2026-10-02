@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('locale', 5)->nullable();
             $table->string('status', 30)->default('pending');
             // Reasons the abuse detector sent this review to moderation.
-            $table->json('flags')->nullable();
+            $table->jsonb('flags')->nullable();
             $table->unsignedInteger('helpful_count')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamp('edited_at')->nullable();

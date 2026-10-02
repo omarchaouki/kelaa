@@ -24,9 +24,9 @@ return new class extends Migration
             $table->id();
             // cgu, privacy, review-guidelines, cookies, legal-notice, about, contact
             $table->string('slug')->unique();
-            $table->json('title');
-            $table->json('body');
-            $table->json('meta_description')->nullable();
+            $table->jsonb('title');
+            $table->jsonb('body');
+            $table->jsonb('meta_description')->nullable();
             $table->boolean('is_published')->default(true);
             $table->timestamps();
         });
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->id();
             $table->string('term');
             // ["سباك", "plombi"]
-            $table->json('synonyms');
+            $table->jsonb('synonyms');
             // Null means the synonym group applies to every locale.
             $table->string('locale', 5)->nullable();
             $table->timestamps();

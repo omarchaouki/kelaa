@@ -1,15 +1,25 @@
 {
-    "_comment": "PLACEHOLDER - replace with the launch city and its real quartiers. Coordinates are WGS84 (latitude, longitude). Slugs appear in URLs: keep them short, lowercase, ASCII.",
+    "_comment": "Launch city of kelaa.ma. City centre from public geographic data (32.04806, -7.40833). Neighbourhood names come from public business and pharmacy listings; verify spelling with the commune and add each neighbourhood's coordinates from the admin panel (Catalogue > Quartiers) before launch. Slugs appear in URLs: never change them once live.",
     "city": {
-        "slug": "ma-ville",
-        "name": { "fr": "Ma Ville", "ar": "مدينتي", "en": "My City" },
-        "center": { "latitude": 33.5731, "longitude": -7.5898 },
-        "default_zoom": 13
+        "slug": "el-kelaa",
+        "name": { "fr": "El Kelaa des Sraghna", "ar": "قلعة السراغنة", "en": "El Kelaa des Sraghna" },
+        "center": { "latitude": 32.04806, "longitude": -7.40833 },
+        "default_zoom": 14
     },
     "neighborhoods": [
-        { "slug": "centre-ville", "name": { "fr": "Centre-ville", "ar": "وسط المدينة", "en": "City centre" }, "center": { "latitude": 33.5950, "longitude": -7.6190 } },
-        { "slug": "medina", "name": { "fr": "Médina", "ar": "المدينة القديمة", "en": "Medina" }, "center": { "latitude": 33.6030, "longitude": -7.6180 } },
-        { "slug": "quartier-industriel", "name": { "fr": "Quartier industriel", "ar": "الحي الصناعي", "en": "Industrial district" }, "center": { "latitude": 33.5800, "longitude": -7.5600 } },
-        { "slug": "hay-salam", "name": { "fr": "Hay Salam", "ar": "حي السلام", "en": "Hay Salam" }, "center": { "latitude": 33.5550, "longitude": -7.6000 } }
+        { "slug": "zaouia", "name": { "fr": "Zaouia", "ar": "الزاوية", "en": "Zaouia" } },
+        { "slug": "mechouar", "name": { "fr": "Mechouar", "ar": "المشور", "en": "Mechouar" } },
+        { "slug": "souika", "name": { "fr": "Souika", "ar": "السويقة", "en": "Souika" } },
+        { "slug": "nakhla", "name": { "fr": "Nakhla", "ar": "النخلة", "en": "Nakhla" } },
+        { "slug": "el-hana", "name": { "fr": "El Hana", "ar": "الهناء", "en": "El Hana" } },
+        { "slug": "el-arssa", "name": { "fr": "El Arssa", "ar": "العرصة", "en": "El Arssa" } },
+        { "slug": "arrayhane", "name": { "fr": "Hay Arrayhane", "ar": "حي الريحان", "en": "Hay Arrayhane" } },
+        { "slug": "el-qods", "name": { "fr": "El Qods", "ar": "القدس", "en": "El Qods" } },
+        { "slug": "el-bahja", "name": { "fr": "El Bahja", "ar": "البهجة", "en": "El Bahja" } },
+        { "slug": "ras-el-ain", "name": { "fr": "Ras El Ain", "ar": "رأس العين", "en": "Ras El Ain" } },
+        { "slug": "aouatif", "name": { "fr": "Aouatif", "ar": "العواطف", "en": "Aouatif" } },
+        { "slug": "ennour", "name": { "fr": "Ennour", "ar": "النور", "en": "Ennour" } },
+        { "slug": "al-amal", "name": { "fr": "Hay Al Amal", "ar": "حي الأمل", "en": "Hay Al Amal" } },
+        { "slug": "abdelmoumen-ben-ali", "name": { "fr": "Abdelmoumen Ben Ali", "ar": "عبد المومن بن علي", "en": "Abdelmoumen Ben Ali" } }
     ]
 }

@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'default_city' => env('DIRECTORY_DEFAULT_CITY', 'ma-ville'),
+    'default_city' => env('DIRECTORY_DEFAULT_CITY', 'el-kelaa'),
 
     'timezone' => 'Africa/Casablanca',
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('submitted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->string('name');
             $table->string('slug');
-            $table->json('description')->nullable();
+            $table->jsonb('description')->nullable();
             $table->string('address')->nullable();
             SpatialSchema::point($table);
             $table->string('phone', 20)->nullable()->index();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('website')->nullable();
             // {"facebook": "...", "instagram": "...", "tiktok": "..."}
-            $table->json('social_links')->nullable();
+            $table->jsonb('social_links')->nullable();
             $table->unsignedTinyInteger('price_range')->nullable();
             $table->boolean('is_always_open')->default(false);
             $table->string('status', 20)->default('pending')->index();
@@ -79,7 +79,7 @@ return new class extends Migration
         Schema::create('business_special_hours', function (Blueprint $table) {
             $table->id();
             $table->foreignId('business_id')->constrained()->cascadeOnDelete();
-            $table->json('label')->nullable();
+            $table->jsonb('label')->nullable();
             $table->date('starts_on');
             $table->date('ends_on');
             $table->time('opens_at')->nullable();

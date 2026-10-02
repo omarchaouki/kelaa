@@ -42,7 +42,7 @@ return new class extends Migration
             $table->foreignId('business_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             // {"field": "new value", ...}
-            $table->json('changes');
+            $table->jsonb('changes');
             $table->text('comment')->nullable();
             $table->string('status', 20)->default('pending')->index();
             $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();

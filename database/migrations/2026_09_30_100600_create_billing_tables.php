@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('client_ice', 20)->nullable();
             $table->string('client_address')->nullable();
             // [{"description": "...", "quantity": 1, "unit_price": "199.00", "total": "199.00"}]
-            $table->json('lines');
+            $table->jsonb('lines');
             $table->decimal('subtotal', 10, 2);
             $table->decimal('tax_rate', 5, 2)->default(0);
             $table->decimal('tax_amount', 10, 2)->default(0);
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->string('reference')->nullable()->unique();
             // Receipt photo is stored with medialibrary, collection "receipt".
             $table->string('status', 20)->default('pending')->index();
-            $table->json('gateway_payload')->nullable();
+            $table->jsonb('gateway_payload')->nullable();
             $table->foreignId('validated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('validated_at')->nullable();
             $table->string('rejection_reason')->nullable();

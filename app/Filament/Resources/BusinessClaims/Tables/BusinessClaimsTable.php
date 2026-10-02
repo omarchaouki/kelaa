@@ -5,7 +5,9 @@ namespace App\Filament\Resources\BusinessClaims\Tables;
 use App\Actions\Moderation\ModerateClaim;
 use App\Enums\ClaimStatus;
 use App\Filament\Resources\Reviews\Tables\ReviewsTable;
+use App\Models\Business;
 use App\Models\BusinessClaim;
+use App\Models\Plan;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
@@ -22,7 +24,11 @@ class BusinessClaimsTable
             // Paid plans with priority support are handled first (spec §8), then oldest first.
             ->modifyQueryUsing(fn (Builder $query) => $query
                 ->with(['business.plan', 'user', 'media'])
-                ->orderByRaw('exists (select 1 from businesses b join plans p on p.id = b.plan_id where b.id = business_claims.business_id and b.plan_expires_at > ? and p.features like ?) desc', [now(), '%"priority_support":true%'])
+                ->orderByDesc(Business::query()
+                    ->selectRaw('count(*)')
+                    ->whereColumn('businesses.id', 'business_claims.business_id')
+                    ->where('plan_expires_at', '>', now())
+                    ->whereIn('plan_id', self::priorityPlanIds()))
                 ->orderBy('created_at'))
             ->columns([
                 TextColumn::make('created_at')->label(__('Date'))->dateTime('d/m/Y H:i'),
@@ -57,5 +63,20 @@ class BusinessClaimsTable
                     ->schema([ReviewsTable::reasonField()])
                     ->action(fn (BusinessClaim $record, array $data, ModerateClaim $moderate) => $moderate->reject(auth()->user(), $record, $data['reason'])),
             ]);
+    }
+
+    /**
+     * Plans whose features include priority support (read in PHP: the JSON
+     * layout differs between databases, so no LIKE on the column).
+     *
+     * @return list<int>
+     */
+    private static function priorityPlanIds(): array
+    {
+        $ids = Plan::query()->get(['id', 'features'])
+            ->filter(fn (Plan $plan): bool => (bool) $plan->feature('priority_support'))
+            ->modelKeys();
+
+        return $ids === [] ? [0] : array_values($ids);
     }
 }

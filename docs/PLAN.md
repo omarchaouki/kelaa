@@ -25,7 +25,7 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 
 | Phase | Status |
 |---|---|
-| 1. Foundation | Done (verified on SQLite; MySQL/Sail run pending, see below) |
+| 1. Foundation | Done (production database: PostgreSQL, see "Production data") |
 | 2. Directory | Done (security-first pass included) |
 | 3. Reviews & moderation | Done |
 | 4. Owners | Done |
@@ -180,3 +180,10 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 6. **Reply moderation:** do owner replies publish immediately (with post-moderation via reports) or go to `pending`? (Proposal: publish immediately, same abuse word filter as reviews.)
 7. **Invoices:** your company's legal details (name, ICE, IF, RC, address) and whether VAT (TVA 20%) applies — placeholders in config until provided.
 8. **CI:** do you want a GitHub Actions workflow and a remote repository?
+
+## Production data (kelaa.ma)
+
+- App name **kelaa.ma**, launch city **El Kelaa des Sraghna** (slug `el-kelaa`, centre 32.04806, -7.40833).
+- Database: **PostgreSQL** (local 18, production 16+). JSON columns are `jsonb`. Distances use the latitude/longitude formula on PostgreSQL; the MySQL POINT path stays for MySQL installs.
+- 18 category groups / 161 categories written for Kelaa residents (agriculture and olive mills, money transfer, adouls and public writers, weddings, public services…), with Darija/Arabic/French search synonyms.
+- Neighbourhood names come from public listings and must be checked with the commune; their coordinates are added from the admin panel.

@@ -1,4 +1,4 @@
-# City Services Directory
+# kelaa.ma
 
 A local directory for one Moroccan city (multi-city ready): residents and visitors find artisans, mechanics, pharmacies, restaurants and more, read ratings and leave reviews. The platform earns money only through clearly labeled sponsored slots and paid business plans; **organic ranking and reviews can never be bought**.
 
@@ -7,7 +7,7 @@ A local directory for one Moroccan city (multi-city ready): residents and visito
 
 ## Stack
 
-Laravel 13 · Livewire 4 + Alpine.js · Tailwind CSS 4 · Filament 5 (`/admin`) · MySQL 8 (spatial `POINT`, `ST_Distance_Sphere`) · Redis + Horizon · Laravel Scout + Meilisearch · Spatie permission / medialibrary / translatable / sitemap / activitylog · Leaflet + OpenStreetMap-compatible tiles · Pest, Pint, Larastan.
+Laravel 13 · Livewire 4 + Alpine.js · Tailwind CSS 4 · Filament 5 (`/admin`) · PostgreSQL 16+ (distances computed from latitude/longitude; MySQL 8 also supported with `ST_Distance_Sphere`) · Redis + Horizon · Laravel Scout + Meilisearch · Spatie permission / medialibrary / translatable / sitemap / activitylog · Leaflet + OpenStreetMap-compatible tiles · Pest, Pint, Larastan.
 
 Locales: `fr` (default), `ar` (RTL), `en`. Every public URL is prefixed: `/fr/...`, `/ar/...`, `/en/...`.
 
@@ -67,12 +67,12 @@ The test suite can run against in-memory SQLite (geo queries fall back to a have
 composer test:sqlite
 ```
 
-The MySQL run inside Sail remains the reference (`sail test`), since production uses MySQL spatial functions.
+Production runs on PostgreSQL: `composer test` runs the suite on the local `kelaa_testing` database (see `.env` and `phpunit.xml`), `composer test:sqlite` is the quick in-memory run.
 
 ## Quality
 
 ```bash
-sail test              # Pest (MySQL "testing" database created by Sail)
+sail test              # Pest (PostgreSQL "kelaa_testing" database created by Sail)
 sail composer lint     # Pint (check) + Larastan level 6
 sail composer format   # Pint (fix)
 ```

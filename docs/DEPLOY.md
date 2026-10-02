@@ -1,11 +1,11 @@
 # Deployment
 
-Production target: one Ubuntu 24.04 server (or Laravel Forge) running Nginx, PHP-FPM 8.4, MySQL 8, Redis and Meilisearch, with Horizon for queues and the Laravel scheduler. The steps below assume Forge. Without Forge, they map to plain systemd units.
+Production target: one Ubuntu 24.04 server (or Laravel Forge) running Nginx, PHP-FPM 8.4, PostgreSQL 16+, Redis and Meilisearch, with Horizon for queues and the Laravel scheduler. The steps below assume Forge. Without Forge, they map to plain systemd units.
 
 ## 1. Server packages
 
-- PHP 8.4 with `bcmath, ctype, curl, dom, fileinfo, gd, intl, mbstring, pcntl, pdo_mysql, posix, redis, xml, zip` (plus `exif` and `imagick` if available).
-- MySQL 8 (spatial functions are used: `ST_Distance_Sphere`, `POINT` column with a spatial index).
+- PHP 8.4 with `bcmath, ctype, curl, dom, fileinfo, gd, intl, mbstring, pcntl, pdo_pgsql, posix, redis, xml, zip` (plus `exif` and `imagick` if available).
+- PostgreSQL 16+ (Forge: "PostgreSQL" database server). Distances are computed from the latitude/longitude columns with a bounding-box pre-filter; PostGIS is not required. Create one database and one role for the app (`DB_CONNECTION=pgsql`).
 - Redis 7 for cache, sessions, queues and locks.
 - Meilisearch 1.x, bound to `127.0.0.1` only, with a master key.
 - Node 22 is only needed to build the assets, or build them in CI.
@@ -112,7 +112,7 @@ Restart=always
 
 ## 6. Backups (offsite, daily)
 
-- **MySQL:** a nightly `mysqldump --single-transaction` or Forge database backups, sent to an S3-compatible bucket in another region, with 30 daily and 12 monthly copies kept.
+- **PostgreSQL:** a nightly `pg_dump --format=custom` (or Forge database backups), sent to an S3-compatible bucket in another region, with 30 daily and 12 monthly copies kept. Restore with `pg_restore --clean --no-owner`.
 - **Files:** sync `storage/app/private` and `storage/app/public` nightly (`rclone sync` or `restic`) to the same offsite bucket, encrypted.
 - **Restore test:** restore to a staging server once per quarter. A backup that was never restored is not a backup.
 - **Invoices:** they must be kept for 10 years, so the backup retention covers them, or export them yearly.

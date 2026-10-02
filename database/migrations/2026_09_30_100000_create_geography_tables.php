@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->json('name');
+            $table->jsonb('name');
             $table->string('slug')->unique();
             $table->decimal('center_latitude', 10, 7);
             $table->decimal('center_longitude', 10, 7);
@@ -24,11 +24,11 @@ return new class extends Migration
         Schema::create('neighborhoods', function (Blueprint $table) {
             $table->id();
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
-            $table->json('name');
+            $table->jsonb('name');
             $table->string('slug');
             SpatialSchema::point($table, 'center', required: false);
             // GeoJSON polygon, optional. Kept as JSON until we need spatial queries on it.
-            $table->json('boundary')->nullable();
+            $table->jsonb('boundary')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 

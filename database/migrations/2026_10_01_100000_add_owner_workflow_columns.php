@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('businesses', function (Blueprint $table) {
             // Listings a submission may duplicate (shown to moderators).
-            $table->json('possible_duplicate_ids')->nullable()->after('status');
+            $table->jsonb('possible_duplicate_ids')->nullable()->after('status');
         });
 
         Schema::table('edit_suggestions', function (Blueprint $table) {

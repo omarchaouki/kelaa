@@ -12,7 +12,7 @@ $todo = '<p><strong>Projet à faire valider par un juriste avant la mise en lign
 return [
     'cgu' => $todo.<<<'HTML'
 <h2>1. Objet</h2>
-<p>Les présentes conditions encadrent l’utilisation de l’annuaire des services de la ville, édité par [Raison sociale] (ci-après « nous »). En utilisant le site, vous les acceptez.</p>
+<p>Les présentes conditions encadrent l’utilisation de kelaa.ma, l’annuaire des services d’El Kelaa des Sraghna, édité par [Raison sociale] (ci-après « nous »). En utilisant le site, vous les acceptez.</p>
 <h2>2. Compte</h2>
 <p>La consultation est libre. Publier un avis, revendiquer ou ajouter un établissement nécessite un compte vérifié par un code envoyé sur votre mobile. Vous êtes responsable de l’usage de votre compte. Un compte par personne.</p>
 <h2>3. Contenus publiés par les utilisateurs</h2>
@@ -24,7 +24,7 @@ return [
 <h2>6. Responsabilité</h2>
 <p>Nous faisons nos meilleurs efforts pour l’exactitude des informations (horaires, pharmacies de garde…) sans pouvoir la garantir. En cas d’urgence, appelez les services d’urgence (15, 19, 150).</p>
 <h2>7. Signalement</h2>
-<p>Tout contenu illicite peut être signalé via le bouton « Signaler » ou à [adresse e-mail de contact].</p>
+<p>Tout contenu illicite peut être signalé via le bouton « Signaler » ou à contact@kelaa.ma.</p>
 <h2>8. Droit applicable</h2>
 <p>Droit marocain. Tribunaux compétents : [ville].</p>
 HTML,
@@ -94,12 +94,13 @@ HTML,
 HTML,
 
     'a-propos' => <<<'HTML'
-<p>Un annuaire local pour trouver rapidement un artisan, un mécanicien, une pharmacie de garde ou un commerce, avec les avis des habitants.</p>
+<p><strong>kelaa.ma</strong> est l’annuaire des services d’El Kelaa des Sraghna : artisans, mécaniciens, pharmacies de garde, médecins, restaurants, commerces, agriculteurs et services publics, avec les avis des habitants.</p>
+<p>Trouver le bon contact à la Kelaa ne devrait pas dépendre du bouche-à-oreille : chaque fiche donne le téléphone, le WhatsApp, les horaires et l’itinéraire.</p>
 <p>Les résultats naturels sont classés selon la pertinence, la distance, les avis et l’activité de la fiche. Les emplacements sponsorisés sont toujours signalés et ne changent jamais les notes.</p>
 HTML,
 
     'contact' => <<<'HTML'
-<p>Une question, une erreur sur une fiche, un contenu à signaler ? Écrivez-nous à [e-mail de contact].</p>
+<p>Une question, une erreur sur une fiche, un contenu à signaler ? Écrivez-nous à contact@kelaa.ma.</p>
 <p>Pour corriger une fiche, utilisez le lien « Suggérer une modification » sur la page de l’établissement. Les professionnels peuvent revendiquer leur fiche gratuitement.</p>
 HTML,
 ];
