@@ -97,7 +97,17 @@ class SearchSynonymSeeder extends Seeder
             'assurance' => ['تأمين', 'assurance auto', 'ta2min', 'لاسورانس'],
             'adoul' => ['عدول', '3doul', 'adel', 'عدل', 'zwaj', 'عقد الزواج'],
             'notaire' => ['موثق', 'notaire', 'mowatiq'],
-            'avocat' => ['محامي', 'mo7ami', 'mohami', 'avocate'],
+            'avocat' => ['محامي', 'mo7ami', 'mohami', 'avocate', 'محامية'],
+            'huissier' => ['مفوض قضائي', 'huissier de justice', 'mofawad'],
+            'expert' => ['خبير', 'khabir', 'expert auto', 'expertise'],
+
+            // Schools and training
+            'école' => ['مدرسة', 'madrasa', 'ecole', 'école privée', 'primaire'],
+            'lycée' => ['ثانوية', 'tanawiya', 'collège', 'إعدادية', 'lycee'],
+            'crèche' => ['روض', 'rawd', 'maternelle', 'حضانة', 'creche'],
+            'formation' => ['تكوين', 'takwin', 'ofppt', 'ista', 'formation professionnelle', 'stage'],
+            'université' => ['جامعة', 'fac', 'faculté', 'كلية', 'universite'],
+            'soutien' => ['دروس الدعم', 'cours', 'drouss', 'tutorat'],
             'écrivain public' => ['الكاتب العمومي', 'kateb', 'katib', 'كاتب'],
             'agence de voyage' => ['وكالة الأسفار', 'omra', 'عمرة', 'hajj', 'حج'],
             'immobilier' => ['سمسار', 'samsar', 'كراء الدار', 'location appartement', 'kra dar'],

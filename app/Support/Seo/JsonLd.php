@@ -31,6 +31,7 @@ class JsonLd
         'HVACBusiness', 'TireShop', 'AutoBodyShop', 'AutoRental', 'FoodEstablishment', 'Physiotherapy', 'DiagnosticLab',
         'IceCreamShop', 'AutoDealer', 'ShoeStore', 'JewelryStore', 'MobilePhoneStore', 'HomeGoodsStore', 'BookStore',
         'EventVenue', 'BankOrCreditUnion', 'InsuranceAgency', 'ExerciseGym', 'PublicSwimmingPool',
+        'CollegeOrUniversity', 'ProfessionalService',
     ];
 
     private const DAYS = [1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'];

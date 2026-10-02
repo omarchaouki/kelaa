@@ -185,5 +185,5 @@ Source of truth: [`SPEC.md`](SPEC.md). Section numbers below (§) refer to it.
 
 - App name **kelaa.ma**, launch city **El Kelaa des Sraghna** (slug `el-kelaa`, centre 32.04806, -7.40833).
 - Database: **PostgreSQL** (local 18, production 16+). JSON columns are `jsonb`. Distances use the latitude/longitude formula on PostgreSQL; the MySQL POINT path stays for MySQL installs.
-- 18 category groups / 161 categories written for Kelaa residents (agriculture and olive mills, money transfer, adouls and public writers, weddings, public services…), with Darija/Arabic/French search synonyms.
+- 19 category groups / 168 categories written for Kelaa residents (agriculture and olive mills, money transfer, adouls and public writers, weddings, public services…), with Darija/Arabic/French search synonyms.
 - Neighbourhood names come from public listings and must be checked with the commune; their coordinates are added from the admin panel.
