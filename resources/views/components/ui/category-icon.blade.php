@@ -1,12 +1,10 @@
 @props(['icon' => null, 'size' => 24])
 @php
-    // Icon names come from the database: only plain Lucide names are accepted,
-    // so a crafted value can never point outside the icon directory.
-    $name = is_string($icon) && preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/', $icon) ? $icon : null;
-    $exists = $name !== null && is_file(base_path("vendor/mallardduck/blade-lucide-icons/resources/svg/icons/{$name}.svg"));
+    // Read once per request (App\Support\Icons\Lucide); unknown names fall back to "store".
+    $inner = \App\Support\Icons\Lucide::inner($icon);
 @endphp
-@if ($exists)
-    <x-dynamic-component :component="'lucide-'.$name" width="{{ $size }}" height="{{ $size }}" aria-hidden="true" {{ $attributes }} />
+@if ($inner !== null)
+    <svg xmlns="http://www.w3.org/2000/svg" width="{{ $size }}" height="{{ $size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" {{ $attributes }}>{!! $inner !!}</svg>
 @else
     <x-ui.icon name="store" :size="$size" {{ $attributes }} />
 @endif

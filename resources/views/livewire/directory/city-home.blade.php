@@ -34,7 +34,7 @@
                     @foreach ($group->children as $category)
                         <a href="{{ route('city.category', ['city' => $city, 'category' => $category]) }}" wire:navigate class="fb-row" wire:key="rail-{{ $category->id }}">
                             <span class="flex size-9 shrink-0 items-center justify-center rounded-full" style="background: {{ $color }}1f; color: {{ $color }}">
-                                <x-ui.category-icon :icon="$category->icon" size="18" />
+                                {{ \App\Support\Icons\Lucide::svg($category->icon, 18) }}
                             </span>
                             <span class="min-w-0 flex-1 truncate">{{ $category->name }}</span>
                             @if (($counts[$category->id] ?? 0) > 0)
@@ -164,7 +164,7 @@
                             <li>
                                 <a href="{{ route('city.category', ['city' => $city, 'category' => $category]) }}" wire:navigate class="fb-row text-[14px]">
                                     <span class="flex size-8 shrink-0 items-center justify-center rounded-full" style="background: {{ $color }}1f; color: {{ $color }}">
-                                        <x-ui.category-icon :icon="$category->icon" size="16" />
+                                        {{ \App\Support\Icons\Lucide::svg($category->icon, 16) }}
                                     </span>
                                     <span class="min-w-0 flex-1 truncate">{{ $category->name }}</span>
                                 </a>

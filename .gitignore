@@ -34,3 +34,4 @@ Thumbs.db
 /public/sitemaps-tmp
 /.env.sail.backup
 /*.local.sql
+/*.local.bat
