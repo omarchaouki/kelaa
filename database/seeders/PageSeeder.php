@@ -6,9 +6,9 @@ use App\Models\Page;
 use Illuminate\Database\Seeder;
 
 /**
- * Creates the legal/static pages once, with French drafts (data/legal.php)
- * that must be reviewed by a lawyer before launch, then edited in the admin
- * panel. Existing pages are never overwritten.
+ * Creates the legal/static pages once, in French, English and Arabic
+ * (data/legal.php), then edited in the admin panel. Existing pages are
+ * never overwritten.
  */
 class PageSeeder extends Seeder
 {
@@ -24,19 +24,13 @@ class PageSeeder extends Seeder
             'contact' => ['fr' => 'Contact', 'ar' => 'اتصل بنا', 'en' => 'Contact'],
         ];
 
-        $placeholder = [
-            'fr' => '<p>Contenu à compléter depuis le panneau d’administration.</p>',
-            'ar' => '<p>المحتوى قيد الإعداد.</p>',
-            'en' => '<p>Content to be written from the admin panel.</p>',
-        ];
-
-        $drafts = require __DIR__.'/data/legal.php';
+        /** @var array<string, array{fr: string, en: string, ar: string}> $bodies */
+        $bodies = require __DIR__.'/data/legal.php';
 
         foreach ($pages as $slug => $title) {
             Page::query()->firstOrCreate(['slug' => $slug], [
                 'title' => $title,
-                // Until translated, Arabic and English readers see the French text.
-                'body' => isset($drafts[$slug]) ? ['fr' => $drafts[$slug], 'ar' => null, 'en' => null] : $placeholder,
+                'body' => $bodies[$slug],
                 'is_published' => true,
             ]);
         }

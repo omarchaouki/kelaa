@@ -7,9 +7,9 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Reference data, safe to run in every environment (idempotent).
-     * Fake data only outside production: `php artisan db:seed --class=DevDataSeeder`
-     * or automatically here in the local environment.
+     * Reference data and the real places of El Kelaa (OpenStreetMap), safe to
+     * run in every environment (idempotent). Fake data only on request:
+     * `php artisan db:seed --class=DevDataSeeder` (refuses production).
      */
     public function run(): void
     {
@@ -21,10 +21,7 @@ class DatabaseSeeder extends Seeder
             PlacementRateSeeder::class,
             PageSeeder::class,
             SearchSynonymSeeder::class,
+            KelaaBusinessSeeder::class,
         ]);
-
-        if (app()->isLocal()) {
-            $this->call(DevDataSeeder::class);
-        }
     }
 }

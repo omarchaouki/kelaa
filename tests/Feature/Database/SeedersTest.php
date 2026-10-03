@@ -6,7 +6,9 @@ use App\Models\City;
 use App\Models\Neighborhood;
 use App\Models\Page;
 use App\Models\Plan;
+use App\Models\Review;
 use App\Models\SearchSynonym;
+use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\DevDataSeeder;
 use Spatie\Permission\Models\Role;
@@ -45,10 +47,33 @@ it('seeds the category tree from the spec in three languages', function () {
         ->and(Category::query()->where('slug', 'plombier')->sole()->is_emergency)->toBeFalse();
 });
 
-it('does not seed fake data outside the local environment', function () {
+it('seeds only the real places of El Kelaa, once, without fake data', function () {
     $this->seed(DatabaseSeeder::class);
 
-    expect(Business::count())->toBe(0);
+    $places = json_decode(file_get_contents(database_path('seeders/data/businesses.json')), true)['businesses'];
+
+    expect(Business::count())->toBe(count($places))
+        ->and(User::count())->toBe(0)
+        ->and(Review::count())->toBe(0)
+        ->and(Business::query()->where('slug', 'pharmacie-imlil')->sole()->categories->pluck('slug')->all())->toBe(['pharmacie-de-garde'])
+        ->and(Business::query()->whereDoesntHave('categories')->count())->toBe(0);
+
+    $this->seed(DatabaseSeeder::class);
+
+    expect(Business::count())->toBe(count($places));
+});
+
+it('seeds every legal page in three languages without placeholders', function () {
+    $this->seed(DatabaseSeeder::class);
+
+    foreach (Page::all() as $page) {
+        foreach (['fr', 'ar', 'en'] as $locale) {
+            $body = (string) $page->getTranslation('body', $locale, false);
+
+            expect($body)->not->toBeEmpty("{$page->slug} misses {$locale}")
+                ->and($body)->not->toContain('[');
+        }
+    }
 });
 
 it('refuses to run the dev data seeder in production', function () {

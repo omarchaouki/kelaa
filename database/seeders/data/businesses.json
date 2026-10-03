@@ -1,0 +1,785 @@
+{
+    "_source": "OpenStreetMap, © OpenStreetMap contributors, ODbL 1.0 (https://www.openstreetmap.org/copyright). Exported 2026-10-03. Each entry keeps its OSM id (\"osm\"). No phone numbers are invented: only data present in OSM.",
+    "businesses": [
+        {
+            "osm": "w/1187858883",
+            "name": "Commissariat de police d’El Kelaa",
+            "category": "administrations",
+            "latitude": 32.069443,
+            "longitude": -7.405327,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1189905520",
+            "name": "Commune d’El Kelaa des Sraghna",
+            "category": "administrations",
+            "latitude": 32.05384,
+            "longitude": -7.406705,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191876553",
+            "name": "Police (Hay Idari)",
+            "category": "administrations",
+            "latitude": 32.052587,
+            "longitude": -7.401913,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "r/16101842",
+            "name": "Province d’El Kelaa des Sraghna",
+            "category": "administrations",
+            "latitude": 32.041478,
+            "longitude": -7.40466,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1187920173",
+            "name": "Tribunal de première instance",
+            "category": "administrations",
+            "latitude": 32.041402,
+            "longitude": -7.407668,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1189849258",
+            "name": "Gare routière d’El Kelaa",
+            "category": "autocars-voyageurs",
+            "latitude": 32.06075,
+            "longitude": -7.389259,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/2907761232",
+            "name": "Poste El Kelaa El Qods",
+            "category": "bureaux-de-poste",
+            "latitude": 32.05903,
+            "longitude": -7.409976,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191655716",
+            "name": "Café Snack",
+            "category": "cafes",
+            "latitude": 32.066055,
+            "longitude": -7.375407,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191456719",
+            "name": "مقهى بوشريط",
+            "category": "cafes",
+            "latitude": 32.029513,
+            "longitude": -7.393075,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191684908",
+            "name": "مركز التأهيل الفلاحي لأولاد بوكرين",
+            "category": "centres-de-formation",
+            "latitude": 32.079368,
+            "longitude": -7.412089,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1187920205",
+            "name": "Lycée Anas Bno Malik",
+            "category": "ecoles-publiques",
+            "latitude": 32.059615,
+            "longitude": -7.413454,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191326326",
+            "name": "École Chahid Hassan Essaghir",
+            "category": "ecoles-publiques",
+            "latitude": 32.044838,
+            "longitude": -7.399458,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191423410",
+            "name": "École Chahid Rhal Ben Ahmed",
+            "category": "ecoles-publiques",
+            "latitude": 32.059846,
+            "longitude": -7.400954,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191325717",
+            "name": "École Hay Idari",
+            "category": "ecoles-publiques",
+            "latitude": 32.051038,
+            "longitude": -7.406325,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1190926468",
+            "name": "École Malika El Fassi",
+            "category": "ecoles-publiques",
+            "latitude": 32.046786,
+            "longitude": -7.403714,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191395798",
+            "name": "École primaire Ibn Khaldoun",
+            "category": "ecoles-publiques",
+            "latitude": 32.052243,
+            "longitude": -7.412497,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1187920206",
+            "name": "إعدادية الليمونة",
+            "category": "ecoles-publiques",
+            "latitude": 32.05925,
+            "longitude": -7.414318,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191693301",
+            "name": "مجموعة مدارس البانكة",
+            "category": "ecoles-publiques",
+            "latitude": 32.031685,
+            "longitude": -7.40401,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191684884",
+            "name": "مدرسة الجديد الإبتدائية",
+            "category": "ecoles-publiques",
+            "latitude": 32.086069,
+            "longitude": -7.409592,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1190283389",
+            "name": "École Supérieure de Technologie",
+            "category": "enseignement-superieur",
+            "latitude": 32.062778,
+            "longitude": -7.375558,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1190283375",
+            "name": "Hôpital El Kelaa 2",
+            "category": "hopitaux-centres-sante",
+            "latitude": 32.053827,
+            "longitude": -7.394478,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1187858884",
+            "name": "Hôpital Essalama",
+            "category": "hopitaux-centres-sante",
+            "latitude": 32.048937,
+            "longitude": -7.403641,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191618623",
+            "name": "Hotel de la Ville",
+            "category": "hotels",
+            "latitude": 32.053828,
+            "longitude": -7.407089,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1187920196",
+            "name": "Hôtel Zawia",
+            "category": "hotels",
+            "latitude": 32.044527,
+            "longitude": -7.408446,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434921250",
+            "name": "Pharmacie Achifa صيدلية الشفاء",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.053996,
+            "longitude": -7.403225,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435240271",
+            "name": "Pharmacie Adel صيدلية عادل",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.05198,
+            "longitude": -7.407708,
+            "address": "Avenue Mohamed V",
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434891658",
+            "name": "Pharmacie Ainachi صيدلية العيناشي",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.056077,
+            "longitude": -7.393499,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434880891",
+            "name": "Pharmacie Al Amal صيدلية الأمل",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.05943,
+            "longitude": -7.397598,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434870962",
+            "name": "Pharmacie Al Andalouss صيدلية الأندلس",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.06673,
+            "longitude": -7.406252,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435302157",
+            "name": "Pharmacie Al Islah صيدلية الإصلاح",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.04957,
+            "longitude": -7.407543,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435314748",
+            "name": "Pharmacie Al Moustachfa صيدلية المستشفى",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.048701,
+            "longitude": -7.398226,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434864074",
+            "name": "Pharmacie Annakhla صيدلية النخلة",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.062442,
+            "longitude": -7.405805,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434849328",
+            "name": "Pharmacie Arrahman صيدلية الرحمان",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.062751,
+            "longitude": -7.413815,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434852944",
+            "name": "Pharmacie Azzohour صيدلية الزهور",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.064863,
+            "longitude": -7.41651,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434959500",
+            "name": "Pharmacie Bouchra صيدلية بشرى",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.061708,
+            "longitude": -7.383594,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434924511",
+            "name": "Pharmacie Centrale الصيدلية المركزية",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.055625,
+            "longitude": -7.407527,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434823897",
+            "name": "Pharmacie El Hana صيدلية الهناء",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.060247,
+            "longitude": -7.408085,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434840645",
+            "name": "Pharmacie El Idrissi صيدلية الإدريسي",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.060936,
+            "longitude": -7.412118,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434968956",
+            "name": "Pharmacie El Mourakkab صيدلية المركب",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.055692,
+            "longitude": -7.409847,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434921694",
+            "name": "Pharmacie El Yasmine صيدلية الياسمين",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.063253,
+            "longitude": -7.391519,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435275045",
+            "name": "Pharmacie Essalama صيدلية السلامة",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.048245,
+            "longitude": -7.402609,
+            "address": "Avenue Abdelmoumen Ben Ali",
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435018079",
+            "name": "Pharmacie Hay Sinai صيدلية الحي الصناعي",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.054373,
+            "longitude": -7.385927,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434996876",
+            "name": "Pharmacie Imam Malik صيدلية الإمام مالك",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.053733,
+            "longitude": -7.409002,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434832813",
+            "name": "Pharmacie Imlil صيدلية إمليل",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.060432,
+            "longitude": -7.405897,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435352818",
+            "name": "Pharmacie Jnan Bakar صيدلية جنان بكار",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.047195,
+            "longitude": -7.399728,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435286499",
+            "name": "Pharmacie Khaless صيدلية خالص",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.048292,
+            "longitude": -7.408086,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434891711",
+            "name": "Pharmacie Louhmadi صيدلية لحمادي",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.055246,
+            "longitude": -7.394715,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435271964",
+            "name": "Pharmacie Mahfoud صيدلية محفوظ",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.050087,
+            "longitude": -7.405889,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435358445",
+            "name": "Pharmacie Majorelle صيدلية ماجوريل",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.045421,
+            "longitude": -7.394543,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8435418832",
+            "name": "Pharmacie Masjid Nour صيدلية مسجد نور",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.048685,
+            "longitude": -7.393924,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434882000",
+            "name": "Pharmacie Nadia صيدلية نادية",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.062741,
+            "longitude": -7.400656,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434861147",
+            "name": "Pharmacie Oussama صيدلية أسامة",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.065984,
+            "longitude": -7.410136,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434997964",
+            "name": "Pharmacie Route Benguerir صيدلية طريق ابن جرير",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.054423,
+            "longitude": -7.411995,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434836214",
+            "name": "Pharmacie Soukaina صيدلية سكينة",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.061086,
+            "longitude": -7.41203,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434847827",
+            "name": "Pharmacie Tahra صيدلية طاهرة",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.062155,
+            "longitude": -7.410649,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8434893409",
+            "name": "Pharmacie les Fleurs صيدلية الورود",
+            "category": "pharmacie-de-garde",
+            "latitude": 32.055185,
+            "longitude": -7.400283,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1187920167",
+            "name": "Piscine municipale",
+            "category": "piscines",
+            "latitude": 32.037523,
+            "longitude": -7.407918,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191456683",
+            "name": "Borj El Kelaa",
+            "category": "restaurants",
+            "latitude": 32.026675,
+            "longitude": -7.395448,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191693336",
+            "name": "Espace Zikar : Café, Restaurant",
+            "category": "restaurants",
+            "latitude": 32.032797,
+            "longitude": -7.404095,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191456707",
+            "name": "Oasis Café Restaurant",
+            "category": "restaurants",
+            "latitude": 32.028614,
+            "longitude": -7.393435,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191323465",
+            "name": "Station des grands taxis (centre)",
+            "category": "stations-de-taxis",
+            "latitude": 32.046075,
+            "longitude": -7.408934,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1189857830",
+            "name": "Station des grands taxis (gare routière)",
+            "category": "stations-de-taxis",
+            "latitude": 32.060941,
+            "longitude": -7.389854,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3378925986",
+            "name": "Afriquia أفريقيا",
+            "category": "stations-service",
+            "latitude": 32.063226,
+            "longitude": -7.380967,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/8185645195",
+            "name": "Afriquia أفريقيا",
+            "category": "stations-service",
+            "latitude": 32.028902,
+            "longitude": -7.393786,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3661063060",
+            "name": "Libya",
+            "category": "stations-service",
+            "latitude": 32.032408,
+            "longitude": -7.399547,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3378925183",
+            "name": "Ojlibys",
+            "category": "stations-service",
+            "latitude": 32.058431,
+            "longitude": -7.385926,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/1210500386",
+            "name": "Ola Energy",
+            "category": "stations-service",
+            "latitude": 32.058877,
+            "longitude": -7.388392,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3661062886",
+            "name": "Petrom",
+            "category": "stations-service",
+            "latitude": 32.030331,
+            "longitude": -7.396265,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/11073258455",
+            "name": "Petrom",
+            "category": "stations-service",
+            "latitude": 32.006519,
+            "longitude": -7.38392,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/11063767623",
+            "name": "Petromin",
+            "category": "stations-service",
+            "latitude": 32.062702,
+            "longitude": -7.381982,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3661063067",
+            "name": "Shell",
+            "category": "stations-service",
+            "latitude": 32.031871,
+            "longitude": -7.398733,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3378924050",
+            "name": "Shell شل",
+            "category": "stations-service",
+            "latitude": 32.072962,
+            "longitude": -7.36858,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/4171978681",
+            "name": "Shell شل",
+            "category": "stations-service",
+            "latitude": 32.075785,
+            "longitude": -7.363456,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/3378925184",
+            "name": "TotalEnergies",
+            "category": "stations-service",
+            "latitude": 32.066428,
+            "longitude": -7.375791,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/11062009110",
+            "name": "TotalEnergies",
+            "category": "stations-service",
+            "latitude": 32.031098,
+            "longitude": -7.39753,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/11062009002",
+            "name": "Winxo",
+            "category": "stations-service",
+            "latitude": 32.029784,
+            "longitude": -7.393403,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "n/4330920003",
+            "name": "Marjane",
+            "category": "supermarches",
+            "latitude": 32.052004,
+            "longitude": -7.396132,
+            "address": null,
+            "phone": null,
+            "website": null
+        },
+        {
+            "osm": "w/1191456706",
+            "name": "Dacia",
+            "category": "vente-voitures",
+            "latitude": 32.028168,
+            "longitude": -7.39272,
+            "address": null,
+            "phone": null,
+            "website": null
+        }
+    ]
+}
