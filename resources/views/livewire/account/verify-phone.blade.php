@@ -1,6 +1,6 @@
 <div class="mx-auto max-w-sm py-6">
     <h1 class="text-2xl font-bold">{{ __('Vérifier mon numéro') }}</h1>
-    <p class="mt-2 text-stone-600">{{ __('Un numéro de mobile vérifié est nécessaire pour publier un avis.') }}</p>
+    <p class="mt-2 text-stone-600">{{ config('auth_options.sms_verification') ? __('Un numéro de mobile vérifié est nécessaire pour publier un avis.') : __('Un numéro de mobile est nécessaire pour publier un avis.') }}</p>
 
     @if ($currentPhone)
         <p class="mt-2 text-sm text-stone-600">{{ __('Numéro actuel :') }} <span dir="ltr">{{ $currentPhone }}</span></p>
@@ -17,7 +17,7 @@
             </div>
             <button type="submit" wire:loading.attr="disabled"
                     class="fb-btn fb-btn-primary w-full">
-                {{ __('Recevoir le code') }}
+                {{ config('auth_options.sms_verification') ? __('Recevoir le code') : __('Enregistrer') }}
             </button>
         </form>
     @else

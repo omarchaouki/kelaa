@@ -499,5 +499,15 @@
     "Envoyée le :date": "أُرسل في :date",
     "En vérification": "قيد التحقق",
     "Publiée · voir": "منشورة · عرض",
-    "Refusée": "مرفوضة"
+    "Refusée": "مرفوضة",
+    "Créer un compte": "إنشاء حساب",
+    "Créer mon compte": "أنشئ حسابي",
+    "Confirmer le mot de passe": "تأكيد كلمة المرور",
+    "Au moins 8 caractères, avec des lettres et des chiffres.": "8 أحرف على الأقل، مع حروف وأرقام.",
+    "Déjà un compte ?": "لديك حساب بالفعل؟",
+    "Pas encore de compte ?": "ليس لديك حساب بعد؟",
+    "Numéro ou mot de passe incorrect.": "الرقم أو كلمة المرور غير صحيحة.",
+    "Ce numéro a déjà un compte. Connectez-vous.": "هذا الرقم لديه حساب بالفعل. سجّل الدخول.",
+    "Votre numéro est enregistré.": "تم حفظ رقمك.",
+    "Un numéro de mobile est nécessaire pour publier un avis.": "رقم الهاتف المحمول ضروري لنشر تقييم."
 }

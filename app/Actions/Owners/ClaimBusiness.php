@@ -40,6 +40,11 @@ class ClaimBusiness
      */
     public function claimPhone(Business $business): ?string
     {
+        // Without an SMS provider, claims go through documents only.
+        if (! config('auth_options.sms_verification')) {
+            return null;
+        }
+
         return $business->whatsapp ?? MoroccanPhone::normalize($business->phone);
     }
 

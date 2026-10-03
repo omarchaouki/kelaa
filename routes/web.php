@@ -18,6 +18,7 @@ use App\Http\Middleware\SetLocale;
 use App\Livewire\Account\PrivacyPage;
 use App\Livewire\Account\VerifyPhone;
 use App\Livewire\Auth\EmailLogin;
+use App\Livewire\Auth\PasswordLogin;
 use App\Livewire\Auth\PhoneLogin;
 use App\Livewire\Directory\BusinessPage;
 use App\Livewire\Directory\CityHome;
@@ -69,7 +70,8 @@ Route::prefix('{locale}')
         Route::get('/', [CityController::class, 'redirectToDefault'])->name('locale.home');
 
         Route::middleware('guest')->group(function () {
-            Route::livewire('login', PhoneLogin::class)->name('login');
+            // Phone + SMS code when an SMS provider is configured, phone + password otherwise.
+            Route::livewire('login', config('auth_options.sms_verification') ? PhoneLogin::class : PasswordLogin::class)->name('login');
             Route::livewire('login/email', EmailLogin::class)->name('login.email');
             Route::get('login/google', [GoogleAuthController::class, 'redirect'])->name('login.google');
         });

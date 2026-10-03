@@ -107,6 +107,11 @@
                     </div>
                 </div>
             @else
+                @unless (config('auth_options.sms_verification'))
+                    <a href="{{ route('login', ['mode' => 'register']) }}" wire:navigate class="fb-btn fb-btn-gray hidden h-10 sm:inline-flex">
+                        {{ __('Créer un compte') }}
+                    </a>
+                @endunless
                 <a href="{{ route('login') }}" wire:navigate class="fb-btn fb-btn-primary h-10">
                     {{ __('Connexion') }}
                 </a>

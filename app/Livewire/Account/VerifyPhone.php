@@ -30,7 +30,7 @@ class VerifyPhone extends Component
     #[Locked]
     public ?string $normalizedPhone = null;
 
-    public function sendCode(OtpService $otp): void
+    public function sendCode(OtpService $otp): mixed
     {
         $this->validate(['phone' => ['required', 'string', MoroccanPhoneNumber::mobile()]]);
 
@@ -39,7 +39,17 @@ class VerifyPhone extends Component
         if (User::query()->where('phone', $phone)->whereKeyNot(Auth::id())->exists()) {
             $this->addError('phone', __('Ce numéro est déjà associé à un autre compte.'));
 
-            return;
+            return null;
+        }
+
+        // No SMS provider yet: the number is saved as given, unverified.
+        if (! config('auth_options.sms_verification')) {
+            /** @var User $user */
+            $user = Auth::user();
+            $user->forceFill(['phone' => $phone, 'phone_verified_at' => null])->save();
+            session()->flash('status', __('Votre numéro est enregistré.'));
+
+            return $this->redirectIntended(route('locale.home'), navigate: true);
         }
 
         try {
@@ -47,15 +57,17 @@ class VerifyPhone extends Component
         } catch (OtpThrottled $e) {
             $this->addError('phone', __('Trop de tentatives. Réessayez dans :minutes min.', ['minutes' => (int) ceil($e->retryAfterSeconds / 60)]));
 
-            return;
+            return null;
         } catch (OtpDeliveryFailed $e) {
             Log::error($e->getMessage());
             $this->addError('phone', __("Impossible d'envoyer le code pour le moment. Réessayez plus tard."));
 
-            return;
+            return null;
         }
 
         $this->normalizedPhone = $phone;
+
+        return null;
     }
 
     public function verify(OtpService $otp): mixed

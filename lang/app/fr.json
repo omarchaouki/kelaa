@@ -499,5 +499,15 @@
     "Envoyée le :date": "Envoyée le :date",
     "En vérification": "En vérification",
     "Publiée · voir": "Publiée · voir",
-    "Refusée": "Refusée"
+    "Refusée": "Refusée",
+    "Créer un compte": "Créer un compte",
+    "Créer mon compte": "Créer mon compte",
+    "Confirmer le mot de passe": "Confirmer le mot de passe",
+    "Au moins 8 caractères, avec des lettres et des chiffres.": "Au moins 8 caractères, avec des lettres et des chiffres.",
+    "Déjà un compte ?": "Déjà un compte ?",
+    "Pas encore de compte ?": "Pas encore de compte ?",
+    "Numéro ou mot de passe incorrect.": "Numéro ou mot de passe incorrect.",
+    "Ce numéro a déjà un compte. Connectez-vous.": "Ce numéro a déjà un compte. Connectez-vous.",
+    "Votre numéro est enregistré.": "Votre numéro est enregistré.",
+    "Un numéro de mobile est nécessaire pour publier un avis.": "Un numéro de mobile est nécessaire pour publier un avis."
 }

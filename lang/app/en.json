@@ -499,5 +499,15 @@
     "Envoyée le :date": "Sent on :date",
     "En vérification": "Being checked",
     "Publiée · voir": "Published · view",
-    "Refusée": "Declined"
+    "Refusée": "Declined",
+    "Créer un compte": "Create account",
+    "Créer mon compte": "Create my account",
+    "Confirmer le mot de passe": "Confirm password",
+    "Au moins 8 caractères, avec des lettres et des chiffres.": "At least 8 characters, with letters and numbers.",
+    "Déjà un compte ?": "Already have an account?",
+    "Pas encore de compte ?": "No account yet?",
+    "Numéro ou mot de passe incorrect.": "Wrong number or password.",
+    "Ce numéro a déjà un compte. Connectez-vous.": "This number already has an account. Please log in.",
+    "Votre numéro est enregistré.": "Your number has been saved.",
+    "Un numéro de mobile est nécessaire pour publier un avis.": "A mobile number is required to post a review."
 }

@@ -90,9 +90,14 @@ class User extends Authenticatable implements FilamentUser, HasLocalePreference,
         return $this->hasMany(BusinessClaim::class);
     }
 
+    /**
+     * Has a usable mobile number. Without SMS verification (no provider yet)
+     * the number given at sign-up is accepted as is.
+     */
     public function hasVerifiedPhone(): bool
     {
-        return $this->phone !== null && $this->phone_verified_at !== null;
+        return $this->phone !== null
+            && ($this->phone_verified_at !== null || ! config('auth_options.sms_verification'));
     }
 
     public function isBanned(): bool
